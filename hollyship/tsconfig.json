@@ -24,7 +24,7 @@
     // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
     // "forceConsistentCasingInFileNames": true,
     /* Strict Type-Checking Options */
-    // "strict": false,
+    // "strict": true,
     /* Enable all strict type-checking options. */
     "noImplicitAny": false,
     /* Raise error on expressions and declarations with an implied 'any' type. */
@@ -61,7 +61,7 @@
       "models/*": ["./src/models/*"]
     },
     /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
-    // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
+    // "rootDirs": [],                        /* List of root folders wse combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */
     "allowSyntheticDefaultImports": true,
@@ -82,7 +82,7 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "./src/**/*",
+    "./src/**/*"
   ],
   "exclude": [
     "App.js",

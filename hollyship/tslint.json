@@ -1,17 +1,15 @@
 {
   "rules": {
     "member-access": false,
-    "member-ordering": [
-      true,
-      "public-before-private",
-      "static-before-instance",
-      "variables-before-functions"
-    ],
     "no-any": false,
     "no-inferrable-types": [false],
     "no-internal-module": true,
     "no-var-requires": false,
-    "typedef": [false],
+    "typedef": [true, "call-signature",
+      "arrow-call-signature",
+      "parameter",
+      "arrow-parameter"
+    ],
     "typedef-whitespace": [
       true, {
         "call-signature": "nospace",
@@ -52,7 +50,7 @@
     "no-string-literal": true,
     "no-switch-case-fall-through": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
+    "no-use-before-declare": false,
     "no-var-keyword": true,
     "radix": true,
     "switch-default": true,
@@ -73,7 +71,7 @@
     "no-trailing-whitespace": false,
     "object-literal-sort-keys": false,
     "trailing-comma": [
-      true, {
+      false, {
         "multiline": "always",
         "singleline": "never"
       }
