@@ -1,5 +1,8 @@
 {
   "eslintConfig": {
-    "extends": ["react-native-app", "airbnb"]
+    "extends": ["react-native-app", "airbnb"],
+    "linterOptions":{
+      "exclude":["node_modules/**/*.ts"]
+    }
   }
 }
