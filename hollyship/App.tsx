@@ -1,4 +1,5 @@
 import React from 'react';
+
 // import { StyleSheet, View } from 'react-native';
 // import StartScreen from './src/screens/StartScreen';
 import Appstack from './src/screens/index';
