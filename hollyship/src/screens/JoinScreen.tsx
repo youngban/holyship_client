@@ -26,7 +26,11 @@ export default class LoginScreen extends Component<Props> {
         </View>
         <View style={styles.formArea}>
           <TextInput style={styles.textForm} placeholder={'ID'} />
-          <TextInput style={styles.textForm} placeholder={'Password'} />
+          <TextInput
+            style={styles.textForm}
+            secureTextEntry={true}
+            placeholder={'Password'}
+          />
           <TextInput style={styles.textForm} placeholder={'Nickname or Name'} />
         </View>
         <View style={styles.buttomArea}>

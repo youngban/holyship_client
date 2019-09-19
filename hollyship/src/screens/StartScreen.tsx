@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, View, Text } from 'react-native';
 
-type Props = {};
-export default class StartScreen extends Component<Props> {
+interface Props {
+  navigation: any;
+}
+interface State {}
+export default class StartScreen extends Component<Props, State> {
   render() {
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.header} />
@@ -11,10 +15,20 @@ export default class StartScreen extends Component<Props> {
           <Text style={styles.title}>Hollyship</Text>
         </View>
         <View>
-          <Button title="Join us" onPress={() => alert('click')} />
+          <Button
+            title="Join us"
+            onPress={() => {
+              navigation.navigate('Join');
+            }}
+          />
         </View>
         <View>
-          <Button title="Log in" onPress={() => alert('click')} />
+          <Button
+            title="Log in"
+            onPress={() => {
+              navigation.navigate('Login');
+            }}
+          />
         </View>
       </View>
     );
