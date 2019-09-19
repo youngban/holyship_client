@@ -19,7 +19,6 @@ const HomeStack = createStackNavigator(
     }),
   }
 );
-
 const CategoryStack = createStackNavigator(
   {
     CategoryScreen,
@@ -64,6 +63,16 @@ const TabNavigator = createBottomTabNavigator(
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
+
+        let icon = ':thought_balloon:';
+        if (routeName === 'Home') {
+          icon = ':flying_saucer:';
+        } else if (routeName === 'Chart') {
+          icon = ':robot_face:';
+        } else if (routeName === 'Category') {
+          icon = ':heart_decoration:';
+        } else if (routeName === 'Mypage') {
+          icon = ':shrug:?‍';
         let icon = '💭';
         if (routeName === 'Home') {
           icon = '🛸';
@@ -73,6 +82,7 @@ const TabNavigator = createBottomTabNavigator(
           icon = '💟';
         } else if (routeName === 'Mypage') {
           icon = '🤷‍';
+
         }
         return (
           <Text style={{ color: (focused && '#46c3ad') || '#888' }}>
