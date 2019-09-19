@@ -7,11 +7,13 @@ export default class StartScreen extends Component<Props> {
     return (
       <View style={styles.container}>
         <View style={styles.header} />
-        <View style={styles.title}>
-          <Text style={{ fontSize: 35, color: 'white' }}>Hollyship</Text>
+        <View>
+          <Text style={styles.title}>Hollyship</Text>
         </View>
         <View>
           <Button title="Join us" onPress={() => alert('click')} />
+        </View>
+        <View>
           <Button title="Log in" onPress={() => alert('click')} />
         </View>
       </View>
@@ -23,6 +25,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
+    justifyContent: 'center',
   },
   header: {
     width: '100%',
@@ -30,21 +33,17 @@ const styles = StyleSheet.create({
     //backgroundColor: '#ff9a9a',
   },
   title: {
+    fontSize: 35,
+    color: 'white',
     width: '100%',
-    height: '18%',
+    paddingTop: '10%',
     justifyContent: 'center',
     //backgroundColor: '#9aa9ff',
   },
   content: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 30,
+    marginBottom: 30,
     //backgroundColor: '#d6ca1a',
-  },
-  footer: {
-    width: '100%',
-    height: '20%',
-    //backgroundColor: '#1ad657',
   },
 });
