@@ -3,10 +3,12 @@ import { Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+
 import CategoryScreen from './CategoryScreen';
 import HomeScreen from './HomeScreen';
 import ChartScreen from './ChartScreen';
 import UserScreen from './UserScreen';
+
 const HomeStack = createStackNavigator(
   {
     HomeScreen,
@@ -27,6 +29,7 @@ const CategoryStack = createStackNavigator(
     }),
   }
 );
+
 const ChartStack = createStackNavigator(
   {
     ChartScreen,
@@ -37,6 +40,7 @@ const ChartStack = createStackNavigator(
     }),
   }
 );
+
 const UserStack = createStackNavigator(
   {
     UserScreen,
@@ -47,6 +51,7 @@ const UserStack = createStackNavigator(
     }),
   }
 );
+
 const TabNavigator = createBottomTabNavigator(
   {
     Category: CategoryStack,
@@ -58,6 +63,7 @@ const TabNavigator = createBottomTabNavigator(
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
+
         let icon = ':thought_balloon:';
         if (routeName === 'Home') {
           icon = ':flying_saucer:';
@@ -67,6 +73,16 @@ const TabNavigator = createBottomTabNavigator(
           icon = ':heart_decoration:';
         } else if (routeName === 'Mypage') {
           icon = ':shrug:?‍';
+        let icon = '💭';
+        if (routeName === 'Home') {
+          icon = '🛸';
+        } else if (routeName === 'Chart') {
+          icon = '🤖';
+        } else if (routeName === 'Category') {
+          icon = '💟';
+        } else if (routeName === 'Mypage') {
+          icon = '🤷‍';
+
         }
         return (
           <Text style={{ color: (focused && '#46c3ad') || '#888' }}>
@@ -82,6 +98,7 @@ const TabNavigator = createBottomTabNavigator(
     },
   }
 );
+
 const Appstack = createStackNavigator({
   TabNavigator: {
     screen: TabNavigator,
@@ -90,4 +107,5 @@ const Appstack = createStackNavigator({
     }),
   },
 });
+
 export default createAppContainer(Appstack);
