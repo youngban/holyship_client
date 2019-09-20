@@ -3,18 +3,22 @@ import { Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createSwitchNavigator } from 'react-navigation';
 
 import CategoryScreen from './CategoryScreen';
 import HomeScreen from './HomeScreen';
 import ChartScreen from './ChartScreen';
 import UserScreen from './UserScreen';
+import Main from './StartScreen';
+import Join from './JoinScreen';
+import Login from './LoginScreen';
 
 const HomeStack = createStackNavigator(
   {
     HomeScreen,
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: () => ({
       title: 'Home',
     }),
   }
@@ -24,34 +28,31 @@ const CategoryStack = createStackNavigator(
     CategoryScreen,
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: () => ({
       title: 'Category',
     }),
   }
 );
-
 const ChartStack = createStackNavigator(
   {
     ChartScreen,
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: () => ({
       title: 'Chart',
     }),
   }
 );
-
 const UserStack = createStackNavigator(
   {
     UserScreen,
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: () => ({
       title: 'MyPage',
     }),
   }
 );
-
 const TabNavigator = createBottomTabNavigator(
   {
     Category: CategoryStack,
@@ -61,9 +62,8 @@ const TabNavigator = createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+      tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
-
         let icon = ':thought_balloon:';
         if (routeName === 'Home') {
           icon = ':flying_saucer:';
@@ -73,16 +73,6 @@ const TabNavigator = createBottomTabNavigator(
           icon = ':heart_decoration:';
         } else if (routeName === 'Mypage') {
           icon = ':shrug:?‍';
-        let icon = '💭';
-        if (routeName === 'Home') {
-          icon = '🛸';
-        } else if (routeName === 'Chart') {
-          icon = '🤖';
-        } else if (routeName === 'Category') {
-          icon = '💟';
-        } else if (routeName === 'Mypage') {
-          icon = '🤷‍';
-
         }
         return (
           <Text style={{ color: (focused && '#46c3ad') || '#888' }}>
@@ -99,13 +89,30 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 
-const Appstack = createStackNavigator({
-  TabNavigator: {
-    screen: TabNavigator,
-    navigationOptions: ({ navigation }) => ({
-      header: null,
-    }),
+const Appstack = createStackNavigator(
+  {
+    TabNavigator: {
+      screen: TabNavigator,
+      navigationOptions: () => ({
+        header: null,
+      }),
+    },
+    Main: { screen: Main },
+    Join: { screen: Join },
+    // Login: { screen: Login },
   },
+  { initialRouteName: 'Main' }
+);
+
+const AuthStack = createStackNavigator({
+  Login: { screen: Login },
 });
 
-export default createAppContainer(Appstack);
+// export default createAppContainer(Appstack);
+
+const Total = createSwitchNavigator({
+  App: Appstack,
+  Auth: AuthStack,
+});
+
+export default createAppContainer(Total);

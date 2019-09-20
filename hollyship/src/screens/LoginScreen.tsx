@@ -6,16 +6,19 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import HomeScreen from './HomeScreen';
 
 // Login
-type Props = {};
+type Props = {
+  navigation: any;
+};
 export default class LoginScreen extends Component<Props> {
   // static navigationOptions = {
   //   header: 2,
   // };
 
   // _doLogin() {
-  //   this.props.navigation.replace('TabNavigator');
+  //   this.props.navigation.replace('HomeScreen');
   // }
 
   render() {
@@ -36,6 +39,9 @@ export default class LoginScreen extends Component<Props> {
           <TouchableOpacity
             style={styles.button}
             // onPress={this._doLogin.bind(this)}
+            onPress={() => {
+              this.props.navigation.navigate('Home');
+            }}
           >
             <Text style={styles.buttonTitle}>Login</Text>
           </TouchableOpacity>
