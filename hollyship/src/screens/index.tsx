@@ -4,70 +4,13 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import CategoryScreen from './CategoryScreen';
-import HomeScreen from './HomeScreen';
-import ChartScreen from './ChartScreen';
-import UserScreen from './UserScreen';
 import Main from './StartScreen';
 import Join from './JoinScreen';
 import Login from './LoginScreen';
 import HomeStack from './HomeScreen';
-
-// const HomeStack = createStackNavigator(
-//   {
-//     HomeScreen,
-//   },
-//   {
-//     defaultNavigationOptions: () => ({
-//       title: 'Home',
-//     }),
-//   }
-// );
-const CategoryStack = createStackNavigator(
-  {
-    CategoryScreen,
-  },
-  {
-    defaultNavigationOptions: () => ({
-      title: 'Category',
-    }),
-  }
-);
-const ChartStack = createStackNavigator(
-  {
-    ChartScreen,
-  },
-  {
-    defaultNavigationOptions: () => ({
-      title: 'Chart',
-    }),
-  }
-);
-const UserStack = createStackNavigator(
-  {
-    UserScreen,
-  },
-  {
-    defaultNavigationOptions: () => ({
-      title: 'MyPage',
-    }),
-  }
-);
-
-// const Appstack = createStackNavigator(
-//   {
-//     HomeScreen,
-//   },
-//   {
-//     defaultNavigationOptions: {
-//       title: 'Home',
-//       headerStyle: {
-//         backgroundColor: '#100759',
-//       },
-//       headerTintColor: '#fff',
-//     },
-//   }
-// );
+import CategoryStack from './CategoryScreen';
+import ChartStack from './ChartScreen';
+import UserStack from './UserScreen';
 
 const AuthStack = createStackNavigator(
   {
@@ -77,8 +20,6 @@ const AuthStack = createStackNavigator(
   },
   { initialRouteName: 'Main', headerMode: 'none' }
 );
-
-// export default createAppContainer(Appstack);
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -94,13 +35,13 @@ const TabNavigator = createBottomTabNavigator(
         const { routeName } = navigation.state;
         let icon = ':thought_balloon:';
         if (routeName === 'Home') {
-          icon = ':flying_saucer:';
+          icon = '🚀';
         } else if (routeName === 'Chart') {
-          icon = ':robot_face:';
+          icon = '🎡';
         } else if (routeName === 'Category') {
-          icon = ':heart_decoration:';
+          icon = '💘';
         } else if (routeName === 'Mypage') {
-          icon = ':shrug:?‍';
+          icon = '💁‍';
         }
         return (
           <Text style={{ color: (focused && '#46c3ad') || '#888' }}>

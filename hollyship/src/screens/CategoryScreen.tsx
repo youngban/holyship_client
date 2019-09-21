@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { Icon } from 'react-native-elements';
 
-export default class CategoryScreen extends Component {
+class CategoryScreen extends Component {
   render() {
     console.log(this.props);
     return (
@@ -19,3 +21,16 @@ export default class CategoryScreen extends Component {
     );
   }
 }
+
+const CategoryStack = createStackNavigator(
+  {
+    CategoryScreen,
+  },
+  {
+    defaultNavigationOptions: () => ({
+      title: 'Category',
+    }),
+  }
+);
+
+export default CategoryStack;
