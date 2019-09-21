@@ -1,15 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 import Appstack from './src/screens/index';
 
-export default function App() {
-  return <Appstack />;
+interface Props {}
+interface State {}
+export default class App extends React.Component<Props, State> {
+  render() {
+    return <Appstack />;
+  }
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
+// export default function App() {
+//   return <Appstack />;
+// }
