@@ -41,7 +41,7 @@ function Item({ id, userId, message, onSelect }) {
   );
 }
 
-export default function MainMostLiked() {
+export default function MainFollowPost() {
   const [selected, setSelected] = React.useState(new Map());
 
   const onSelect = React.useCallback(

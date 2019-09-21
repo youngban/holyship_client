@@ -11,17 +11,18 @@ import UserScreen from './UserScreen';
 import Main from './StartScreen';
 import Join from './JoinScreen';
 import Login from './LoginScreen';
+import HomeStack from './HomeScreen';
 
-const HomeStack = createStackNavigator(
-  {
-    HomeScreen,
-  },
-  {
-    defaultNavigationOptions: () => ({
-      title: 'Home',
-    }),
-  }
-);
+// const HomeStack = createStackNavigator(
+//   {
+//     HomeScreen,
+//   },
+//   {
+//     defaultNavigationOptions: () => ({
+//       title: 'Home',
+//     }),
+//   }
+// );
 const CategoryStack = createStackNavigator(
   {
     CategoryScreen,
@@ -53,9 +54,20 @@ const UserStack = createStackNavigator(
   }
 );
 
-const Appstack = createStackNavigator({
-  HomeScreen,
-});
+// const Appstack = createStackNavigator(
+//   {
+//     HomeScreen,
+//   },
+//   {
+//     defaultNavigationOptions: {
+//       title: 'Home',
+//       headerStyle: {
+//         backgroundColor: '#100759',
+//       },
+//       headerTintColor: '#fff',
+//     },
+//   }
+// );
 
 const AuthStack = createStackNavigator(
   {
@@ -71,7 +83,7 @@ const AuthStack = createStackNavigator(
 const TabNavigator = createBottomTabNavigator(
   {
     Category: CategoryStack,
-    Home: Appstack,
+    Home: HomeStack,
     Chart: ChartStack,
     Mypage: UserStack,
   },
@@ -99,6 +111,8 @@ const TabNavigator = createBottomTabNavigator(
     }),
     lazy: false,
     tabBarOptions: {
+      activeBackgroundColor: '#100759',
+      inactiveBackgroundColor: '#100759',
       activeTintColor: '#46c3ad',
       inactiveTintColor: '#888',
     },

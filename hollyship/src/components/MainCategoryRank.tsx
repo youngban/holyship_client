@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   TouchableOpacity,
   FlatList,
@@ -52,8 +52,11 @@ function Item({ id, title, singer, uri, onSelect }) {
     </View>
   );
 }
+interface Props {
+  navigation: any;
+}
 
-export default function MainMostLiked() {
+export default function MainCategoryRank() {
   const [selected, setSelected] = React.useState(new Map());
 
   const onSelect = React.useCallback(
