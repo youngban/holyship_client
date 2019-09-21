@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import MainMostLiked from '../components/MainMostLiked';
-import MainCategory from '../components/MainCategory';
+import MainMostLikedStories from '../components/MainMostLikedStories';
+import MainFollowPost from '../components/MainFollowPost';
+import MainCategoryRank from '../components/MainCategoryRank';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-export default class HomeScreen extends Component {
+class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -11,16 +14,19 @@ export default class HomeScreen extends Component {
           <View style={styles.titleArea}>
             <Text style={styles.title}>Most Liked Stories</Text>
             <View>
-              <MainMostLiked />
+              <MainMostLikedStories />
             </View>
           </View>
           <View style={styles.titleArea}>
             <Text style={styles.title}>카테고리별 1위의 노래</Text>
+            <View>
+              <MainCategoryRank />
+            </View>
           </View>
           <View style={styles.titleArea}>
             <Text style={styles.title}>팔로워들의 댓글 및 포스팅</Text>
             <View>
-              <MainCategory />
+              <MainFollowPost />
             </View>
           </View>
         </ScrollView>
@@ -28,6 +34,19 @@ export default class HomeScreen extends Component {
     );
   }
 }
+
+const HomeStack = createStackNavigator(
+  {
+    HomeScreen,
+  },
+  {
+    defaultNavigationOptions: () => ({
+      title: 'Home',
+    }),
+  }
+);
+
+export default HomeStack;
 
 const styles = StyleSheet.create({
   container: {
