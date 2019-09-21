@@ -6,17 +6,28 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import HomeScreen from './HomeScreen';
 
 // Login
 type Props = {
   navigation: any;
 };
-export default class LoginScreen extends Component<Props> {
-  // static navigationOptions = {
-  //   header: 2,
-  // };
+type State = {
+  user_id: string;
+  password: string;
+};
 
+export default class LoginScreen extends Component<Props, State> {
+  static navigationOptions = {
+    header: 'Login',
+  };
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      user_id: '',
+      password: '',
+    };
+  }
   // _doLogin() {
   //   this.props.navigation.replace('HomeScreen');
   // }
@@ -28,11 +39,18 @@ export default class LoginScreen extends Component<Props> {
           <Text style={styles.title}>Holly Ship 🚀</Text>
         </View>
         <View style={styles.formArea}>
-          <TextInput style={styles.textForm} placeholder={'ID'} />
+          <TextInput
+            style={styles.textForm}
+            placeholder="ID"
+            value={this.state.user_id}
+            onChangeText={text => this.setState({ user_id: text })}
+          />
           <TextInput
             style={styles.textForm}
             secureTextEntry={true}
             placeholder={'Password'}
+            value={this.state.password}
+            onChangeText={text => this.setState({ password: text })}
           />
         </View>
         <View style={styles.buttomArea}>

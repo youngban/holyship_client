@@ -1,9 +1,8 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createSwitchNavigator } from 'react-navigation';
 
 import CategoryScreen from './CategoryScreen';
 import HomeScreen from './HomeScreen';
@@ -53,14 +52,31 @@ const UserStack = createStackNavigator(
     }),
   }
 );
+
+const Appstack = createStackNavigator({
+  HomeScreen,
+});
+
+const AuthStack = createStackNavigator(
+  {
+    Main,
+    Join,
+    Login,
+  },
+  { initialRouteName: 'Main', headerMode: 'none' }
+);
+
+// export default createAppContainer(Appstack);
+
 const TabNavigator = createBottomTabNavigator(
   {
     Category: CategoryStack,
-    Home: HomeStack,
+    Home: Appstack,
     Chart: ChartStack,
     Mypage: UserStack,
   },
   {
+    initialRouteName: 'Home',
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
@@ -89,30 +105,12 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 
-const Appstack = createStackNavigator(
+const Total = createSwitchNavigator(
   {
-    TabNavigator: {
-      screen: TabNavigator,
-      navigationOptions: () => ({
-        header: null,
-      }),
-    },
-    Main: { screen: Main },
-    Join: { screen: Join },
-    // Login: { screen: Login },
+    App: TabNavigator,
+    Auth: AuthStack,
   },
-  { initialRouteName: 'Main' }
+  { initialRouteName: 'Auth' }
 );
-
-const AuthStack = createStackNavigator({
-  Login: { screen: Login },
-});
-
-// export default createAppContainer(Appstack);
-
-const Total = createSwitchNavigator({
-  App: Appstack,
-  Auth: AuthStack,
-});
 
 export default createAppContainer(Total);
