@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 
 export default class EmotinScreen extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('key'),
+    };
+  };
   render() {
-    return <Text>Emotion</Text>;
+    const key = this.props.navigation.state.params.key;
+
+    return <Text>{key}</Text>;
   }
 }
