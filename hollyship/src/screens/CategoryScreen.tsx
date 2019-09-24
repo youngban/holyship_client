@@ -6,14 +6,14 @@ import { Icon } from 'react-native-elements';
 
 class CategoryScreen extends Component {
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <View>
         <Icon
           name="sentiment-neutral"
           type="MaterialIcons"
           size={60}
-          onPress={() => this.props.navigation.navigate('EmotionScreen')}
+          onPress={props => this.props.navigation.navigate('EmotionScreen')}
         >
           <Text>happy</Text>
         </Icon>
