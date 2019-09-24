@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 
 type Props = {
   navigation: NavigationStackProp<{ category: 'string' }>;
 };
-export default class EmotinScreen extends Component {
+export default class EmotinScreen extends Component<Props> {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('category'),
