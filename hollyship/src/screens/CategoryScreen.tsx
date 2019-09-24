@@ -25,6 +25,7 @@ class CategoryScreen extends Component<Props, MyState> {
   }
 
   // setState의 category에 변수를 사용해서 handlePress를 다이내믹하게 사용할 수 있도록 리팩토링하기
+  // 인자로 받아서 if문 처리
   handlePress1(emotion) {
     this.props.navigation.navigate('EmotionScreen', {
       category: emotion,

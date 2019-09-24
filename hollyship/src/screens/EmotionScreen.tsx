@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, View, FlatList } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 
 type Props = {
@@ -14,6 +14,6 @@ export default class EmotinScreen extends Component {
   render() {
     const header = this.props.navigation.state.params.category;
 
-    return <Text>{header}</Text>;
+    return <View>{/* flat List로 해당 카테고리의 글들을 렌더링*/}</View>;
   }
 }
