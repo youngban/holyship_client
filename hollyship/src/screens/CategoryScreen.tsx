@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View, Button, Modal, Alert, Picker } from 'react-native';
+import {
+  Text,
+  View,
+  Button,
+  Modal,
+  Alert,
+  Picker,
+  StyleSheet,
+} from 'react-native';
 import {
   createStackNavigator,
   NavigationStackProp,
@@ -15,6 +23,7 @@ type Props = {
   navigation: NavigationStackProp<{ category: 'string' }>;
 };
 
+const emotions = ['HAPPY', 'BLANK', 'SAD', 'CHILL', 'ANGRY', 'CONFUSED'];
 class CategoryScreen extends Component<Props, MyState> {
   constructor(props) {
     super(props);
@@ -25,52 +34,14 @@ class CategoryScreen extends Component<Props, MyState> {
   }
 
   // setState의 category에 변수를 사용해서 handlePress를 다이내믹하게 사용할 수 있도록 리팩토링하기
-  // 인자로 받아서 if문 처리
-  handlePress1(emotion) {
+  // const emotions = [{category:'happy',icon:'emoticon-outline'}]
+  handlePress(emotion) {
     this.props.navigation.navigate('EmotionScreen', {
       category: emotion,
     });
   }
 
-  handlePress2() {
-    this.props.navigation.navigate('EmotionScreen', {
-      category: 'BLANK',
-    });
-  }
-
-  handlePress3() {
-    this.props.navigation.navigate('EmotionScreen', {
-      category: 'SAD',
-    });
-  }
-
-  handlePress4() {
-    this.props.navigation.navigate('EmotionScreen', {
-      category: 'CHILL',
-    });
-  }
-
-  handlePress5() {
-    this.props.navigation.navigate('EmotionScreen', {
-      category: 'ANGRY',
-    });
-  }
-
-  handlePress6() {
-    this.props.navigation.navigate('EmotionScreen', {
-      category: 'CONFUSED',
-    });
-  }
-
   render() {
-    // console.log(this.props);
-    return (
-      <View>
-        <Icon
-          name="sentiment-neutral"
-          type="MaterialIcons"
-          size={60}
-          onPress={props => this.props.navigation.navigate('EmotionScreen')}
     return (
       <View style={{ flex: 1 }}>
         <Modal
@@ -78,19 +49,23 @@ class CategoryScreen extends Component<Props, MyState> {
           transparent={false}
           visible={this.state.isVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed');
+            Alert.alert('글쓰기 취소', '게시글 입력을 취소하시겠습니까?', [
+              { text: '아니오' },
+              {
+                text: '네',
+                onPress: () =>
+                  this.setState({ isVisible: !this.state.isVisible }),
+              },
+            ]);
           }}
         >
           <Picker
             selectedValue={this.state.emotion}
             onValueChange={itemValue => this.setState({ emotion: itemValue })}
           >
-            <Picker.Item label="HAPPY" value="HAPPY" />
-            <Picker.Item label="BLANK" value="BLANK" />
-            <Picker.Item label="SAD" value="SAD" />
-            <Picker.Item label="CHILL" value="CHILL" />
-            <Picker.Item label="ANGRY" value="ANGRY" />
-            <Picker.Item label="CONFUSED" value="CONFUSED" />
+            {emotions.map(item => (
+              <Picker.Item label={item} value={item} key={item} />
+            ))}
           </Picker>
           <Button
             title="Post"
@@ -112,9 +87,9 @@ class CategoryScreen extends Component<Props, MyState> {
           <Icon
             name="emoticon-outline"
             size={60}
-            onPress={() => this.handlePress1('HAPPY')}
+            onPress={() => this.handlePress('HAPPY')}
           />
-          <Text style={{ textAlign: 'center' }}>HAPPY</Text>
+          <Text style={styles.iconTitle}>HAPPY</Text>
         </View>
 
         <View
@@ -129,16 +104,16 @@ class CategoryScreen extends Component<Props, MyState> {
             <Icon
               name="emoticon-cool-outline"
               size={60}
-              onPress={() => this.handlePress4()}
+              onPress={() => this.handlePress('CHILL')}
             />
-            <Text style={{ textAlign: 'center' }}>CHILL</Text>
+            <Text style={styles.iconTitle}>CHILL</Text>
           </View>
 
           <View style={{ alignItems: 'center' }}>
             <Icon
               name="selection-ellipse"
               size={60}
-              onPress={() => this.handlePress2()}
+              onPress={() => this.handlePress('BLANK')}
             ></Icon>
             <Text accessibilityLabel="그냥" style={{ textAlign: 'center' }}>
               BLANK
@@ -149,30 +124,28 @@ class CategoryScreen extends Component<Props, MyState> {
             <Icon
               name="emoticon-cry-outline"
               size={60}
-              onPress={() => this.handlePress3()}
+              onPress={() => this.handlePress('SAD')}
             />
-            <Text style={{ textAlign: 'center' }}>SAD</Text>
+            <Text style={styles.iconTitle}>SAD</Text>
           </View>
         </View>
-        {/* <View style={{ flexDirection: 'row' }}></View> */}
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
           <View>
             <Icon
               name="emoticon-angry-outline"
               size={60}
-              onPress={() => this.handlePress5()}
+              onPress={() => this.handlePress('ANGRY')}
             />
-            <Text style={{ textAlign: 'center' }}>ANGRY</Text>
+            <Text style={styles.iconTitle}>ANGRY</Text>
           </View>
           <View>
             <Icon
-              // style={{ alignItems: 'flex-end' }}
               name="emoticon-sad-outline"
               size={60}
-              onPress={() => this.handlePress6()}
+              onPress={() => this.handlePress('CONFUSED')}
             />
-            <Text style={{ textAlign: 'center' }}>CONFUSED</Text>
+            <Text style={styles.iconTitle}>CONFUSED</Text>
           </View>
         </View>
       </View>
@@ -193,3 +166,9 @@ const CategoryStack = createStackNavigator(
 );
 
 export default CategoryStack;
+
+const styles = StyleSheet.create({
+  iconTitle: {
+    textAlign: 'center',
+  },
+});
