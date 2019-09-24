@@ -9,62 +9,56 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EmotionScreen from './EmotionScreen';
 import { TextInput } from 'react-native-gesture-handler';
 
-type MyState = { category: string; isVisible: boolean; emotion: string };
+type MyState = { isVisible: boolean; emotion: string };
 
 type Props = {
-  navigation: NavigationStackProp<{ key: 'string' }>;
+  navigation: NavigationStackProp<{ category: 'string' }>;
 };
 
 class CategoryScreen extends Component<Props, MyState> {
   constructor(props) {
     super(props);
     this.state = {
-      category: '',
       isVisible: false,
       emotion: '',
     };
   }
 
   // setState의 category에 변수를 사용해서 handlePress를 다이내믹하게 사용할 수 있도록 리팩토링하기
-  handlePress1() {
-    this.setState({ category: 'HAPPY' });
+  // 인자로 받아서 if문 처리
+  handlePress1(emotion) {
     this.props.navigation.navigate('EmotionScreen', {
-      key: this.state.category,
+      category: emotion,
     });
   }
 
   handlePress2() {
-    this.setState({ category: 'BLANK' });
     this.props.navigation.navigate('EmotionScreen', {
-      key: this.state.category,
+      category: 'BLANK',
     });
   }
 
   handlePress3() {
-    this.setState(() => ({ category: 'SAD' }));
     this.props.navigation.navigate('EmotionScreen', {
-      key: this.state.category,
+      category: 'SAD',
     });
   }
 
   handlePress4() {
-    this.setState(() => ({ category: 'CHILL' }));
     this.props.navigation.navigate('EmotionScreen', {
-      key: this.state.category,
+      category: 'CHILL',
     });
   }
 
   handlePress5() {
-    this.setState(() => ({ category: 'ANGRY' }));
     this.props.navigation.navigate('EmotionScreen', {
-      key: this.state.category,
+      category: 'ANGRY',
     });
   }
 
   handlePress6() {
-    this.setState(() => ({ category: 'CONFUSED' }));
     this.props.navigation.navigate('EmotionScreen', {
-      key: this.state.category,
+      category: 'CONFUSED',
     });
   }
 
@@ -118,7 +112,7 @@ class CategoryScreen extends Component<Props, MyState> {
           <Icon
             name="emoticon-outline"
             size={60}
-            onPress={() => this.handlePress1()}
+            onPress={() => this.handlePress1('HAPPY')}
           />
           <Text style={{ textAlign: 'center' }}>HAPPY</Text>
         </View>
