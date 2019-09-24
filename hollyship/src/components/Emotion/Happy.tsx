@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import {
   TouchableOpacity,
   FlatList,
@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Image,
+  Alert,
 } from 'react-native';
 
 // * 데이터 관리
@@ -73,12 +74,10 @@ function Item({ id, title, singer, uri, onPress }) {
     </View>
   );
 }
-interface Props {
-  navigation: any;
-}
+interface Props {}
 interface State {}
 
-export default class MainCategoryRank extends React.Component<Props, State> {
+export default class Happy extends React.Component<Props, State> {
   state = {
     selected: new Map(),
   };
@@ -90,8 +89,8 @@ export default class MainCategoryRank extends React.Component<Props, State> {
   };
   render() {
     const { selected } = this.state;
-    // const { onPress } = this;
-    const { navigation } = this.props;
+    const { onPress } = this;
+
     return (
       <View style={styles.container}>
         <FlatList
@@ -102,12 +101,12 @@ export default class MainCategoryRank extends React.Component<Props, State> {
               uri={item.uri}
               title={item.title}
               singer={item.singer}
-              onPress={() => navigation.navigate('Chart')}
+              onPress={() => Alert.alert('hi')}
             />
           )}
           keyExtractor={item => item.id}
           extraData={selected}
-          horizontal={true}
+          horizontal={false}
         />
       </View>
     );
@@ -119,9 +118,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    backgroundColor: 'hotpink',
+    backgroundColor: '#f59042',
     borderRadius: 10,
-    padding: 20,
+    padding: 10,
     marginVertical: 8,
     marginHorizontal: 8,
   },

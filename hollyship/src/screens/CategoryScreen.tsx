@@ -69,6 +69,14 @@ class CategoryScreen extends Component<Props, MyState> {
   }
 
   render() {
+    // console.log(this.props);
+    return (
+      <View>
+        <Icon
+          name="sentiment-neutral"
+          type="MaterialIcons"
+          size={60}
+          onPress={props => this.props.navigation.navigate('EmotionScreen')}
     return (
       <View style={{ flex: 1 }}>
         <Modal

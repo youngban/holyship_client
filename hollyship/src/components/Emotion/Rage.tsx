@@ -1,4 +1,156 @@
-import * as React from 'react';
+// import React, { Component } from 'react';
+// import { View, Text } from 'react-native';
+
+// interface Props {}
+// interface State {}
+
+// const categories = [
+//   {
+//     id: 1,
+//     title: '가끔이러다',
+//     singer: '펀치',
+//     tags: ['Sad', 'Happy', 'Rage', 'Fear', 'Chill', 'Blank'],
+//     like: 142,
+//     image: require('../FakeImage/1.jpeg'),
+//   },
+//   {
+//     id: 2,
+//     title: '가을밤 떠난 너',
+//     singer: '케이시',
+//     tags: ['Sad', 'Happy', 'Rage', 'Fear', 'Chill', 'Blank'],
+//     like: 100,
+//     image: require('../FakeImage/2.jpeg'),
+//   },
+//   {
+//     id: 3,
+//     title: '안녕',
+//     singer: '폴킴',
+//     tags: ['Sad', 'Happy', 'Rage', 'Fear', 'Chill', 'Blank'],
+//     like: 42,
+//     image: require('../FakeImage/3.jpeg'),
+//   },
+//   {
+//     id: 4,
+//     title: '워커홀릭',
+//     singer: '볼빤간사춘기',
+//     tags: ['Sad', 'Happy', 'Rage', 'Fear', 'Chill', 'Blank'],
+//     like: 2,
+//     image: require('../FakeImage/4.jpeg'),
+//   },
+// ];
+
+// const music = [];
+// export default class Sad extends React.Component {
+//   render() {
+//     return (
+//       <View>
+//         <Text>hi</Text>
+//       </View>
+//     );
+//   }
+// }
+//!
+// import React, { Component } from 'react';
+// import {
+//   TouchableOpacity,
+//   FlatList,
+//   StyleSheet,
+//   Text,
+//   View,
+//   Image,
+// } from 'react-native';
+2;
+// // * 데이터 관리
+// const DATA = [
+//   {
+//     id: '1',
+//     userId: 'suyang',
+//     message: '오늘은 좋은 하루',
+//   },
+//   {
+//     id: '2',
+//     userId: 'hello',
+//     message: '내일은 좋은 하루',
+//   },
+//   {
+//     id: '3',
+//     userId: 'olleh',
+//     message: ' 하루',
+//   },
+// ];
+
+// // * UI Part
+// // const SadItem = () => {
+// //   return <Text>세드아이템자리</Text>;
+// // };
+// function Item({ id, title, selected, onSelect }) {
+//   return (
+//     <TouchableOpacity
+//       onPress={() => onSelect(id)}
+//       style={[
+//         styles.item,
+//         { backgroundColor: selected ? '#6e3b6e' : '#f9c2ff' },
+//       ]}
+//     >
+//       <Text style={styles.title}>{title}</Text>
+//     </TouchableOpacity>
+//   );
+// }
+
+// export default class Sad extends Component {
+//   state = {
+//     data: DATA,
+//     selected: new Map(),
+//   };
+
+//   onSelect = id => {
+//     console.log('SELECTED');
+//     const { selected } = this.state;
+//     const newSelected = new Map(selected);
+//     newSelected.set(id, !selected.get(id));
+//     this.setState(newSelected);
+//   };
+
+//   render() {
+//     const { data } = this.state;
+//     const { onSelect } = this;
+//     return (
+//       <View style={styles.container}>
+//         <Text>SAD PAGE</Text>
+//         <FlatList
+//           data={data}
+//           renderItem={({ item }) => (
+//             <Item id={item.id} message={item.message} onSelect={onSelect} />
+//           )}
+//           keyExtractor={itme => item.id}
+//         />
+//       </View>
+//     );
+//   }
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//   },
+//   item: {
+//     backgroundColor: 'hotpink',
+//     borderRadius: 10,
+//     padding: 20,
+//     marginVertical: 8,
+//     marginHorizontal: 8,
+//   },
+//   title: {
+//     fontSize: 10,
+//     color: 'white',
+//     fontWeight: 'bold',
+//   },
+//   hi: {
+//     flex: 1,
+//   },
+// });
+//??
+import React, { Component } from 'react';
 import {
   TouchableOpacity,
   FlatList,
@@ -6,9 +158,10 @@ import {
   Text,
   View,
   Image,
+  Alert,
 } from 'react-native';
 
-// * 데이터 관리
+//TODO: 데이터 관리
 const DATA = [
   {
     id: '1',
@@ -54,7 +207,7 @@ const DATA = [
   },
 ];
 
-// * UI Part
+//TODO: UI Part
 function Item({ id, title, singer, uri, onPress }) {
   return (
     <View>
@@ -73,12 +226,11 @@ function Item({ id, title, singer, uri, onPress }) {
     </View>
   );
 }
-interface Props {
-  navigation: any;
-}
+interface Props {}
 interface State {}
 
-export default class MainCategoryRank extends React.Component<Props, State> {
+//TODO: Main
+export default class Rage extends React.Component<Props, State> {
   state = {
     selected: new Map(),
   };
@@ -90,8 +242,7 @@ export default class MainCategoryRank extends React.Component<Props, State> {
   };
   render() {
     const { selected } = this.state;
-    // const { onPress } = this;
-    const { navigation } = this.props;
+
     return (
       <View style={styles.container}>
         <FlatList
@@ -102,26 +253,27 @@ export default class MainCategoryRank extends React.Component<Props, State> {
               uri={item.uri}
               title={item.title}
               singer={item.singer}
-              onPress={() => navigation.navigate('Chart')}
+              onPress={() => Alert.alert('hi')}
             />
           )}
           keyExtractor={item => item.id}
           extraData={selected}
-          horizontal={true}
+          horizontal={false}
         />
       </View>
     );
   }
 }
 
+//TODO: Style
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   item: {
-    backgroundColor: 'hotpink',
+    backgroundColor: '#ebe421',
     borderRadius: 10,
-    padding: 20,
+    padding: 10,
     marginVertical: 8,
     marginHorizontal: 8,
   },
