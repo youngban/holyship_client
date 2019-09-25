@@ -4,8 +4,8 @@ import { Text, View, StyleSheet, Alert } from 'react-native';
 import { ButtonGroup, Button } from 'react-native-elements';
 import Sad from '../components/Emotion/Sad';
 import Happy from '../components/Emotion/Happy';
-import Rage from '../components/Emotion/Rage';
-import Fear from '../components/Emotion/Fear';
+import Angry from '../components/Emotion/Angry';
+import Confused from '../components/Emotion/Confused';
 import Chill from '../components/Emotion/Chill';
 import Blank from '../components/Emotion/Blank';
 
@@ -51,16 +51,16 @@ class ChartScreen extends React.Component<Props, State> {
   );
   component3 = () => (
     <Button
-      title="Rage"
+      title="Angry"
       type="clear"
-      onPress={() => this.setState({ currentEmotion: 'Rage' })}
+      onPress={() => this.setState({ currentEmotion: 'Angry' })}
     />
   );
   component4 = () => (
     <Button
-      title="Fear"
+      title="Confused"
       type="clear"
-      onPress={() => this.setState({ currentEmotion: 'Fear' })}
+      onPress={() => this.setState({ currentEmotion: 'Confused' })}
     />
   );
   component5 = () => (
@@ -101,10 +101,10 @@ class ChartScreen extends React.Component<Props, State> {
             <Sad />
           ) : this.state.currentEmotion === 'Happy' ? (
             <Happy />
-          ) : this.state.currentEmotion === 'Rage' ? (
-            <Rage />
-          ) : this.state.currentEmotion === 'Fear' ? (
-            <Fear />
+          ) : this.state.currentEmotion === 'Angry' ? (
+            <Angry />
+          ) : this.state.currentEmotion === 'Confused' ? (
+            <Confused />
           ) : this.state.currentEmotion === 'Chill' ? (
             <Chill />
           ) : (

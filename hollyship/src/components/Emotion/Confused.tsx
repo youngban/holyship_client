@@ -78,7 +78,7 @@ interface Props {}
 interface State {}
 
 //TODO: Main
-export default class Fear extends React.Component<Props, State> {
+export default class Confused extends React.Component<Props, State> {
   state = {
     selected: new Map(),
   };
