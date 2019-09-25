@@ -6,17 +6,31 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
+const axios = require('axios');
 
 // Login
 type Props = {};
 export default class LoginScreen extends Component<Props> {
-  // static navigationOptions = {
-  //   header: 2,
-  // };
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      username: '',
+      password: '',
+    };
+  }
 
-  // _doLogin() {
-  //   this.props.navigation.replace('TabNavigator');
-  // }
+  handleJoin() {
+    axios
+      .post('http://192.168.0.10:8000/auth/signup', {
+        email: this.state.email,
+        username: this.state.username,
+        password: this.state.password,
+      })
+      .then(this.props.navigation.dispatch(NavigationActions.back()))
+      .catch(err => console.log(err));
+  }
 
   render() {
     return (
@@ -25,18 +39,28 @@ export default class LoginScreen extends Component<Props> {
           <Text style={styles.title}>Wellcome 🚀</Text>
         </View>
         <View style={styles.formArea}>
-          <TextInput style={styles.textForm} placeholder={'ID'} />
+          <TextInput
+            style={styles.textForm}
+            // keyboardType="email-address"
+            placeholder={'ID'}
+            onChangeText={input => this.setState({ email: input })}
+          />
           <TextInput
             style={styles.textForm}
             secureTextEntry={true}
             placeholder={'Password'}
+            onChangeText={input => this.setState({ password: input })}
           />
-          <TextInput style={styles.textForm} placeholder={'Nickname or Name'} />
+          <TextInput
+            style={styles.textForm}
+            placeholder={'Username'}
+            onChangeText={input => this.setState({ username: input })}
+          />
         </View>
         <View style={styles.buttomArea}>
           <TouchableOpacity
             style={styles.button}
-            // onPress={this._doLogin.bind(this)}
+            onPress={this.handleJoin.bind(this)}
           >
             <Text style={styles.buttonTitle}>Sign Up</Text>
           </TouchableOpacity>
