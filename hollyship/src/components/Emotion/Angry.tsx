@@ -78,7 +78,7 @@ interface Props {}
 interface State {}
 
 //TODO: Main
-export default class Fear extends React.Component<Props, State> {
+export default class Angry extends React.Component<Props, State> {
   state = {
     selected: new Map(),
   };
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    backgroundColor: '#64eb21',
+    backgroundColor: '#ebe421',
     borderRadius: 10,
     padding: 10,
     marginVertical: 8,
