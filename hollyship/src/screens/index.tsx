@@ -4,7 +4,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import Main from './StartScreen';
+import Start from './StartScreen';
 import Join from './JoinScreen';
 import Login from './LoginScreen';
 import HomeStack from './HomeScreen';
@@ -14,11 +14,11 @@ import UserStack from './UserScreen';
 
 const AuthStack = createStackNavigator(
   {
-    Main,
+    Start,
     Join,
     Login,
   },
-  { initialRouteName: 'Main', headerMode: 'none' }
+  { initialRouteName: 'Start', headerMode: 'none' }
 );
 
 const TabNavigator = createBottomTabNavigator(
