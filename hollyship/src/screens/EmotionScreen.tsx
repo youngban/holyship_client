@@ -13,7 +13,6 @@ export default class EmotinScreen extends Component<Props> {
   };
   render() {
     const header = this.props.navigation.state.params.category;
-
     return <View>{/* flat List로 해당 카테고리의 글들을 렌더링*/}</View>;
   }
 }
