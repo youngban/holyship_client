@@ -42,10 +42,6 @@ class CategoryScreen extends Component<Props, MyState> {
   }
 
   render() {
-<<<<<<< HEAD
-=======
-    // console.log(this.props);
->>>>>>> c0120da02a5a6abe712f980e1f2b1e19889adaa5
     return (
       <View style={{ flex: 1 }}>
         <Modal
