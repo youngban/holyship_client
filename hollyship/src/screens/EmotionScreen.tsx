@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { View, FlatList } from 'react-native';
+import { NavigationStackProp } from 'react-navigation-stack';
 
-export default class EmotinScreen extends Component {
+type Props = {
+  navigation: NavigationStackProp<{ category: 'string' }>;
+};
+export default class EmotinScreen extends Component<Props> {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('key'),
+      title: navigation.getParam('category'),
     };
   };
   render() {
-    const key = this.props.navigation.state.params.key;
+    const header = this.props.navigation.state.params.category;
 
-    return <Text>{key}</Text>;
+    return <View>{/* flat List로 해당 카테고리의 글들을 렌더링*/}</View>;
   }
 }
