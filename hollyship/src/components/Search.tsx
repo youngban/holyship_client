@@ -3,11 +3,6 @@ import { SearchBar } from 'react-native-elements';
 
 const axios = require('axios');
 
-const client_id = '7740a77e808040a6b9494d9861edb1b0';
-'Nzc0MGE3N2U4MDgwNDBhNmI5NDk0ZDk4NjFlZGIxYjA=';
-const client_secret = 'b0cbf91f4c65466a85bf968e8582bad3';
-'YjBjYmY5MWY0YzY1NDY2YTg1YmY5NjhlODU4MmJhZDM=';
-
 var authOptions = {
   url: 'https://accounts.spotify.com/api/token',
   headers: {
