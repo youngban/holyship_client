@@ -1,5 +1,6 @@
 import React from 'react';
 import { AsyncStorage, ActivityIndicator, StatusBar, View } from 'react-native';
+import { getAccessToken } from 'src/utils/api';
 
 interface Props {
   navigation: any;

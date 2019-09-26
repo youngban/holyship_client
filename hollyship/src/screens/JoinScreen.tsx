@@ -10,8 +10,15 @@ import { NavigationActions } from 'react-navigation';
 const axios = require('axios');
 
 // Login
-type Props = {};
-export default class LoginScreen extends Component<Props> {
+type Props = {
+  navigation: any;
+};
+interface State {
+  email: string;
+  username: string;
+  password: string;
+}
+export default class LoginScreen extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +30,7 @@ export default class LoginScreen extends Component<Props> {
 
   handleJoin() {
     axios
-      .post('http://192.168.0.10:8000/auth/signup', {
+      .post('http://13.125.244.90:8000/auth/signup', {
         email: this.state.email,
         username: this.state.username,
         password: this.state.password,
