@@ -5,14 +5,16 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
+const axios = require('axios');
 
 // Login
 type Props = {
   navigation: any;
 };
 type State = {
-  user_id: string;
+  email: string;
   password: string;
 };
 
@@ -24,13 +26,30 @@ export default class LoginScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      user_id: '',
+      email: '',
       password: '',
     };
   }
   // _doLogin() {
   //   this.props.navigation.replace('HomeScreen');
   // }
+  handleLogin() {
+    console.log(this.state);
+
+    axios
+      .post('http://13.125.244.90:8000/auth/login', {
+        email: this.state.email,
+        password: this.state.password,
+      })
+      .then(res => {
+        console.log(res);
+        console.log(res.status);
+        if (res.status === 200) {
+          this.props.navigation.navigate('Home');
+        }
+      })
+      .catch(Alert.alert('아이디 / 비밀번호가 맞지않습니다.'));
+  }
 
   render() {
     return (
@@ -42,24 +61,24 @@ export default class LoginScreen extends Component<Props, State> {
           <TextInput
             style={styles.textForm}
             placeholder="ID"
-            value={this.state.user_id}
-            onChangeText={text => this.setState({ user_id: text })}
+            // value={this.state.username}
+            onChangeText={text => this.setState({ email: text })}
           />
           <TextInput
             style={styles.textForm}
             secureTextEntry={true}
             placeholder={'Password'}
-            value={this.state.password}
+            // value={this.state.password}
             onChangeText={text => this.setState({ password: text })}
           />
         </View>
         <View style={styles.buttomArea}>
           <TouchableOpacity
             style={styles.button}
-            // onPress={this._doLogin.bind(this)}
-            onPress={() => {
-              this.props.navigation.navigate('Home');
-            }}
+            onPress={this.handleLogin.bind(this)}
+            // onPress={() => {
+            //   this.props.navigation.navigate('Home');
+            // }}
           >
             <Text style={styles.buttonTitle}>Login</Text>
           </TouchableOpacity>
