@@ -30,9 +30,7 @@ export default class LoginScreen extends Component<Props, State> {
       password: '',
     };
   }
-  // _doLogin() {
-  //   this.props.navigation.replace('HomeScreen');
-  // }
+
   handleLogin() {
     console.log(this.state);
 
@@ -48,7 +46,7 @@ export default class LoginScreen extends Component<Props, State> {
           this.props.navigation.navigate('Home');
         }
       })
-      .catch(Alert.alert('아이디 / 비밀번호가 맞지않습니다.'));
+      .catch(err => Alert.alert('아이디 / 비밀번호가 맞지않습니다.'));
   }
 
   render() {
