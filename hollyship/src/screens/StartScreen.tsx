@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, Button, View, Text } from 'react-native';
+import { StyleSheet, Button, View, Text, Alert } from 'react-native';
+const axios = require('axios');
 
 interface Props {
   navigation: any;
 }
 interface State {}
 export default class StartScreen extends Component<Props, State> {
+  hand() {
+    axios.get('http://13.125.244.90:8000/auth/logout').then(console.log('hi'));
+    // .catch(err => Alert.alert(err));
+  }
   render() {
     const { navigation } = this.props;
     return (
@@ -29,6 +34,9 @@ export default class StartScreen extends Component<Props, State> {
               navigation.navigate('Login');
             }}
           />
+        </View>
+        <View>
+          <Button title="Log-Out" onPress={this.hand.bind(this)} />
         </View>
       </View>
     );
