@@ -7,6 +7,7 @@ import {
   Alert,
   Picker,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import {
   createStackNavigator,
@@ -15,7 +16,9 @@ import {
 // import { Icon } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EmotionScreen from './EmotionScreen';
+import ReadScreen from './ReadScreen';
 import { TextInput } from 'react-native-gesture-handler';
+const axios = require('axios');
 
 type MyState = { isVisible: boolean; emotion: string };
 
@@ -30,15 +33,35 @@ class CategoryScreen extends Component<Props, MyState> {
     this.state = {
       isVisible: false,
       emotion: '',
+      title: '',
+      content: '',
+      emotion: '',
     };
   }
 
   // setState의 category에 변수를 사용해서 handlePress를 다이내믹하게 사용할 수 있도록 리팩토링하기
   // const emotions = [{category:'happy',icon:'emoticon-outline'}]
   handlePress(emotion) {
-    this.props.navigation.navigate('EmotionScreen', {
-      category: emotion,
-    });
+    axios
+      .get(`http://13.125.244.90:8000/emoji/${emotion}`)
+      .then(res => {
+        this.props.navigation.navigate('EmotionScreen', {
+          category: emotion,
+          data: res.data,
+        });
+      })
+      .catch(err => console.log(err));
+  }
+
+  handlePost() {
+    axios
+      .post('http://13.125.244.90:8000/post', {
+        title: this.state.title,
+        content: this.state.content,
+        emotion: this.state.emotion,
+      })
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -59,21 +82,63 @@ class CategoryScreen extends Component<Props, MyState> {
             ]);
           }}
         >
-          <Picker
-            selectedValue={this.state.emotion}
-            onValueChange={itemValue => this.setState({ emotion: itemValue })}
-          >
-            {emotions.map(item => (
-              <Picker.Item label={item} value={item} key={item} />
-            ))}
-          </Picker>
-          <Button
-            title="Post"
-            onPress={() => {
-              this.setState({ isVisible: !this.state.isVisible });
-            }}
-          ></Button>
-          <TextInput></TextInput>
+          <View style={styles.darkTheme}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 20,
+                }}
+              >
+                글쓰기
+              </Text>
+
+              <View style={{ paddingEnd: '10%' }}>
+                <Icon
+                  name="check-outline"
+                  size={20}
+                  color="white"
+                  onPress={this.handlePost.bind(this)}
+                />
+              </View>
+            </View>
+
+            <Picker
+              style={styles.darkTheme}
+              itemStyle={styles.darkTheme}
+              selectedValue={this.state.emotion}
+              onValueChange={itemValue => this.setState({ emotion: itemValue })}
+            >
+              {emotions.map(item => (
+                <Picker.Item
+                  label={item}
+                  value={item}
+                  key={item}
+                  color={'black'}
+                />
+              ))}
+            </Picker>
+            <View style={{ borderBottomColor: 'grey', borderBottomWidth: 1 }}>
+              <TextInput
+                style={styles.darkTheme}
+                placeholder={'제목'}
+                onChangeText={text => this.setState({ title: text })}
+              ></TextInput>
+            </View>
+
+            <TextInput
+              style={styles.darkTheme}
+              placeholder={'내용'}
+              onChangeText={text => this.setState({ content: text })}
+              multiline={true}
+            ></TextInput>
+          </View>
         </Modal>
 
         <Button
@@ -87,7 +152,7 @@ class CategoryScreen extends Component<Props, MyState> {
           <Icon
             name="emoticon-outline"
             size={60}
-            onPress={() => this.handlePress('HAPPY')}
+            onPress={() => this.handlePress('happy')}
           />
           <Text style={styles.iconTitle}>HAPPY</Text>
         </View>
@@ -104,7 +169,7 @@ class CategoryScreen extends Component<Props, MyState> {
             <Icon
               name="emoticon-cool-outline"
               size={60}
-              onPress={() => this.handlePress('CHILL')}
+              onPress={() => this.handlePress('chill')}
             />
             <Text style={styles.iconTitle}>CHILL</Text>
           </View>
@@ -113,7 +178,7 @@ class CategoryScreen extends Component<Props, MyState> {
             <Icon
               name="selection-ellipse"
               size={60}
-              onPress={() => this.handlePress('BLANK')}
+              onPress={() => this.handlePress('blank')}
             ></Icon>
             <Text accessibilityLabel="그냥" style={{ textAlign: 'center' }}>
               BLANK
@@ -124,7 +189,7 @@ class CategoryScreen extends Component<Props, MyState> {
             <Icon
               name="emoticon-cry-outline"
               size={60}
-              onPress={() => this.handlePress('SAD')}
+              onPress={() => this.handlePress('sad')}
             />
             <Text style={styles.iconTitle}>SAD</Text>
           </View>
@@ -135,7 +200,7 @@ class CategoryScreen extends Component<Props, MyState> {
             <Icon
               name="emoticon-angry-outline"
               size={60}
-              onPress={() => this.handlePress('ANGRY')}
+              onPress={() => this.handlePress('angry')}
             />
             <Text style={styles.iconTitle}>ANGRY</Text>
           </View>
@@ -143,7 +208,7 @@ class CategoryScreen extends Component<Props, MyState> {
             <Icon
               name="emoticon-sad-outline"
               size={60}
-              onPress={() => this.handlePress('CONFUSED')}
+              onPress={() => this.handlePress('confused')}
             />
             <Text style={styles.iconTitle}>CONFUSED</Text>
           </View>
@@ -157,6 +222,7 @@ const CategoryStack = createStackNavigator(
   {
     CategoryScreen,
     EmotionScreen,
+    ReadScreen,
   },
   {
     defaultNavigationOptions: () => ({
@@ -170,5 +236,17 @@ export default CategoryStack;
 const styles = StyleSheet.create({
   iconTitle: {
     textAlign: 'center',
+  },
+  darkTheme: {
+    color: 'white',
+    backgroundColor: 'black',
+  },
+  button: {
+    backgroundColor: 'green',
+    borderRadius: 30,
+    width: '80%',
+    height: '10%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
