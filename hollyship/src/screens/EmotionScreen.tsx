@@ -25,6 +25,7 @@ export default class EmotinScreen extends Component<Props> {
       .then(res => {
         this.props.navigation.navigate('ReadScreen', {
           post: res.data,
+          comment: res.data.comments,
         });
       })
       .catch(err => console.log(err));
@@ -41,6 +42,7 @@ export default class EmotinScreen extends Component<Props> {
               key={item.id}
             >{`${item.title}`}</Text>
           )}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     );

@@ -54,7 +54,6 @@ class CategoryScreen extends Component<Props, MyState> {
   }
 
   handlePost() {
-    console.log(this.state.title, this.state.content);
     axios
       .post('http://13.125.244.90:8000/post', {
         title: this.state.title,
