@@ -5,9 +5,12 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
+
 import { NavigationActions } from 'react-navigation';
-const axios = require('axios');
+
+import axios from 'axios';
 
 // Login
 type Props = {
@@ -41,38 +44,51 @@ export default class LoginScreen extends Component<Props, State> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.titleArea}>
-          <Text style={styles.title}>Wellcome 🚀</Text>
-        </View>
-        <View style={styles.formArea}>
-          <TextInput
-            style={styles.textForm}
-            // keyboardType="email-address"
-            placeholder={'ID'}
-            onChangeText={input => this.setState({ email: input })}
-          />
-          <TextInput
-            style={styles.textForm}
-            secureTextEntry={true}
-            placeholder={'Password'}
-            onChangeText={input => this.setState({ password: input })}
-          />
-          <TextInput
-            style={styles.textForm}
-            placeholder={'Username'}
-            onChangeText={input => this.setState({ username: input })}
-          />
-        </View>
-        <View style={styles.buttomArea}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.handleJoin.bind(this)}
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <View style={styles.container}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
           >
-            <Text style={styles.buttonTitle}>Sign Up</Text>
-          </TouchableOpacity>
+            <Text style={styles.title}> WelCome🚀</Text>
+            <TextInput
+              style={styles.textForm}
+              // keyboardType="email-address"
+              placeholder={'ID'}
+              onChangeText={input => this.setState({ email: input })}
+            />
+            <TextInput
+              style={styles.textForm}
+              secureTextEntry={true}
+              placeholder={'Password'}
+              onChangeText={input => this.setState({ password: input })}
+            />
+            <TextInput
+              style={styles.textForm}
+              placeholder={'Username'}
+              onChangeText={input => this.setState({ username: input })}
+            />
+            <View
+              style={{
+                height: '35%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '50%',
+              }}
+            >
+              <TouchableOpacity
+                style={styles.button}
+                onPress={this.handleJoin.bind(this)}
+              >
+                <Text style={styles.buttonTitle}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -81,51 +97,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-    paddingLeft: '10%',
-    paddingRight: '10%',
-    justifyContent: 'center',
-  },
-  titleArea: {
-    width: '100%',
-    padding: '10%',
-    alignItems: 'center',
   },
   title: {
     fontSize: 30,
-    color: 'white',
-    paddingTop: '10%',
-  },
-  formArea: {
+    color: '#fff',
+    alignItems: 'center',
     width: '100%',
-    paddingTop: '15%',
-    paddingBottom: -40,
+    padding: '10%',
+    paddingTop: 100,
   },
   textForm: {
-    borderWidth: 0.5,
-    borderColor: '#888',
-    width: '100%',
-    height: '17%',
+    // flex: 1,
+    width: '70%',
+    height: '8%',
+    color: 'ghostwhite',
     paddingLeft: 15,
     paddingRight: 5,
-    marginBottom: 30,
-    borderRadius: 30,
-    color: 'white',
-  },
-  buttomArea: {
-    width: '100%',
-    height: '10%',
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderColor: '#888',
   },
   button: {
-    backgroundColor: '#46c3ad',
-    borderRadius: 30,
-    width: '100%',
-    height: '80%',
-    justifyContent: 'center',
+    width: '90%',
+    height: '30%',
+    borderColor: 'plum',
+    borderWidth: 3,
+    borderRadius: 40,
+    marginTop: 12,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonTitle: {
-    color: 'white',
     fontSize: 20,
+    color: 'ghostwhite',
     fontWeight: 'bold',
   },
 });
