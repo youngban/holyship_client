@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
 import { Text, View, StyleSheet, Alert } from 'react-native';
 import { ButtonGroup, Button } from 'react-native-elements';
-import Sad from '../components/Emotion/Sad';
-import Happy from '../components/Emotion/Happy';
-import Angry from '../components/Emotion/Angry';
-import Confused from '../components/Emotion/Confused';
-import Chill from '../components/Emotion/Chill';
-import Blank from '../components/Emotion/Blank';
+import EmotionNav from '../components/Emotion/index';
+
+const EmotionChart = createAppContainer(EmotionNav);
 
 interface Props {
   navigation: any;
@@ -15,102 +13,14 @@ interface Props {
   Props: any;
   title: string;
 }
-interface State {
-  currentEmotion: string;
-  selectedIndex: number;
-}
+interface State {}
 
 class ChartScreen extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedIndex: 0,
-      currentEmotion: '',
-    };
-
-    this.updateIndex = this.updateIndex.bind(this);
-  }
-
-  updateIndex(selectedIndex) {
-    this.setState({ selectedIndex });
-  }
-
-  component1 = () => (
-    <Button
-      title="Sad"
-      type="clear"
-      onPress={() => this.setState({ currentEmotion: 'Sad' })}
-    />
-  );
-  component2 = () => (
-    <Button
-      title="Happy"
-      type="clear"
-      onPress={() => this.setState({ currentEmotion: 'Happy' })}
-    />
-  );
-  component3 = () => (
-    <Button
-      title="Angry"
-      type="clear"
-      onPress={() => this.setState({ currentEmotion: 'Angry' })}
-    />
-  );
-  component4 = () => (
-    <Button
-      title="Confused"
-      type="clear"
-      onPress={() => this.setState({ currentEmotion: 'Confused' })}
-    />
-  );
-  component5 = () => (
-    <Button
-      title="Chill"
-      type="clear"
-      onPress={() => this.setState({ currentEmotion: 'Chill' })}
-    />
-  );
-  component6 = () => (
-    <Button
-      title="Blank"
-      type="clear"
-      onPress={() => this.setState({ currentEmotion: 'Blank' })}
-    />
-  );
-
   render() {
-    const buttons = [
-      { element: this.component1 },
-      { element: this.component2 },
-      { element: this.component3 },
-      { element: this.component4 },
-      { element: this.component5 },
-      { element: this.component6 },
-    ];
-
     return (
       <View style={styles.container}>
-        <ButtonGroup
-          onPress={this.updateIndex}
-          selectedButtonStyle={{ backgroundColor: 'yellow' }}
-          buttons={buttons}
-          containerStyle={{ height: 60, width: 340 }}
-        />
-        <View style={styles.container}>
-          {this.state.currentEmotion === 'Sad' ? (
-            <Sad />
-          ) : this.state.currentEmotion === 'Happy' ? (
-            <Happy />
-          ) : this.state.currentEmotion === 'Angry' ? (
-            <Angry />
-          ) : this.state.currentEmotion === 'Confused' ? (
-            <Confused />
-          ) : this.state.currentEmotion === 'Chill' ? (
-            <Chill />
-          ) : (
-            <Blank />
-          )}
-        </View>
+        <View style={styles.line}></View>
+        <EmotionChart />
       </View>
     );
   }
@@ -125,6 +35,10 @@ const ChartStack = createStackNavigator(
   {
     defaultNavigationOptions: () => ({
       title: 'Chart',
+      headerStyle: {
+        backgroundColor: 'black',
+      },
+      headerTintColor: 'ghostwhite',
     }),
   }
 );
@@ -133,16 +47,11 @@ export default ChartStack;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
+    flex: 1,
     backgroundColor: 'black',
-    paddingTop: '15%',
+    // paddingTop: '15%',
   },
-  Button: {
-    margin: 80,
-    marginRight: 40,
-    padding: 70,
+  line: {
+    backgroundColor: 'red',
   },
-  // Btn: {
-  //   backgroundColor: 'white',
-  // },
 });
