@@ -6,18 +6,23 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  AsyncStorage,
+  KeyboardAvoidingView,
 } from 'react-native';
+
 const axios = require('axios');
 
 // Login
-type Props = {
+interface Props {
   navigation: any;
-};
-type State = {
+  header: string;
+}
+
+interface State {
   email: string;
   password: string;
-};
-
+  isLogin: boolean;
+}
 export default class LoginScreen extends Component<Props, State> {
   static navigationOptions = {
     header: 'Login',
@@ -28,8 +33,28 @@ export default class LoginScreen extends Component<Props, State> {
     this.state = {
       email: '',
       password: '',
+      isLogin: false,
     };
   }
+  _saveData = () => {
+    const obj = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+    AsyncStorage.setItem('obj', JSON.stringify(obj));
+  };
+
+  _loadData = async () => {
+    try {
+      const data = await AsyncStorage.getItem('data');
+      console.log(data);
+      alert(data);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  //! 진짜
 
   handleLogin() {
     console.log(this.state);
@@ -42,6 +67,7 @@ export default class LoginScreen extends Component<Props, State> {
       .then(res => {
         console.log(res);
         console.log(res.status);
+        console.log(res.config.data);
         if (res.status === 200) {
           this.props.navigation.navigate('Home');
         }
@@ -51,37 +77,40 @@ export default class LoginScreen extends Component<Props, State> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.titleArea}>
-          <Text style={styles.title}>Holly Ship 🚀</Text>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <View style={styles.container}>
+          <View style={styles.titleArea}>
+            <Text style={styles.title}>Holly Ship</Text>
+          </View>
+          <View style={styles.formArea}>
+            <TextInput
+              style={styles.textForm}
+              placeholder="ID"
+              // value={this.state.username}
+              onChangeText={text => this.setState({ email: text })}
+            />
+            <TextInput
+              style={styles.textForm}
+              secureTextEntry={true}
+              placeholder={'Password'}
+              // value={this.state.password}
+              onChangeText={text => this.setState({ password: text })}
+            />
+          </View>
+          <View style={styles.buttomArea}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={this.handleLogin.bind(this)}
+              // onPress={() => {
+              //   this.props.navigation.navigate('Home');
+              // }}
+            >
+              <Text style={styles.buttonTitle}>Login</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ height: '10%' }}></View>
         </View>
-        <View style={styles.formArea}>
-          <TextInput
-            style={styles.textForm}
-            placeholder="ID"
-            // value={this.state.username}
-            onChangeText={text => this.setState({ email: text })}
-          />
-          <TextInput
-            style={styles.textForm}
-            secureTextEntry={true}
-            placeholder={'Password'}
-            // value={this.state.password}
-            onChangeText={text => this.setState({ password: text })}
-          />
-        </View>
-        <View style={styles.buttomArea}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.handleLogin.bind(this)}
-            // onPress={() => {
-            //   this.props.navigation.navigate('Home');
-            // }}
-          >
-            <Text style={styles.buttonTitle}>Login</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -92,48 +121,57 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     paddingLeft: '10%',
     paddingRight: '10%',
-    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   titleArea: {
     width: '100%',
     padding: '10%',
     alignItems: 'center',
-    paddingBottom: '20%',
+    paddingTop: '20%',
+    paddingBottom: '10%',
   },
   title: {
-    fontSize: 30,
-    color: 'white',
+    fontSize: 35,
+    color: 'ghostwhite',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 20,
+    textShadowColor: 'red',
   },
   formArea: {
     width: '100%',
-    paddingBottom: '10%',
+    // paddingBottom: '10%',
   },
   textForm: {
-    borderWidth: 0.5,
-    borderColor: '#888',
     width: '100%',
     height: '20%',
     paddingLeft: 15,
     paddingRight: 5,
-    marginBottom: 30,
+    marginBottom: '10%',
     borderRadius: 30,
     color: 'white',
+    borderBottomWidth: 1,
+    borderColor: 'plum',
   },
   buttomArea: {
-    width: '100%',
+    width: '50%',
     height: '10%',
   },
   button: {
-    backgroundColor: '#46c3ad',
-    borderRadius: 30,
+    borderColor: 'plum',
+    borderWidth: 3,
+    borderRadius: 40,
     width: '100%',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonTitle: {
-    color: 'white',
+    color: 'ghostwhite',
     fontSize: 20,
     fontWeight: 'bold',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 20,
+    textShadowColor: 'red',
   },
 });

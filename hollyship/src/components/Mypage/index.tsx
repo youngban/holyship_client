@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
@@ -16,11 +16,10 @@ const AppNavigator = createMaterialTopTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: 'white',
+      activeTintColor: 'ghostwhite',
       inactiveTintColor: 'tomato',
-      showIcon: true,
       style: {
-        backgroundColor: '#100759',
+        backgroundColor: 'black',
       },
     },
   }

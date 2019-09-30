@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
-import { Text, View, StyleSheet, StatusBar, Alert } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  StatusBar,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 
 import { createAppContainer } from 'react-navigation';
 import { Icon, Button } from 'react-native-elements';
@@ -25,9 +32,19 @@ class UserScreen extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="red" barStyle="light-content" />
+        {/* <StatusBar backgroundColor="red" barStyle="light-content" /> */}
         <View style={styles.header}>
-          <Button title="Log-Out" onPress={this.handleLogout.bind(this)} />
+          <TouchableOpacity
+            style={{
+              borderColor: 'plum',
+              borderWidth: 3,
+              borderRadius: 40,
+            }}
+            onPress={this.handleLogout.bind(this)}
+          >
+            <Text style={{ color: 'white', margin: 3 }}>Log-Out</Text>
+          </TouchableOpacity>
+          {/* <Button title="Log-Out" onPress={this.handleLogout.bind(this)} /> */}
           <Icon
             name="settings"
             size={28}
@@ -50,9 +67,9 @@ const UserStack = createStackNavigator(
     defaultNavigationOptions: () => ({
       title: 'MyPage',
       headerStyle: {
-        backgroundColor: '#100759',
+        backgroundColor: 'black',
       },
-      headerTintColor: '#fff',
+      headerTintColor: 'ghostwhite',
     }),
   }
 );
@@ -65,10 +82,12 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: 'black',
-    color: 'white',
+    color: 'ghostwhite',
     height: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderTopWidth: 1,
+    borderTopColor: 'tomato',
   },
 });
