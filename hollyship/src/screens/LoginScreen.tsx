@@ -21,7 +21,6 @@ interface Props {
 interface State {
   email: string;
   password: string;
-  isLogin: boolean;
 }
 export default class LoginScreen extends Component<Props, State> {
   static navigationOptions = {
@@ -33,47 +32,31 @@ export default class LoginScreen extends Component<Props, State> {
     this.state = {
       email: '',
       password: '',
-      isLogin: false,
     };
   }
-  _saveData = () => {
-    const obj = {
-      email: this.state.email,
-      password: this.state.password,
-    };
-    AsyncStorage.setItem('obj', JSON.stringify(obj));
-  };
 
-  _loadData = async () => {
+  handleLogin = async () => {
     try {
-      const data = await AsyncStorage.getItem('data');
-      console.log(data);
-      alert(data);
-    } catch (error) {
-      alert(error);
+      console.log(this.state);
+      const { email, password } = this.state;
+      const data = await axios.post('http://13.125.244.90:8000/auth/login', {
+        email,
+        password,
+      });
+      const token = data.data.token;
+
+      if (data.status === 200) {
+        this.props.navigation.navigate('Home');
+      }
+      if (token) {
+        await AsyncStorage.setItem('access_token', token);
+        console.log(token);
+      }
+    } catch (err) {
+      Alert.alert('아이디 / 비밀번호가 맞지않습니다.');
+      console.error(err);
     }
   };
-
-  //! 진짜
-
-  handleLogin() {
-    console.log(this.state);
-
-    axios
-      .post('http://13.125.244.90:8000/auth/login', {
-        email: this.state.email,
-        password: this.state.password,
-      })
-      .then(res => {
-        console.log(res);
-        console.log(res.status);
-        console.log(res.config.data);
-        if (res.status === 200) {
-          this.props.navigation.navigate('Home');
-        }
-      })
-      .catch(err => Alert.alert('아이디 / 비밀번호가 맞지않습니다.'));
-  }
 
   render() {
     return (
@@ -100,7 +83,7 @@ export default class LoginScreen extends Component<Props, State> {
           <View style={styles.buttomArea}>
             <TouchableOpacity
               style={styles.button}
-              onPress={this.handleLogin.bind(this)}
+              onPress={this.handleLogin}
               // onPress={() => {
               //   this.props.navigation.navigate('Home');
               // }}
