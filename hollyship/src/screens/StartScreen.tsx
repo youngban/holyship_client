@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   Image,
+  AsyncStorage,
 } from 'react-native';
 
 const axios = require('axios');
@@ -19,6 +20,19 @@ export default class StartScreen extends Component<Props, State> {
     axios.get('http://13.125.244.90:8000/auth/logout').then(console.log('hi'));
     // .catch(err => Alert.alert(err));
   }
+
+  componentDidMount() {
+    this.checkAccessToken();
+  }
+
+  checkAccessToken = async () => {
+    const asyncItem = await AsyncStorage.getItem('access_token');
+    console.log('[ACCESS_TOKEN]', asyncItem);
+    if (asyncItem) {
+      await this.props.navigation.navigate('Home');
+    }
+  };
+
   render() {
     const { navigation } = this.props;
     return (

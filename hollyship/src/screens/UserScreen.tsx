@@ -7,6 +7,7 @@ import {
   StatusBar,
   Alert,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 
 import { createAppContainer } from 'react-navigation';
@@ -26,6 +27,7 @@ class UserScreen extends Component<Props> {
     axios
       .get('http://13.125.244.90:8000/auth/logout')
       .then(this.props.navigation.navigate('Login'))
+      .then(AsyncStorage.removeItem('access_token'))
       .catch(err => Alert.alert(err));
   }
 

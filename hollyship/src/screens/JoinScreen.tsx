@@ -38,7 +38,8 @@ export default class LoginScreen extends Component<Props, State> {
         username: this.state.username,
         password: this.state.password,
       })
-      .then(this.props.navigation.dispatch(NavigationActions.back()))
+      // .then(this.props.navigation.dispatch(NavigationActions.back()))
+      .then(this.props.navigation.navigate('Login'))
       .catch(err => console.log(err));
   }
 
