@@ -11,6 +11,7 @@ import HomeStack from './HomeScreen';
 import CategoryStack from './CategoryScreen';
 import ChartStack from './ChartScreen';
 import UserStack from './UserScreen';
+import Splash from './Splash';
 
 const AuthStack = createStackNavigator(
   {
@@ -62,10 +63,11 @@ const TabNavigator = createBottomTabNavigator(
 
 const Total = createSwitchNavigator(
   {
-    App: TabNavigator,
+    Splash,
     Auth: AuthStack,
+    App: TabNavigator,
   },
-  { initialRouteName: 'Auth' }
+  { initialRouteName: 'Splash' }
 );
 
 export default createAppContainer(Total);
