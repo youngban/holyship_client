@@ -6,8 +6,10 @@ import {
   Modal,
   Alert,
   Picker,
+  FlatList,
   StyleSheet,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import {
   createStackNavigator,
@@ -15,6 +17,10 @@ import {
 } from 'react-navigation-stack';
 // import { Icon } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import EmotionScreen from './EmotionScreen';
 import ReadScreen from './ReadScreen';
 import { TextInput } from 'react-native-gesture-handler';
@@ -26,7 +32,15 @@ type Props = {
   navigation: NavigationStackProp<{ category: 'string' }>;
 };
 
-const emotions = ['HAPPY', 'BLANK', 'SAD', 'CHILL', 'ANGRY', 'CONFUSED'];
+const emotions = [
+  { title: 'happy', img: require('../img/happy.jpg') },
+  { title: 'chill', img: require('../img/chill.jpeg') },
+  { title: 'blank', img: require('../img/blank.jpg') },
+  { title: 'sad', img: require('../img/sad.jpg') },
+  { title: 'tired', img: require('../img/tired.jpg') },
+  { title: 'angry', img: require('../img/angry.jpg') },
+];
+
 class CategoryScreen extends Component<Props, MyState> {
   constructor(props) {
     super(props);
@@ -38,6 +52,18 @@ class CategoryScreen extends Component<Props, MyState> {
       emotion: '',
     };
   }
+
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: 'Category',
+    headerRight: (
+      <Icon
+        name="lead-pencil"
+        color="white"
+        size={30}
+        // onPress={navigation.state.params.handleModal}
+      ></Icon>
+    ),
+  });
 
   // setState의 category에 변수를 사용해서 handlePress를 다이내믹하게 사용할 수 있도록 리팩토링하기
   // const emotions = [{category:'happy',icon:'emoticon-outline'}]
@@ -51,6 +77,18 @@ class CategoryScreen extends Component<Props, MyState> {
         });
       })
       .catch(err => console.log(err));
+  }
+
+  // handleModal = () => {
+  //   this.setState({
+  //     isVisible: !this.state.isVisible,
+  //   });
+  // };
+
+  componentDidMount() {
+    // this.props.navigation.setParams({
+    //   handleSave: this.handleModal,
+    // });
   }
 
   handlePost() {
@@ -117,9 +155,9 @@ class CategoryScreen extends Component<Props, MyState> {
             >
               {emotions.map(item => (
                 <Picker.Item
-                  label={item}
-                  value={item}
-                  key={item}
+                  label={item.title}
+                  value={item.title}
+                  key={item.title}
                   color={'black'}
                 />
               ))}
@@ -141,13 +179,53 @@ class CategoryScreen extends Component<Props, MyState> {
           </View>
         </Modal>
 
-        <Button
-          title="writing"
-          onPress={() => this.setState({ isVisible: !this.state.isVisible })}
-        >
-          Write
-        </Button>
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Button
+              title="writing"
+              onPress={() =>
+                this.setState({ isVisible: !this.state.isVisible })
+              }
+            >
+              Write
+            </Button>
+            <View style={{ flex: 1, backgroundColor: 'black' }}>
+              <FlatList
+                data={emotions}
+                renderItem={({ item }) => (
+                  <ImageBackground
+                    source={item.img}
+                    style={{
+                      flexDirection: 'column',
+                      margin: 2,
+                      alignContent: 'stretch',
+                      backgroundColor: 'grey',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        flex: 1,
+                        height: hp('12.5%'),
+                        fontSize: 20,
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                        alignContent: 'center',
+                        color: 'white',
+                      }}
+                      onPress={() => this.handlePress(`${item.title}`)}
+                    >
+                      {item.title}
+                    </Text>
+                  </ImageBackground>
+                )}
+                numColumns={1}
+                keyExtractor={index => index.toString()}
+              ></FlatList>
+            </View>
+          </View>
+        </View>
 
+        {/* 
         <View style={{ alignItems: 'center' }}>
           <Icon
             name="emoticon-outline"
@@ -212,7 +290,7 @@ class CategoryScreen extends Component<Props, MyState> {
             />
             <Text style={styles.iconTitle}>CONFUSED</Text>
           </View>
-        </View>
+        </View> */}
       </View>
     );
   }
@@ -227,6 +305,10 @@ const CategoryStack = createStackNavigator(
   {
     defaultNavigationOptions: () => ({
       title: 'Category',
+      headerStyle: {
+        backgroundColor: 'black',
+      },
+      headerTintColor: '#fff',
     }),
   }
 );
