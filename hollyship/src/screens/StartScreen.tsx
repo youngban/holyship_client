@@ -17,9 +17,7 @@ interface Props {
 interface State {}
 export default class StartScreen extends Component<Props, State> {
   hand() {
-    axios
-      .get('http://13.125.244.90:8000/auth/logout')
-      .then(console.log('LogOut'));
+    axios.get('http://13.125.244.90:8000/auth/logout').then(console.log('hi'));
     // .catch(err => Alert.alert(err));
   }
 

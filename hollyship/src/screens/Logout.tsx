@@ -5,7 +5,7 @@ export default class Logout extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Text>Logout</Text>
+        <Text>hi</Text>
       </View>
     );
   }
