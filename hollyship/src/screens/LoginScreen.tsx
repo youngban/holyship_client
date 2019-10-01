@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 35,
     color: 'ghostwhite',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 20,
+    textShadowOffset: { width: 3, height: 2 },
+    textShadowRadius: 30,
     textShadowColor: 'red',
   },
   formArea: {
