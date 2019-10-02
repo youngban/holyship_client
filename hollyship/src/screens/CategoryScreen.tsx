@@ -34,6 +34,7 @@ type MyState = {
 type Props = {
   navigation: NavigationStackProp<{ category: 'string' }>;
 };
+// const { width } = Dimensions.get('window');
 
 const emotions = [
   { title: 'happy', img: require('../img/happy.jpg') },

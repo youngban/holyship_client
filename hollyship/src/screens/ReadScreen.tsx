@@ -60,9 +60,11 @@ export default class ReadScreen extends Component<Props> {
         </View>
         <View>
           {console.log(comments)}
-          {comments.map(item => {
-            return <Text key={item.comment}>{item.comment}</Text>;
-          })}
+          {/* {if(comments.length > 0){
+              comments.map(item => {
+                return <Text key={item.comment}>{item.comment}</Text>;
+              })
+          }} */}
         </View>
         <Modal
           animationType={'slide'}

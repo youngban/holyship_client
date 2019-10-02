@@ -12,6 +12,7 @@ import CategoryStack from './CategoryScreen';
 import ChartStack from './ChartScreen';
 import UserStack from './UserScreen';
 import Splash from './Splash';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AuthStack = createStackNavigator(
   {
@@ -34,18 +35,18 @@ const TabNavigator = createBottomTabNavigator(
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
-        let icon = ':thought_balloon:';
+        let icon;
         if (routeName === 'Home') {
-          icon = '🚀';
+          icon = <Icon name="home-variant-outline" size={30}></Icon>;
         } else if (routeName === 'Chart') {
-          icon = '🎡';
+          icon = <Icon name="menu" size={30}></Icon>;
         } else if (routeName === 'Category') {
-          icon = '💘';
+          icon = <Icon name="emoticon-wink-outline" size={30}></Icon>;
         } else if (routeName === 'Mypage') {
-          icon = '💁‍';
+          icon = <Icon name="account" size={30}></Icon>;
         }
         return (
-          <Text style={{ color: (focused && '#46c3ad') || '#888' }}>
+          <Text style={{ color: (focused && '#FFFFFF') || '#888' }}>
             {icon}
           </Text>
         );
@@ -53,9 +54,9 @@ const TabNavigator = createBottomTabNavigator(
     }),
     lazy: false,
     tabBarOptions: {
-      activeBackgroundColor: '#100759',
-      inactiveBackgroundColor: '#100759',
-      activeTintColor: '#46c3ad',
+      activeBackgroundColor: '#272525',
+      inactiveBackgroundColor: '#272525',
+      activeTintColor: '#FFFFFF',
       inactiveTintColor: '#888',
     },
   }
