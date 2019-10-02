@@ -107,11 +107,16 @@ export default class EmotinScreen extends Component<Props> {
                   style={{
                     color: 'white',
                     marginBottom: 10,
-                    borderBottomWidth: 1,
                   }}
                 >
                   {item.user.username}
                 </Text>
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'grey',
+                  }}
+                ></View>
               </View>
             )}
             keyExtractor={index => index.toString()}
