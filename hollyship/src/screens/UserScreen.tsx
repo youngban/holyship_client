@@ -11,9 +11,12 @@ import {
 } from 'react-native';
 
 import { createAppContainer } from 'react-navigation';
-import { Icon, Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import { Icon, Button } from 'react-native-elements';
 import AppNavigator from '../components/Mypage/index';
 import Info from './Info';
+import Edit from './Edit';
+
 const axios = require('axios');
 
 const AppIndex = createAppContainer(AppNavigator);
@@ -23,6 +26,23 @@ interface Props {
 }
 
 class UserScreen extends Component<Props> {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: 'Edit',
+      headerStyle: {
+        backgroundColor: 'black',
+      },
+      headerTintColor: 'ghostwhite',
+      headerRight: (
+        <Icon
+          name="account-circle-outline"
+          size={35}
+          color="white"
+          onPress={() => navigation.navigate('Info')}
+        />
+      ),
+    };
+  };
   handleLogout() {
     axios
       .get('http://13.125.244.90:8000/auth/logout')
@@ -46,13 +66,6 @@ class UserScreen extends Component<Props> {
           >
             <Text style={{ color: 'white', margin: 3 }}>Log-Out</Text>
           </TouchableOpacity>
-          {/* <Button title="Log-Out" onPress={this.handleLogout.bind(this)} /> */}
-          <Icon
-            name="settings"
-            size={28}
-            color="white"
-            onPress={() => this.props.navigation.navigate('Info')}
-          />
         </View>
         <AppIndex />
       </View>
@@ -64,6 +77,7 @@ const UserStack = createStackNavigator(
   {
     UserScreen,
     Info,
+    Edit,
   },
   {
     defaultNavigationOptions: () => ({
@@ -88,7 +102,7 @@ const styles = StyleSheet.create({
     height: 30,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     borderTopWidth: 1,
     borderTopColor: 'tomato',
   },
