@@ -1,7 +1,12 @@
 import * as React from 'react';
 import { mapping, dark as darkTheme } from '@eva-design/eva';
-import { ApplicationProvider, Layout } from 'react-native-ui-kitten';
+import {
+  ApplicationProvider,
+  Layout,
+  IconRegistry,
+} from 'react-native-ui-kitten';
 import AppStack from './src/screens/index';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
 interface Props {}
 interface State {}
@@ -15,9 +20,12 @@ const ApplicationContent = () => (
 export default class App extends React.Component<Props, State> {
   render() {
     return (
-      <ApplicationProvider mapping={mapping} theme={darkTheme}>
-        <ApplicationContent />
-      </ApplicationProvider>
+      <>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider mapping={mapping} theme={darkTheme}>
+          <ApplicationContent />
+        </ApplicationProvider>
+      </>
     );
   }
 }
