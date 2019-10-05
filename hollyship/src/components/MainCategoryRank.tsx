@@ -96,16 +96,17 @@ export default class MainCategoryRank extends React.Component<Props, State> {
       <View style={styles.container}>
         <FlatList
           data={DATA}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <Item
               id={item.id}
+              index={index}
               uri={item.uri}
               title={item.title}
               singer={item.singer}
               onPress={() => navigation.navigate('Chart')}
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index.toString()}
           extraData={selected}
           horizontal={true}
         />

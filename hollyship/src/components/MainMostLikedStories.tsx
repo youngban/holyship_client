@@ -56,15 +56,16 @@ export default function MainMostLikedStories() {
     <View style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <Item
             id={item.id}
+            index={index}
             liked_id={item.liked_id}
             title={item.title}
             onSelect={onSelect}
           />
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index.toString()}
         extraData={selected}
         // horizontal={true}
       />

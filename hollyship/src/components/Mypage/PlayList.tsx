@@ -95,16 +95,17 @@ export default class PlayList extends React.Component<Props, State> {
       <View style={styles.container}>
         <FlatList
           data={DATA}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <Item
               id={item.id}
+              index={index}
               uri={item.uri}
               title={item.title}
               singer={item.singer}
               onPress={() => Alert.alert('hi')}
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index.toString()}
           extraData={selected}
           horizontal={false}
         />
