@@ -16,11 +16,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AuthStack = createStackNavigator(
   {
-    Start,
-    Join,
     Login,
+    Join,
   },
-  { initialRouteName: 'Start', headerMode: 'none' }
+  { initialRouteName: 'Login', headerMode: 'none' }
 );
 
 const TabNavigator = createBottomTabNavigator(

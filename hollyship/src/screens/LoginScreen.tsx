@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import { Layout, Text, Input, Button } from 'react-native-ui-kitten';
 
@@ -21,6 +22,7 @@ interface Props {
 interface State {
   email: string;
   password: string;
+  isLoading: boolean;
 }
 export default class LoginScreen extends Component<Props, State> {
   static navigationOptions = {
@@ -29,9 +31,29 @@ export default class LoginScreen extends Component<Props, State> {
   state = {
     email: '',
     password: '',
+    isLoading: false,
+  };
+
+  componentDidMount = () => {
+    this.setState({
+      ...this.state,
+      isLoading: false,
+    });
+  };
+
+  componentWillUnmount = () => {
+    this.setState({
+      ...this.state,
+      isLoading: false,
+    });
   };
 
   handleLogin = async () => {
+    Keyboard.dismiss();
+    this.setState({
+      ...this.state,
+      isLoading: true,
+    });
     try {
       console.log(this.state);
       const { email, password } = this.state;
@@ -49,8 +71,11 @@ export default class LoginScreen extends Component<Props, State> {
         console.log(token);
       }
     } catch (err) {
-      Alert.alert('아이디 / 비밀번호가 맞지않습니다.');
-      console.error(err);
+      this.setState({
+        ...this.state,
+        isLoading: false,
+      });
+      return Alert.alert('아이디 / 비밀번호가 맞지않습니다.');
     }
   };
 
@@ -62,12 +87,13 @@ export default class LoginScreen extends Component<Props, State> {
 
   isValidInputPassword = () => {
     const { password } = this.state;
-    return password.length >= 6;
+    return password.length >= 4;
   };
 
   render() {
     const isValidInputEmail = this.isValidInputEmail();
     const isValidInputPassword = this.isValidInputPassword();
+    const { isLoading } = this.state;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
@@ -81,18 +107,16 @@ export default class LoginScreen extends Component<Props, State> {
             <Layout style={styles.formArea}>
               <Input
                 style={styles.textInput}
-                status={isValidInputEmail ? 'info' : 'danger'}
-                caption={isValidInputEmail ? 'Correct' : '빈칸은 안되요!'}
+                status={isValidInputEmail ? 'info' : ''}
+                caption={isValidInputEmail ? 'Done' : 'ID를 입력해주세요'}
                 placeholder="ID"
                 onChangeText={text => this.setState({ email: text })}
               />
               <Input
                 style={styles.textInput}
-                status={isValidInputPassword ? 'info' : 'danger'}
+                status={isValidInputPassword ? 'info' : ''}
                 caption={
-                  isValidInputPassword
-                    ? 'Correct'
-                    : '비밀번호는 6자 이상이에요!'
+                  isValidInputPassword ? 'Done' : '비밀번호를 입력해주세요'
                 }
                 keyboardType="decimal-pad"
                 secureTextEntry={true}
@@ -110,7 +134,7 @@ export default class LoginScreen extends Component<Props, State> {
                 disabled={
                   isValidInputEmail && isValidInputPassword ? false : true
                 }
-                onPress={this.handleLogin}
+                onPress={this.handleLogin.bind(this)}
               >
                 LOGIN
               </Button>
@@ -119,12 +143,12 @@ export default class LoginScreen extends Component<Props, State> {
                 status="danger"
                 appearance="outline"
                 size="large"
-                onPress={this.handleLogin}
+                onPress={() => this.props.navigation.navigate('Join')}
               >
                 SIGNUP
               </Button>
             </Layout>
-            <Layout style={{ height: '10%' }}></Layout>
+            {isLoading && <ActivityIndicator size="large" color="0000ff" />}
           </Layout>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
@@ -156,7 +180,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     borderRadius: 30,
-    borderColor: 'plum',
   },
   buttonWrapper: {
     padding: 10,

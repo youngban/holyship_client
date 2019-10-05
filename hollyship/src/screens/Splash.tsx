@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  AsyncStorage,
+} from 'react-native';
 import { Layout, Text } from 'react-native-ui-kitten';
 
 interface Props {
@@ -7,12 +12,21 @@ interface Props {
 }
 
 export default class Splash extends Component<Props> {
-  constructor(props) {
-    super(props);
-    setTimeout(() => {
-      this.props.navigation.navigate('Start');
-    }, 1500);
-  }
+  componentDidMount = () => {
+    this.checkAccessToken();
+  };
+
+  checkAccessToken = async () => {
+    const ascyncItem = await AsyncStorage.getItem('access_token');
+    if (ascyncItem) {
+      await this.props.navigation.navigate('Home');
+    } else {
+      setTimeout(() => {
+        this.props.navigation.navigate('Login');
+      }, 1500);
+    }
+  };
+
   render() {
     return (
       <Layout style={styles.container}>
