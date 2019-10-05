@@ -119,7 +119,7 @@ export default class EmotinScreen extends Component<Props> {
                 ></View>
               </View>
             )}
-            keyExtractor={index => index.toString()}
+            keyExtractor={(item, index) => index.toString()}
           />
         </View>
       </View>

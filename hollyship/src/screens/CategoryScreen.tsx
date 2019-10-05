@@ -21,6 +21,7 @@ import {
 } from 'react-native-responsive-screen';
 import EmotionScreen from './EmotionScreen';
 import ReadScreen from './ReadScreen';
+import SearchScreen from './SearchScreen';
 import { TextInput } from 'react-native-gesture-handler';
 const axios = require('axios');
 
@@ -234,6 +235,7 @@ const CategoryStack = createStackNavigator(
     CategoryScreen,
     EmotionScreen,
     ReadScreen,
+    SearchScreen,
   },
   {
     defaultNavigationOptions: () => ({
