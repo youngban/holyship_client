@@ -1024,6 +1024,13 @@
   resolved "https://registry.yarnpkg.com/@types/websql/-/websql-0.0.27.tgz#621a666a7f02018e7cbb4abab956a25736c27d71"
   integrity sha1-Yhpman8CAY58u0q6uVaiVzbCfXE=
 
+"@ui-kitten/eva-icons@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@ui-kitten/eva-icons/-/eva-icons-4.2.0.tgz#208e39d89e7a7d99d93a1d4b17184e78ec7f26d9"
+  integrity sha512-RpbCp+eVOn564iMgSOsPUpTAztkZY4xTwIb6L8LrQNbEORFati+u4tUPhoQ4JAVuN9GBHSriB+EeSeMdabLyxA==
+  dependencies:
+    react-native-eva-icons "1.1.0"
+
 "@unimodules/core@~3.0.0":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@unimodules/core/-/core-3.0.2.tgz#a2b143fb1e743809ba17c60ae1848f82b8637901"
@@ -4508,6 +4515,11 @@ react-native-elements@*, react-native-elements@^1.2.1:
     react-native-ratings "^6.3.0"
     react-native-status-bar-height "^2.2.0"
 
+react-native-eva-icons@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-eva-icons/-/react-native-eva-icons-1.1.0.tgz#323e55d759187edc216d049e7c0012a27383e0ed"
+  integrity sha512-0k6sbiKoHxmmbCgAZTHj6llcdcwtbyZJ1E2AK0my7QU0WRaWwqWMep5AUlMbrIiuYE9mkMZiabEXYcfn3ir2PA==
+
 react-native-gesture-handler@~1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.3.0.tgz#d0386f565928ccc1849537f03f2e37fd5f6ad43f"
@@ -4571,6 +4583,11 @@ react-native-status-bar-height@^2.2.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.4.0.tgz#de8cee4bb733a196167210d2d0bc1fa10acba3e3"
   integrity sha512-pWvZFlyIHiuxLugLioq97vXiaGSovFXEyxt76wQtbq0gxv4dGXMPqYow46UmpwOgeJpBhqL1E0EKxnfJRrFz5w==
+
+react-native-svg@^9.11.1:
+  version "9.11.1"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.11.1.tgz#b1ccf48de413ff8c4f476f202aaa3893f4c8b59a"
+  integrity sha512-BmNCM81SSzhj1+N5rYiy7sxrkmybgiT8Cu8yVRB7zVoWze/i1lbCWJah+Gk0OHHwR35ZA31oVKf5jtO4G1n94Q==
 
 react-native-swipeout@^2.3.6:
   version "2.3.6"

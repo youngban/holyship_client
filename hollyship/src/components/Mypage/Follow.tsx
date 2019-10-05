@@ -104,16 +104,17 @@ export default class Follow extends React.Component<Props, State> {
       <View style={styles.container}>
         <FlatList
           data={DATA}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <Item
               id={item.id}
+              index={index}
               uri={item.uri}
               user_id={item.user_id}
               follow={item.follow}
               onPress={() => Alert.alert('hi')}
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index.toString()}
           extraData={selected}
           horizontal={false}
         />

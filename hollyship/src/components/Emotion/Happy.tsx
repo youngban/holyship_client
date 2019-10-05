@@ -33,7 +33,10 @@ function Item({ id, title, artist, playTime, genre, thumbnail }) {
   );
 }
 
-interface Props {}
+interface Props {
+  item: any;
+  index: number;
+}
 interface State {}
 
 export default class Happy extends React.Component<Props, State> {
@@ -62,9 +65,10 @@ export default class Happy extends React.Component<Props, State> {
       <View style={styles.container}>
         <FlatList
           data={this.state.happyMusics}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }: Props) => (
             <Item
               id={item.id}
+              index={index}
               thumbnail={item.thumbnail}
               title={item.title}
               artist={item.artist}
@@ -74,7 +78,7 @@ export default class Happy extends React.Component<Props, State> {
               // onPress={() => Alert.alert('hi')}
             />
           )}
-          // keyExtractor={item => item.id}
+          keyExtractor={(item, index) => index.toString()}
           extraData={selected}
           horizontal={false}
         />

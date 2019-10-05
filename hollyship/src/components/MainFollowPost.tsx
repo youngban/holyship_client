@@ -58,15 +58,16 @@ export default function MainFollowPost() {
     <View style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <Item
             id={item.id}
+            index={index}
             userId={item.userId}
             message={item.message}
             onSelect={onSelect}
           />
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index.toString()}
         extraData={selected}
       />
     </View>

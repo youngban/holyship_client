@@ -1,8 +1,13 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import {
+  BottomNavigation,
+  BottomNavigationTab,
+  Icon,
+} from 'react-native-ui-kitten';
 
 import Start from './StartScreen';
 import Join from './JoinScreen';
@@ -12,7 +17,6 @@ import CategoryStack from './CategoryScreen';
 import ChartStack from './ChartScreen';
 import UserStack from './UserScreen';
 import Splash from './Splash';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AuthStack = createStackNavigator(
   {
@@ -21,6 +25,94 @@ const AuthStack = createStackNavigator(
   },
   { initialRouteName: 'Login', headerMode: 'none' }
 );
+
+interface State {
+  selectedIndex: number;
+}
+
+interface Props {
+  navigation: any;
+}
+
+export class BottomNavigationShowcase extends React.Component<Props, State> {
+  state: State = {
+    selectedIndex: 1,
+  };
+
+  emotionIcon = style => (
+    <Icon
+      {...style}
+      name="heart"
+      fill={this.state.selectedIndex === 0 ? '#f33' : '#ccc'}
+    />
+  );
+  homeIcon = style => (
+    <Icon
+      {...style}
+      name="home"
+      fill={this.state.selectedIndex === 1 ? '#33f' : '#ccc'}
+    />
+  );
+  chartIcon = style => (
+    <Icon
+      {...style}
+      name="music"
+      fill={this.state.selectedIndex === 2 ? '#33f' : '#ccc'}
+    />
+  );
+  myPageIcon = style => (
+    <Icon
+      {...style}
+      name="person"
+      fill={this.state.selectedIndex === 3 ? '#33f' : '#ccc'}
+    />
+  );
+
+  onTabSelect = (selectedIndex: number): void => {
+    this.setState({ selectedIndex });
+    const {
+      [selectedIndex]: selectedRoute,
+    } = this.props.navigation.state.routes;
+    this.props.navigation.navigate(selectedRoute.routeName);
+  };
+
+  render(): React.ReactNode {
+    const { emotionIcon, homeIcon, chartIcon, myPageIcon } = this;
+    return (
+      <BottomNavigation
+        style={styles.bottomNavigation}
+        indicatorStyle={styles.indicator}
+        selectedIndex={this.state.selectedIndex}
+        onSelect={this.onTabSelect}
+      >
+        <BottomNavigationTab
+          style={styles.tab}
+          titleStyle={styles.tabTitle}
+          title="Emotion"
+          icon={emotionIcon}
+        />
+        <BottomNavigationTab
+          style={styles.tab}
+          titleStyle={styles.tabTitle}
+          title="Home"
+          icon={homeIcon}
+        />
+        <BottomNavigationTab
+          style={styles.tab}
+          titleStyle={styles.tabTitle}
+          title="Chart"
+          icon={chartIcon}
+        />
+        <BottomNavigationTab
+          style={styles.tab}
+          titleStyle={styles.tabTitle}
+          title="MyPage"
+          icon={myPageIcon}
+        />
+      </BottomNavigation>
+    );
+  }
+}
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -31,33 +123,7 @@ const TabNavigator = createBottomTabNavigator(
   },
   {
     initialRouteName: 'Home',
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused }) => {
-        const { routeName } = navigation.state;
-        let icon;
-        if (routeName === 'Home') {
-          icon = <Icon name="home-variant-outline" size={30}></Icon>;
-        } else if (routeName === 'Chart') {
-          icon = <Icon name="menu" size={30}></Icon>;
-        } else if (routeName === 'Category') {
-          icon = <Icon name="emoticon-wink-outline" size={30}></Icon>;
-        } else if (routeName === 'Mypage') {
-          icon = <Icon name="account" size={30}></Icon>;
-        }
-        return (
-          <Text style={{ color: (focused && '#FFFFFF') || '#888' }}>
-            {icon}
-          </Text>
-        );
-      },
-    }),
-    lazy: false,
-    tabBarOptions: {
-      activeBackgroundColor: '#272525',
-      inactiveBackgroundColor: '#272525',
-      activeTintColor: '#FFFFFF',
-      inactiveTintColor: '#888',
-    },
+    tabBarComponent: BottomNavigationShowcase,
   }
 );
 
@@ -69,5 +135,18 @@ const Total = createSwitchNavigator(
   },
   { initialRouteName: 'Splash' }
 );
+
+const styles = StyleSheet.create({
+  bottomNavigation: {
+    backgroundColor: '#000',
+    paddingTop: 10,
+    paddingBottom: 15,
+  },
+  indicator: { backgroundColor: '#33f' },
+  tab: { backgroundColor: '#000' },
+  tabTitle: {
+    color: '#ddd',
+  },
+});
 
 export default createAppContainer(Total);
