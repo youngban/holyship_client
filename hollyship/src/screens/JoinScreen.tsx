@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
   StyleSheet,
-  TouchableOpacity,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Dimensions,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
-
-import { NavigationActions } from 'react-navigation';
-
+import { Layout, Text, Input, Button, Popover } from 'react-native-ui-kitten';
 import axios from 'axios';
 
-// Login
 type Props = {
   navigation: any;
 };
+
 interface State {
   email: string;
   username: string;
   password: string;
+  popoverVisible: boolean;
+  isLoading: boolean;
 }
 export default class LoginScreen extends Component<Props, State> {
   constructor(props) {
@@ -28,68 +29,152 @@ export default class LoginScreen extends Component<Props, State> {
       email: '',
       username: '',
       password: '',
+      popoverVisible: false,
+      isLoading: false,
     };
   }
 
-  handleJoin() {
-    axios
-      .post('http://13.125.244.90:8000/auth/signup', {
+  handleJoin = async () => {
+    try {
+      Keyboard.dismiss();
+      this.setState({
+        ...this.state,
+        isLoading: true,
+      });
+      const login = await axios.post('http://13.125.244.90:8000/auth/signup', {
         email: this.state.email,
         username: this.state.username,
         password: this.state.password,
-      })
-      // .then(this.props.navigation.dispatch(NavigationActions.back()))
-      .then(this.props.navigation.navigate('Login'))
-      .catch(err => console.log(err));
-  }
+      });
+      Alert.alert('로그인되었습니다.');
+      await this.props.navigation.navigate('Login');
+    } catch (err) {
+      this.setState({
+        ...this.state,
+        isLoading: false,
+      });
+      return this.togglePopover();
+    }
+  };
+
+  componentWillUnmount = () => {
+    this.setState({
+      ...this.state,
+      isLoading: false,
+    });
+  };
+
+  togglePopover = () => {
+    this.setState({ popoverVisible: true });
+    setTimeout(() => {
+      this.setState({
+        popoverVisible: false,
+      });
+    }, 1500);
+  };
+
+  renderPopoverContentElement = () => (
+    <Layout style={styles.popoverContent}>
+      <Text category="h6">중복된 아이디 또는 닉네임입니다.</Text>
+    </Layout>
+  );
+
+  // TODO: checked valid input
+  isValidInputEmail = () => {
+    const { email } = this.state;
+    return email.length > 0;
+  };
+
+  isValidInputPassword = () => {
+    const { password } = this.state;
+    return password.length >= 4;
+  };
+
+  isValidInputUsername = () => {
+    const { username } = this.state;
+    return username.length > 0;
+  };
 
   render() {
+    const { isLoading } = this.state;
+    const { handleJoin } = this;
+    const isValidInputEmail = this.isValidInputEmail();
+    const isValidInputPassword = this.isValidInputPassword();
+    const isValidInputUsername = this.isValidInputUsername();
     return (
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-        <View style={styles.container}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-            }}
-          >
-            <Text style={styles.title}> WelCome🚀</Text>
-            <TextInput
-              style={styles.textForm}
-              // keyboardType="email-address"
-              placeholder={'ID'}
-              onChangeText={input => this.setState({ email: input })}
-            />
-            <TextInput
-              style={styles.textForm}
-              secureTextEntry={true}
-              placeholder={'Password'}
-              onChangeText={input => this.setState({ password: input })}
-            />
-            <TextInput
-              style={styles.textForm}
-              placeholder={'Username'}
-              onChangeText={input => this.setState({ username: input })}
-            />
-            <View
-              style={{
-                height: '35%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '50%',
-              }}
-            >
-              <TouchableOpacity
-                style={styles.button}
-                onPress={this.handleJoin.bind(this)}
-              >
-                <Text style={styles.buttonTitle}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+          <Layout style={styles.container}>
+            <Layout style={styles.formArea}>
+              <Layout style={styles.titleArea}>
+                <Text category="h1" style={styles.title}>
+                  WelCome 🚀
+                </Text>
+              </Layout>
+              <Input
+                style={styles.textForm}
+                placeholder={'ID'}
+                status={isValidInputEmail ? 'info' : ''}
+                caption={isValidInputEmail ? 'Correct' : 'ID를 입력해주세요'}
+                onChangeText={input => this.setState({ email: input })}
+              />
+              <Input
+                style={styles.textForm}
+                secureTextEntry={true}
+                placeholder={'Password'}
+                keyboardType="decimal-pad"
+                status={isValidInputPassword ? 'info' : ''}
+                caption={
+                  isValidInputPassword
+                    ? 'Correct'
+                    : '비밀번호는 4자리 이상으로 해주세요'
+                }
+                onChangeText={input => this.setState({ password: input })}
+              />
+              <Input
+                style={styles.textForm}
+                placeholder={'Nickname'}
+                status={isValidInputUsername ? 'info' : ''}
+                caption={
+                  isValidInputUsername ? 'Correct' : '닉네임을 입력해주세요'
+                }
+                onChangeText={input => this.setState({ username: input })}
+              />
+              <Layout style={styles.buttonArea}>
+                <Popover
+                  visible={this.state.popoverVisible}
+                  content={this.renderPopoverContentElement()}
+                  onBackdropPress={this.togglePopover}
+                >
+                  <Button
+                    appearance="outline"
+                    status={
+                      isValidInputEmail &&
+                      isValidInputPassword &&
+                      isValidInputUsername
+                        ? 'success'
+                        : 'basic'
+                    }
+                    disabled={
+                      isValidInputEmail &&
+                      isValidInputPassword &&
+                      isValidInputUsername
+                        ? false
+                        : true
+                    }
+                    size="large"
+                    style={styles.singupButton}
+                    onPress={handleJoin}
+                  >
+                    Sign Up
+                  </Button>
+                </Popover>
+              </Layout>
+              {isLoading && <ActivityIndicator size="large" color="0000ff" />}
+            </Layout>
+          </Layout>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -97,7 +182,18 @@ export default class LoginScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    paddingLeft: '10%',
+    paddingRight: '10%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleArea: {
+    marginBottom: 10,
+  },
+  formArea: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 30,
@@ -108,29 +204,16 @@ const styles = StyleSheet.create({
     paddingTop: 100,
   },
   textForm: {
-    // flex: 1,
-    width: '70%',
-    height: '8%',
-    color: 'ghostwhite',
+    width: Dimensions.get('screen').width * 0.7,
     paddingLeft: 15,
     paddingRight: 5,
     marginBottom: 15,
-    borderBottomWidth: 1,
-    borderColor: '#888',
   },
-  button: {
-    width: '90%',
-    height: '30%',
-    borderColor: 'plum',
-    borderWidth: 3,
-    borderRadius: 40,
-    marginTop: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+  buttonArea: {
+    margin: 20,
   },
-  buttonTitle: {
-    fontSize: 20,
-    color: 'ghostwhite',
-    fontWeight: 'bold',
+  singupButton: {
+    width: Dimensions.get('screen').width * 0.4,
   },
+  popoverContent: { justifyContent: 'center', alignItems: 'center' },
 });
