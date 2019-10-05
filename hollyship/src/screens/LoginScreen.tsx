@@ -55,7 +55,6 @@ export default class LoginScreen extends Component<Props, State> {
       isLoading: true,
     });
     try {
-      console.log(this.state);
       const { email, password } = this.state;
       const data = await axios.post('http://13.125.244.90:8000/auth/login', {
         email,
@@ -108,6 +107,7 @@ export default class LoginScreen extends Component<Props, State> {
               <Input
                 style={styles.textInput}
                 status={isValidInputEmail ? 'info' : ''}
+                value={this.state.email}
                 caption={isValidInputEmail ? 'Done' : 'ID를 입력해주세요'}
                 placeholder="ID"
                 onChangeText={text => this.setState({ email: text })}
@@ -115,6 +115,7 @@ export default class LoginScreen extends Component<Props, State> {
               <Input
                 style={styles.textInput}
                 status={isValidInputPassword ? 'info' : ''}
+                value={this.state.password}
                 caption={
                   isValidInputPassword ? 'Done' : '비밀번호를 입력해주세요'
                 }

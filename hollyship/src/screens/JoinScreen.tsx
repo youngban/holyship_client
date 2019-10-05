@@ -115,6 +115,7 @@ export default class LoginScreen extends Component<Props, State> {
                 style={styles.textForm}
                 placeholder={'ID'}
                 status={isValidInputEmail ? 'info' : ''}
+                value={this.state.email}
                 caption={isValidInputEmail ? 'Correct' : 'ID를 입력해주세요'}
                 onChangeText={input => this.setState({ email: input })}
               />
@@ -123,6 +124,7 @@ export default class LoginScreen extends Component<Props, State> {
                 secureTextEntry={true}
                 placeholder={'Password'}
                 keyboardType="decimal-pad"
+                value={this.state.password}
                 status={isValidInputPassword ? 'info' : ''}
                 caption={
                   isValidInputPassword
@@ -135,6 +137,7 @@ export default class LoginScreen extends Component<Props, State> {
                 style={styles.textForm}
                 placeholder={'Nickname'}
                 status={isValidInputUsername ? 'info' : ''}
+                value={this.state.username}
                 caption={
                   isValidInputUsername ? 'Correct' : '닉네임을 입력해주세요'
                 }
