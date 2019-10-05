@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { Layout, Text } from 'react-native-ui-kitten';
 
 interface Props {
   navigation: any;
@@ -14,11 +15,13 @@ export default class Splash extends Component<Props> {
   }
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Holly Ship</Text>
+      <Layout style={styles.container}>
+        <Text category="h1" style={styles.title}>
+          Holly Ship
+        </Text>
         <Image source={require('../Image/mainicon.png')} />
         <ActivityIndicator size="large" color="0000ff" />
-      </View>
+      </Layout>
     );
   }
 }
@@ -26,13 +29,10 @@ export default class Splash extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    fontSize: 40,
-    color: 'white',
     fontWeight: 'bold',
     textShadowOffset: { width: 4, height: 2 },
     textShadowRadius: 20,
