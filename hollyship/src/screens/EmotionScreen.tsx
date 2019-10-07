@@ -72,7 +72,9 @@ export default class EmotinScreen extends Component<Props> {
             margin: 7,
           }}
         >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>차트 Top5</Text>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>
+            Most Recommend Songs
+          </Text>
         </View>
 
         <View style={{ flex: 1 }}>

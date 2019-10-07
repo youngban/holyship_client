@@ -38,11 +38,10 @@ type Props = {
 // const { width } = Dimensions.get('window');
 
 const emotions = [
-  { title: 'happy', img: require('../img/happy.jpg') },
-  { title: 'chill', img: require('../img/chill.jpeg') },
-  { title: 'blank', img: require('../img/blank.jpg') },
+  { title: 'happy', img: require('../img/happy4.jpeg') },
+  { title: 'chill', img: require('../img/chill3.jpeg') },
+  { title: 'empty', img: require('../img/blank.jpeg') },
   { title: 'sad', img: require('../img/sad.jpg') },
-  { title: 'tired', img: require('../img/tired.jpg') },
   { title: 'angry', img: require('../img/angry.jpg') },
 ];
 
@@ -206,7 +205,7 @@ class CategoryScreen extends Component<Props, MyState> {
                     <Text
                       style={{
                         flex: 1,
-                        height: hp('13.3%'),
+                        height: hp('16%'),
                         fontSize: 20,
                         justifyContent: 'center',
                         textAlign: 'center',
