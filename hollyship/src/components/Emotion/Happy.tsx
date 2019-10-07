@@ -51,7 +51,6 @@ export default class Happy extends React.Component<Props, State> {
       ...this.state,
       happyMusics: response.data,
     });
-    console.log(response.data);
   };
 
   componentDidMount() {
