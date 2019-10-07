@@ -89,25 +89,25 @@ export class BottomNavigationShowcase extends React.Component<Props, State> {
           style={styles.tab}
           titleStyle={styles.tabTitle}
           title="Emotion"
-          icon={emotionIcon}
+          // icon={emotionIcon}
         />
         <BottomNavigationTab
           style={styles.tab}
           titleStyle={styles.tabTitle}
           title="Home"
-          icon={homeIcon}
+          // icon={homeIcon}
         />
         <BottomNavigationTab
           style={styles.tab}
           titleStyle={styles.tabTitle}
           title="Chart"
-          icon={chartIcon}
+          // icon={chartIcon}
         />
         <BottomNavigationTab
           style={styles.tab}
           titleStyle={styles.tabTitle}
           title="MyPage"
-          icon={myPageIcon}
+          // icon={myPageIcon}
         />
       </BottomNavigation>
     );
