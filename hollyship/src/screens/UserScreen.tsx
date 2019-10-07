@@ -6,10 +6,12 @@ import {
   Dimensions,
   Alert,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import MypagePosts from '../../src/components/Mypage-Posts/MypagePosts';
 
@@ -18,6 +20,7 @@ interface Props {
 }
 
 interface State {
+  userId: number;
   username: string;
   postingNumber: number;
   followerCounter: number;
@@ -29,13 +32,13 @@ interface State {
 // TODO : Class
 export default class UserScreen extends Component<Props, State> {
   state = {
+    userId: 0,
     username: '',
     postingNumber: 0,
     followerCounter: 0,
     followingCounter: 0,
     modalVisible: false,
-    userImage:
-      'https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png',
+    userImage: null,
   };
 
   // TODO : 모달
@@ -46,9 +49,6 @@ export default class UserScreen extends Component<Props, State> {
 
   // TODO : 이미지 유지 및 화면 cdm
   componentDidMount = () => {
-    // AsyncStorage.getItem('image').then(value =>
-    //   this.setState({ image: value })
-    // );
     this.getUserImage();
     this.getUserInfo();
     this.postingConter();
@@ -56,32 +56,47 @@ export default class UserScreen extends Component<Props, State> {
     // this.followingCounter();
   };
 
+  // TODO: iOS Allow Camera Album Permission
+  getPermissionAsync = async () => {
+    if (Platform.OS === 'ios') {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  };
+
   // TODO : 이미지 선택 및 이미지 POST 날리기
   pickImage = async () => {
+    await this.getPermissionAsync();
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
     });
-    //! console.log('[changeImage]', result);
-    this.setState({ userImage: result.uri });
-
     if (!result.cancelled) {
-      // this.setState({ image: result.uri });
       const data = new FormData();
       data.append('photo', {
         uri: result.uri,
         name: result.uri.split('/').pop(),
         type: result.type,
       });
-      //! console.log('[data] :', data);
-      const res = await axios.post('http://13.125.244.90:8000/user/upload', {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        // body: data,
+
+      // TODO: Upload UserImage to AWS S3 Bucket
+      const res = await axios.post(
+        'http://13.125.244.90:8000/user/upload',
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      const userImage = res.data.file.location;
+      this.setState({ ...this.state, userImage });
+      // TODO: Change UserImage in User Info
+      await axios.patch(`http://13.125.244.90:8000/user`, {
+        userImage,
       });
-      //! console.log('[POST - image]', res.data);
     }
   };
 
@@ -95,11 +110,10 @@ export default class UserScreen extends Component<Props, State> {
   getUserImage = async () => {
     try {
       const response = await axios.get('http://13.125.244.90:8000/user');
-      // console.log('[iWantImage] : ', response.data);
-      // this.setState({
-      //   ...this.state,
-      //   userImage: response.data.userImage,
-      // });
+      this.setState({
+        ...this.state,
+        userImage: response.data.userImage,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -111,6 +125,7 @@ export default class UserScreen extends Component<Props, State> {
       const response = await axios.get('http://13.125.244.90:8000/user');
       this.setState({
         ...this.state,
+        userId: response.data.userId,
         username: response.data.username,
       });
     } catch (err) {
@@ -157,12 +172,16 @@ export default class UserScreen extends Component<Props, State> {
   // };
 
   // TODO: 로그아웃 요청
-  handleLogout() {
-    axios
-      .get('http://13.125.244.90:8000/auth/logout')
-      .then(this.props.navigation.navigate('Login'))
-      .then(AsyncStorage.removeItem('access_token'))
-      .catch(err => Alert.alert('logout'));
+  async handleLogout() {
+    try {
+      await axios.get('http://13.125.244.90:8000/auth/logout');
+      await this.props.navigation.navigate('Login');
+      await AsyncStorage.removeItem('access_token');
+      Alert.alert('로그아웃되었습니다.');
+    } catch (err) {
+      Alert.alert('There is No User Info.\n Have To ReLogin.');
+      await this.props.navigation.navigate('Login');
+    }
   }
 
   // TODO : 모달 페이지
@@ -197,15 +216,15 @@ export default class UserScreen extends Component<Props, State> {
           style={styles.gradientBg}
         ></LinearGradient>
         <Layout style={styles.imageContainer}>
-          {userImage && (
-            <Avatar
-              style={styles.avatarStyle}
-              appearance="default"
-              size="large"
-              shape="round"
-              source={{ uri: userImage }}
-            />
-          )}
+          <Avatar
+            style={styles.avatarStyle}
+            appearance="default"
+            size="large"
+            shape="round"
+            source={
+              !userImage ? require('../Image/user.png') : { uri: userImage }
+            }
+          />
           <Button
             style={styles.imageBtn}
             appearance="filled"
