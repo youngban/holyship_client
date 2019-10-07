@@ -46,7 +46,7 @@ export default class LoginScreen extends Component<Props, State> {
         username: this.state.username,
         password: this.state.password,
       });
-      Alert.alert('로그인되었습니다.');
+      Alert.alert('회원가입이 완료되었습니다!');
       await this.props.navigation.navigate('Login');
     } catch (err) {
       this.setState({
