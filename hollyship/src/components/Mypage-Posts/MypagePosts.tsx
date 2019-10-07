@@ -22,7 +22,7 @@ export default class MypagePosts extends Component<Props, State> {
       const response = await axios.get(
         'http://13.125.244.90:8000/post/user/my'
       );
-      console.log('[내가쓴글 데이터]', response.data.posts);
+
       this.setState({
         ...this.state,
         total: response.data.posts,

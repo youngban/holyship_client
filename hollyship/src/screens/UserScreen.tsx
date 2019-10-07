@@ -62,7 +62,7 @@ export default class UserScreen extends Component<Props, State> {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    console.log('[changeImage]', result);
+    //! console.log('[changeImage]', result);
     this.setState({ userImage: result.uri });
 
     if (!result.cancelled) {
@@ -73,7 +73,7 @@ export default class UserScreen extends Component<Props, State> {
         name: result.uri.split('/').pop(),
         type: result.type,
       });
-      console.log('[data] :', data);
+      //! console.log('[data] :', data);
       const res = await axios.post('http://13.125.244.90:8000/user/upload', {
         headers: {
           Accept: 'application/json',
@@ -81,7 +81,7 @@ export default class UserScreen extends Component<Props, State> {
         },
         // body: data,
       });
-      console.log('[POST - image]', res.data);
+      //! console.log('[POST - image]', res.data);
     }
   };
 
@@ -124,7 +124,6 @@ export default class UserScreen extends Component<Props, State> {
       const response = await axios.get(
         'http://13.125.244.90:8000/post/user/my'
       );
-      // console.log(response.data);
 
       this.setState({
         ...this.state,
