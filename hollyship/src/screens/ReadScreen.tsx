@@ -1,25 +1,17 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  Modal,
-  TextInput,
-  Alert,
-  Button,
-  Keyboard,
-} from 'react-native';
+import { View, Text, Modal, TextInput, Alert, Keyboard } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import { AsyncStorage } from 'react-native';
 import SearchScreen from './SearchScreen';
+import { CommentList } from '../components/CommentList';
+import { Posting } from '../components/Posting';
 
 const axios = require('axios');
-const searchAuth = 'Bearer ' + AsyncStorage.getItem('spotify_token');
 
 type Props = {
   navigation: NavigationStackProp<{}>;
 };
+
 export default class ReadScreen extends Component<Props> {
   constructor(props) {
     super(props);
@@ -27,9 +19,22 @@ export default class ReadScreen extends Component<Props> {
       isVisible: false,
       comment: '',
       query: '',
-      data: [],
+      commentData: [],
+      musicData: [],
+      musicId: 0,
       isloading: false,
     };
+  }
+
+  componentDidMount() {
+    axios
+      .get(`http://13.125.244.90:8000/comment`)
+      .then(res =>
+        this.setState({
+          commentData: res.data,
+        })
+      )
+      .catch(err => console.log(err));
   }
 
   handleComment() {
@@ -37,19 +42,16 @@ export default class ReadScreen extends Component<Props> {
       .post(`http://13.125.244.90:8000/comment`, {
         comment: this.state.comment,
         postId: this.props.navigation.getParam('post').id,
+        musicId: this.state.musicId,
       })
+      .catch(err => console.log(err))
       .then(this.setState({ isVisible: !this.state.isVisible }));
   }
 
-  displayComment() {
-    if (this.props.navigation.getParam('post').comments) {
-      return (
-        <Text>{this.props.navigation.getParam('post').comments.comment}</Text>
-      );
-    } else {
-      return <Text>댓글을 입력해주세요</Text>;
-    }
-  }
+  onSaveItem = id => {
+    this.setState({ musicId: id });
+    console.log(this.state.musicId);
+  };
 
   updateSearch() {
     Keyboard.dismiss();
@@ -57,43 +59,58 @@ export default class ReadScreen extends Component<Props> {
       .get(
         `https://itunes.apple.com/search?term=${this.state.query}&limit=25&country=KR&media=music&entity=musicTrack`
       )
-      .then(res => this.setState({ data: res.data.results, isloading: true }))
+      .then(res =>
+        this.setState({ musicData: res.data.results, isloading: true })
+      )
       .catch(err => console.log(err));
-    console.log(this.state.data);
   }
 
   render() {
-    const post = this.props.navigation.getParam('post');
-    const comments = this.props.navigation.getParam('comment');
-    const result = this.state.data;
+    const {
+      isVisible,
+      isloading,
+      musicData,
+      commentData,
+      pickedMusic,
+    } = this.state;
     return (
-      <View>
-        <Text>{post.title}</Text>
-        <Text>{post.user.username}</Text>
-        <Text>{post.createdAt}</Text>
-        <Text>{post.content}</Text>
-        <View
-          style={{
-            borderTopWidth: 1,
-            borderTopColor: 'grey',
-            flexDirection: 'row',
-          }}
-        >
-          <Text>댓글</Text>
-          <Icon
-            name="message-text-outline"
-            size={30}
-            onPress={() => this.setState({ isVisible: !this.state.isVisible })}
-          />
-        </View>
+      <View style={{ backgroundColor: 'black', flex: 1 }}>
+        <Posting post={this.props.navigation.getParam('post')} />
+
         <View>
-          {/* {console.log(comments)} */}
-          {/* {if(comments.length > 0){
-              comments.map(item => {
-                return <Text key={item.comment}>{item.comment}</Text>;
-              })
-          }} */}
+          <View
+            style={{
+              borderTopWidth: 1,
+              borderTopColor: 'grey',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 15,
+              marginBottom: 15,
+            }}
+          >
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 20,
+              }}
+            >
+              댓글
+            </Text>
+            <Icon
+              name="message-text-outline"
+              color="white"
+              size={30}
+              onPress={() => this.setState({ isVisible: !isVisible })}
+            />
+          </View>
+          <View>
+            <CommentList
+              comments={commentData}
+              currentPost={this.props.navigation.getParam('post').id}
+            />
+          </View>
         </View>
+
         <View
           style={{
             backgroundColor: 'grey',
@@ -102,14 +119,13 @@ export default class ReadScreen extends Component<Props> {
           <Modal
             animationType={'slide'}
             transparent={false}
-            visible={this.state.isVisible}
+            visible={isVisible}
             onRequestClose={() => {
               Alert.alert('글쓰기 취소', '게시글 입력을 취소하시겠습니까?', [
                 { text: '아니오' },
                 {
                   text: '네',
-                  onPress: () =>
-                    this.setState({ isVisible: !this.state.isVisible }),
+                  onPress: () => this.setState({ isVisible: !isVisible }),
                 },
               ]);
             }}
@@ -143,8 +159,10 @@ export default class ReadScreen extends Component<Props> {
                 </View>
 
                 <SearchScreen
-                  items={this.state.data}
-                  checkLoad={this.state.isloading}
+                  items={musicData}
+                  checkLoad={isloading}
+                  picked={pickedMusic}
+                  onSaveMusic={this.onSaveItem}
                 />
               </View>
               <View
