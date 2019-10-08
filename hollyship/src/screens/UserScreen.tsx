@@ -46,14 +46,11 @@ export default class UserScreen extends Component<Props, State> {
       'https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png',
 
     userImage: null,
-
   };
 
-  //? *******************************************************************************
-
-  //?                      모달 페이지 상태
-
-  //? *******************************************************************************
+  //? *******************************************************
+  //?                   모달 페이지 상태
+  //? *******************************************************
 
   // TODO : 모달
   setModalVisible = () => {
@@ -66,11 +63,9 @@ export default class UserScreen extends Component<Props, State> {
     this.setState({ modalVisible1 });
   };
 
-  //? *******************************************************************************
-
-  //?                      COMPONENT DID MOUNT
-
-  //? *******************************************************************************
+  //? *******************************************************
+  //?                  COMPONENT DID MOUNT
+  //? *******************************************************
 
   // TODO : 이미지 유지 및 화면 cdm
   componentDidMount = () => {
@@ -81,12 +76,9 @@ export default class UserScreen extends Component<Props, State> {
     // this.followingCounter();
   };
 
-
-  //? *******************************************************************************
-
-  //?                     서버 요청 ( 이미지, 유저 이미지, 팔로우, 포스팅)
-
-  //? *******************************************************************************
+  //? *******************************************************
+  //?      서버 요청 ( 이미지, 유저 이미지, 팔로우, 포스팅)
+  //? *******************************************************
 
   // TODO: iOS Allow Camera Album Permission
   getPermissionAsync = async () => {
@@ -113,13 +105,6 @@ export default class UserScreen extends Component<Props, State> {
         type: result.type,
       });
 
-      const res = await axios.post('http://13.125.244.90:8000/user/upload', {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        // body: data,
-
       // TODO: Upload UserImage to AWS S3 Bucket
       const res = await axios.post(
         'http://13.125.244.90:8000/user/upload',
@@ -135,7 +120,6 @@ export default class UserScreen extends Component<Props, State> {
       // TODO: Change UserImage in User Info
       await axios.patch(`http://13.125.244.90:8000/user`, {
         userImage,
-
       });
     }
   };
@@ -218,11 +202,9 @@ export default class UserScreen extends Component<Props, State> {
     }
   }
 
-  //? *******************************************************************************
-
-  //?                      포스터, 팔로우, 팔로잉 모달 페이지
-
-  //? *******************************************************************************
+  //? *******************************************************
+  //?      포스터, 팔로우, 팔로잉 모달 페이지
+  //? *******************************************************
 
   // TODO : 포스터 모달 페이지
   renderModalElement = () => {
