@@ -46,7 +46,6 @@ export default class UserScreen extends Component<Props, State> {
       'https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png',
 
     userImage: null,
-
   };
 
   //? *******************************************************************************
@@ -81,7 +80,6 @@ export default class UserScreen extends Component<Props, State> {
     // this.followingCounter();
   };
 
-
   //? *******************************************************************************
 
   //?                     서버 요청 ( 이미지, 유저 이미지, 팔로우, 포스팅)
@@ -113,13 +111,6 @@ export default class UserScreen extends Component<Props, State> {
         type: result.type,
       });
 
-      const res = await axios.post('http://13.125.244.90:8000/user/upload', {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        // body: data,
-
       // TODO: Upload UserImage to AWS S3 Bucket
       const res = await axios.post(
         'http://13.125.244.90:8000/user/upload',
@@ -135,7 +126,6 @@ export default class UserScreen extends Component<Props, State> {
       // TODO: Change UserImage in User Info
       await axios.patch(`http://13.125.244.90:8000/user`, {
         userImage,
-
       });
     }
   };
