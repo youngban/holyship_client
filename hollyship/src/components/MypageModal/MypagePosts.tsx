@@ -22,7 +22,6 @@ export default class MypagePosts extends Component<Props, State> {
       const response = await axios.get(
         'http://13.125.244.90:8000/post/user/my'
       );
-
       this.setState({
         ...this.state,
         total: response.data.posts,
@@ -34,6 +33,7 @@ export default class MypagePosts extends Component<Props, State> {
 
   render() {
     const { total } = this.state;
+
     const setModalVisible = this.props;
     return !total ? (
       <ActivityIndicator />
