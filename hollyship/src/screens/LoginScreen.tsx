@@ -110,12 +110,17 @@ export default class LoginScreen extends Component<Props, State> {
                 value={this.state.email}
                 caption={isValidInputEmail ? 'Done' : 'ID를 입력해주세요'}
                 placeholder="ID"
+                keyboardType="email-address"
+                keyboardAppearance="dark"
+                autoCapitalize="none"
+                autoCorrect={false}
                 onChangeText={text => this.setState({ email: text })}
               />
               <Input
                 style={styles.textInput}
                 status={isValidInputPassword ? 'info' : ''}
                 value={this.state.password}
+                keyboardAppearance="dark"
                 caption={
                   isValidInputPassword ? 'Done' : '비밀번호를 입력해주세요'
                 }
