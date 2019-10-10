@@ -10,8 +10,7 @@ import {
 import { FlatList } from 'react-native-gesture-handler';
 import { Dimensions } from 'react-native';
 import axios from 'axios';
-import { PREFIX_URL } from '../../config/config';
-
+import { PREFIX_URL } from '../config/config';
 
 const { width, height } = Dimensions.get('window');
 

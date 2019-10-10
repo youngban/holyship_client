@@ -6,8 +6,7 @@ import SearchScreen from './SearchScreen';
 import { CommentList } from '../components/CommentList';
 import { Posting } from '../components/Posting';
 
-import { PREFIX_URL } from '../../config/config';
-
+import { PREFIX_URL } from '../config/config';
 
 const axios = require('axios');
 
@@ -45,21 +44,16 @@ export default class ReadScreen extends Component<Props> {
   }
 
   getMusics() {
-    axios
-      .get(`http://${PREFIX_URL}/user`)
-      .then(res => {
-        const userData = res.data.likeMusics;
-        this.setState({ userMusics: userData.map(item => item.id) });
-      })
-
+    axios.get(`http://${PREFIX_URL}/user`).then(res => {
+      const userData = res.data.likeMusics;
+      this.setState({ userMusics: userData.map(item => item.id) });
+    });
   }
 
   handleComment() {
     axios
 
-
       .post(`${PREFIX_URL}/comment`, {
-
         comment: this.state.comment,
         postId: this.props.navigation.getParam('post').id,
         musicId: this.state.musicId,
