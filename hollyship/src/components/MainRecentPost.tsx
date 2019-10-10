@@ -19,7 +19,7 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 
-const PREFIX_URL = 'http://13.125.244.90:8000';
+import { PREFIX_URL } from '../config/config';
 
 interface state {
   posts: any;

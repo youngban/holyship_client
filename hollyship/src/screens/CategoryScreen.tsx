@@ -23,6 +23,7 @@ import EmotionScreen from './EmotionScreen';
 import ReadScreen from './ReadScreen';
 import SearchScreen from './SearchScreen';
 import { TextInput } from 'react-native-gesture-handler';
+import { PREFIX_URL } from '../config/config';
 const axios = require('axios');
 
 type MyState = {
@@ -72,7 +73,7 @@ class CategoryScreen extends Component<Props, MyState> {
 
   handlePress(emotion) {
     axios
-      .get(`http://13.125.244.90:8000/emoji/${emotion}`)
+      .get(`${PREFIX_URL}/emoji/${emotion}`)
       .then(res => {
         this.props.navigation.navigate('EmotionScreen', {
           category: emotion,
@@ -96,7 +97,7 @@ class CategoryScreen extends Component<Props, MyState> {
 
   handlePost() {
     axios
-      .post('http://13.125.244.90:8000/post', {
+      .post(`${PREFIX_URL}/post`, {
         title: this.state.title,
         content: this.state.content,
         emotion: this.state.emotion,
