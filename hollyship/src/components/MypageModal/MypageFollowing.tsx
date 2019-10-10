@@ -3,9 +3,9 @@ import { View, StyleSheet, Dimensions, Alert } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { Button } from 'react-native-ui-kitten';
 import { FlatList } from 'react-native-gesture-handler';
+import FollowingBtn from './FollowingBtn';
 
 import axios from 'axios';
-import FollowBtn from './FollowBtn';
 
 export default class MypageFollowers extends Component {
   state = {
@@ -20,8 +20,9 @@ export default class MypageFollowers extends Component {
   getFollowers = async () => {
     try {
       const response = await axios.get(
-        'http://13.125.244.90:8000/follow/follower'
+        'http://13.125.244.90:8000/follow/following'
       );
+
       this.setState({
         dataSource: response.data,
       });
@@ -35,7 +36,7 @@ export default class MypageFollowers extends Component {
       <ListItem
         roundAvatar
         index={index}
-        title={item.followerName}
+        title={item.followingName}
         leftAvatar={{
           source: { uri: item.image },
         }}
@@ -54,7 +55,7 @@ export default class MypageFollowers extends Component {
         titleStyle={styles.titleStyle}
       />
       <View style={styles.buttonStyle}>
-        <FollowBtn dataSource={item.followerName} />
+        <FollowingBtn />
       </View>
     </View>
   );

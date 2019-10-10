@@ -15,7 +15,11 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import MypageModal from '../components/MypageModal/MypagePosts';
 import MypageFollowers from '../components/MypageModal/MypageFollowers';
+
+import MypageFollowing from '../components/MypageModal/MypageFollowing';
+
 import { PREFIX_URL } from '../config/config';
+
 
 interface Props {
   navigation: any;
@@ -25,10 +29,11 @@ interface State {
   userId: number;
   username: string;
   postingNumber: number;
-  followerCounter: number;
+  followNumber: number;
   followingCounter: number;
-  modalVisible: boolean;
-  modalVisible1: boolean;
+  postModalVisible: boolean;
+  followModalVisible: boolean;
+  followingModalVisible: boolean;
   userImage: any;
 }
 
@@ -38,14 +43,11 @@ export default class UserScreen extends Component<Props, State> {
     userId: 0,
     username: '',
     postingNumber: 0,
-    followerCounter: 0,
+    followNumber: 0,
     followingCounter: 0,
-    modalVisible: false,
-
-    modalVisible1: false,
-    userImage:
-      'https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png',
-
+    postModalVisible: false,
+    followModalVisible: false,
+    followingModalVisible: false,
     userImage: null,
   };
 
@@ -55,16 +57,21 @@ export default class UserScreen extends Component<Props, State> {
 
   // TODO : 모달
   setModalVisible = () => {
-    const modalVisible = !this.state.modalVisible;
-    this.setState({ modalVisible });
+    const postModalVisible: boolean = !this.state.postModalVisible;
+    this.setState({ postModalVisible });
   };
 
   setFollowModal = () => {
-    const modalVisible1 = !this.state.modalVisible1;
-    this.setState({ modalVisible1 });
+    const followModalVisible: boolean = !this.state.followModalVisible;
+    this.setState({ followModalVisible });
   };
 
-  //? *******************************************************
+  setFollowingModal = () => {
+    const followingModalVisible: boolean = !this.state.followingModalVisible;
+    this.setState({ followingModalVisible });
+  };
+
+  //? ***************state****************************************
   //?                  COMPONENT DID MOUNT
   //? *******************************************************
 
@@ -73,8 +80,8 @@ export default class UserScreen extends Component<Props, State> {
     this.getUserImage();
     this.getUserInfo();
     this.postingConter();
-    // this.followerCounter();
-    // this.followingCounter();
+    this.followCounter();
+    this.followingCounter();
   };
 
   //? *******************************************************
@@ -163,26 +170,38 @@ export default class UserScreen extends Component<Props, State> {
   };
 
   // TODO: Axios 팔로워 카운터
-  // followerCounter = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://13.125.244.90:8000/follow/follower`
-  //     );
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+
+  followCounter = async () => {
+    try {
+      const response = await axios.get(
+        'http://13.125.244.90:8000/follow/follower'
+      );
+      console.log('[Follow - Counter]', response.data.length);
+      this.setState({
+        ...this.state,
+        followNumber: response.data.length,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
 
   // TODO: Axios 팔로잉 카운터
-  // followingCounter = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       'http://13.125.244.90:8000/follow/following'
-  //     );
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  followingCounter = async () => {
+    try {
+      const response = await axios.get(
+        'http://13.125.244.90:8000/follow/following'
+      );
+
+      this.setState({
+        followingCounter: response.data.length,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // TODO: 로그아웃 요청
   async handleLogout() {
@@ -247,6 +266,29 @@ export default class UserScreen extends Component<Props, State> {
     );
   };
 
+  // TODO : 팔로잉 모달 페이지
+  showingFollowingModal = () => {
+    return (
+      <Layout level="1" style={styles.modalContainer}>
+        <Button
+          style={{
+            marginTop: 15,
+            padding: 2,
+            marginRight: 5,
+            alignSelf: 'flex-end',
+          }}
+          size="giant"
+          status="danger"
+          appearance="ghost"
+          onPress={this.setFollowingModal}
+        >
+          ❌
+        </Button>
+        <MypageFollowing />
+      </Layout>
+    );
+  };
+
   render() {
     let { userImage } = this.state;
     return (
@@ -301,17 +343,28 @@ export default class UserScreen extends Component<Props, State> {
               allowBackdrop={true}
               backdropStyle={{ backgroundColor: 'black', opacity: 0.5 }}
               onBackdropPress={this.setFollowModal}
-              visible={this.state.modalVisible1}
+              visible={this.state.followModalVisible}
             >
               {this.showFollowModal()}
             </Modal>
-            <Text category="h6">{this.state.followerCounter}</Text>
+            <Text category="h6">{this.state.followNumber}</Text>
           </TouchableOpacity>
           {/* Following */}
-          <TouchableOpacity style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={this.setFollowingModal}
+          >
             <Text category="h6" status="primary" style={styles.button}>
               Following
             </Text>
+            <Modal
+              allowBackdrop={true}
+              backdropStyle={{ backgroundColor: 'black', opacity: 0.5 }}
+              onBackdropPress={this.setFollowingModal}
+              visible={this.state.followingModalVisible}
+            >
+              {this.showingFollowingModal()}
+            </Modal>
             <Text category="h6">{this.state.followingCounter}</Text>
           </TouchableOpacity>
           {/* Posts */}
@@ -332,7 +385,7 @@ export default class UserScreen extends Component<Props, State> {
               allowBackdrop={true}
               backdropStyle={{ backgroundColor: 'black', opacity: 0.5 }}
               onBackdropPress={this.setModalVisible}
-              visible={this.state.modalVisible}
+              visible={this.state.postModalVisible}
             >
               {this.renderModalElement()}
             </Modal>
