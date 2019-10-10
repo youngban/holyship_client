@@ -20,7 +20,6 @@ import MypageFollowing from '../components/MypageModal/MypageFollowing';
 
 import { PREFIX_URL } from '../config/config';
 
-
 interface Props {
   navigation: any;
 }
@@ -119,7 +118,7 @@ export default class UserScreen extends Component<Props, State> {
           'Content-Type': 'multipart/form-data',
         },
       });
-      const userImage = res.data.file.location;
+      const userImage = res.data.file;
       this.setState({ ...this.state, userImage });
       // TODO: Change UserImage in User Info
       await axios.patch(`${PREFIX_URL}/user`, {
@@ -185,8 +184,6 @@ export default class UserScreen extends Component<Props, State> {
       console.log(err);
     }
   };
-
-
 
   // TODO: Axios 팔로잉 카운터
   followingCounter = async () => {
