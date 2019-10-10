@@ -5,7 +5,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchScreen from './SearchScreen';
 import { CommentList } from '../components/CommentList';
 import { Posting } from '../components/Posting';
-import { PREFIX_URL } from '../config/config';
+
+import { PREFIX_URL } from '../../config/config';
+
 
 const axios = require('axios');
 
@@ -22,25 +24,42 @@ export default class ReadScreen extends Component<Props> {
       query: '',
       commentData: [],
       musicData: [],
+      userMusics: [],
       musicId: 0,
       isloading: false,
     };
   }
 
   componentDidMount() {
+    this.getComments();
+    this.getMusics();
+  }
+
+  getComments() {
     axios
-      .get(`${PREFIX_URL}/comment`)
-      .then(res =>
-        this.setState({
-          commentData: res.data,
-        })
-      )
+      .get(`http://${PREFIX_URL}/comment`)
+      .then(res => {
+        this.setState({ commentData: res.data });
+      })
       .catch(err => console.log(err));
+  }
+
+  getMusics() {
+    axios
+      .get(`http://${PREFIX_URL}/user`)
+      .then(res => {
+        const userData = res.data.likeMusics;
+        this.setState({ userMusics: userData.map(item => item.id) });
+      })
+
   }
 
   handleComment() {
     axios
+
+
       .post(`${PREFIX_URL}/comment`, {
+
         comment: this.state.comment,
         postId: this.props.navigation.getParam('post').id,
         musicId: this.state.musicId,
@@ -71,9 +90,11 @@ export default class ReadScreen extends Component<Props> {
       isVisible,
       isloading,
       musicData,
+      userMusics,
       commentData,
       pickedMusic,
     } = this.state;
+
     return (
       <View style={{ backgroundColor: 'black', flex: 1 }}>
         <Posting post={this.props.navigation.getParam('post')} />
@@ -107,7 +128,9 @@ export default class ReadScreen extends Component<Props> {
           <View>
             <CommentList
               comments={commentData}
+              likeMusics={userMusics}
               currentPost={this.props.navigation.getParam('post').id}
+              handleLikes={this.getMusics}
             />
           </View>
         </View>
