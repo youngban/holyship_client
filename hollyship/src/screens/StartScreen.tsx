@@ -8,6 +8,7 @@ import {
   Image,
   AsyncStorage,
 } from 'react-native';
+import { PREFIX_URL } from '../config/config';
 
 const axios = require('axios');
 
@@ -17,7 +18,7 @@ interface Props {
 interface State {}
 export default class StartScreen extends Component<Props, State> {
   hand() {
-    axios.get('http://13.125.244.90:8000/auth/logout').then(console.log('hi'));
+    axios.get(`${PREFIX_URL}/auth/logout`).then(console.log('hi'));
     // .catch(err => Alert.alert(err));
   }
 

@@ -15,7 +15,11 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import MypageModal from '../components/MypageModal/MypagePosts';
 import MypageFollowers from '../components/MypageModal/MypageFollowers';
+
 import MypageFollowing from '../components/MypageModal/MypageFollowing';
+
+import { PREFIX_URL } from '../config/config';
+
 
 interface Props {
   navigation: any;
@@ -110,19 +114,15 @@ export default class UserScreen extends Component<Props, State> {
       });
 
       // TODO: Upload UserImage to AWS S3 Bucket
-      const res = await axios.post(
-        'http://13.125.244.90:8000/user/upload',
-        data,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const res = await axios.post(`${PREFIX_URL}/user/upload`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       const userImage = res.data.file.location;
       this.setState({ ...this.state, userImage });
       // TODO: Change UserImage in User Info
-      await axios.patch(`http://13.125.244.90:8000/user`, {
+      await axios.patch(`${PREFIX_URL}/user`, {
         userImage,
       });
     }
@@ -131,7 +131,7 @@ export default class UserScreen extends Component<Props, State> {
   // TODO : 유저 이미지 가져오기
   getUserImage = async () => {
     try {
-      const response = await axios.get('http://13.125.244.90:8000/user');
+      const response = await axios.get(`${PREFIX_URL}/user`);
       this.setState({
         ...this.state,
         userImage: response.data.userImage,
@@ -144,7 +144,7 @@ export default class UserScreen extends Component<Props, State> {
   // TODO : 유저 이름 가져오기
   getUserInfo = async () => {
     try {
-      const response = await axios.get('http://13.125.244.90:8000/user');
+      const response = await axios.get(`${PREFIX_URL}/user`);
       this.setState({
         ...this.state,
         userId: response.data.userId,
@@ -158,9 +158,7 @@ export default class UserScreen extends Component<Props, State> {
   // TODO: Axios 포스팅 카운터
   postingConter = async () => {
     try {
-      const response = await axios.get(
-        'http://13.125.244.90:8000/post/user/my'
-      );
+      const response = await axios.get(`${PREFIX_URL}/post/user/my`);
 
       this.setState({
         ...this.state,
@@ -172,6 +170,7 @@ export default class UserScreen extends Component<Props, State> {
   };
 
   // TODO: Axios 팔로워 카운터
+
   followCounter = async () => {
     try {
       const response = await axios.get(
@@ -186,6 +185,8 @@ export default class UserScreen extends Component<Props, State> {
       console.log(err);
     }
   };
+
+
 
   // TODO: Axios 팔로잉 카운터
   followingCounter = async () => {
@@ -205,7 +206,7 @@ export default class UserScreen extends Component<Props, State> {
   // TODO: 로그아웃 요청
   async handleLogout() {
     try {
-      await axios.get('http://13.125.244.90:8000/auth/logout');
+      await axios.get(`${PREFIX_URL}/auth/logout`);
       await this.props.navigation.navigate('Login');
       await AsyncStorage.removeItem('access_token');
       Alert.alert('로그아웃되었습니다.');

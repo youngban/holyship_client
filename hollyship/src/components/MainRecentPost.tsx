@@ -20,7 +20,7 @@ import moment from 'moment';
 import FollowBtn from './MypageModal/MainFollowBtn';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const PREFIX_URL = 'http://13.125.244.90:8000';
+import { PREFIX_URL } from '../config/config';
 
 export interface State {
   posts: any;

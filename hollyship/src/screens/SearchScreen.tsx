@@ -10,6 +10,7 @@ import {
 import { FlatList } from 'react-native-gesture-handler';
 import { Dimensions } from 'react-native';
 import axios from 'axios';
+import { PREFIX_URL } from '../config/config';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,7 +41,7 @@ export default class SearchScreen extends Component {
           text: '네',
           onPress: () =>
             axios
-              .post(`http://13.125.244.90:8000/music`, {
+              .post(`${PREFIX_URL}/music`, {
                 id: item.trackId,
                 title: item.trackName,
                 thumbnail: item.artworkUrl60,
