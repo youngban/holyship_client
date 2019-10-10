@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { StyleSheet, Alert, Dimensions, ScrollView } from 'react-native';
-import { Layout, Text, List, ListItem, Button } from 'react-native-ui-kitten';
+import {
+  Layout,
+  Text,
+  List,
+  ListItem,
+  Button,
+  Select,
+} from 'react-native-ui-kitten';
 import axios from 'axios';
 import { Image } from 'react-native-elements';
+import DialogInput from 'react-native-dialog-input';
 
 interface Props {
   navigation: any;
@@ -11,7 +19,14 @@ interface Props {
   Props: any;
   title: string;
 }
-interface State {}
+interface State {
+  musics: any;
+  selectedOption: any | undefined;
+  isDialogVisible: boolean;
+  inputText: string;
+  itemsData: any;
+  playListMusics: any;
+}
 
 const PREFIX_URL = 'http://13.125.244.90:8000';
 const SCREEN_WIDTH = Dimensions.get('screen').width;
@@ -20,15 +35,22 @@ const SCREEN_HEIGHT = Dimensions.get('screen').height;
 class ChartScreen extends React.Component<Props, State> {
   state = {
     musics: [],
+    selectedOption: undefined,
+    isDialogVisible: false,
+    inputText: '',
+    itemsData: [],
+    playListMusics: [],
   };
 
+  // TODO: INITIALIZE
   componentDidMount = () => {
     this.fetchMusics();
+    this.getPlayListItems();
   };
 
+  // TODO: Fetch Music Data
   fetchMusics = async () => {
     const response = await axios.get(`${PREFIX_URL}/music`);
-    console.log(response.data[0].likeUsers.length);
     const sortedMusics = response.data.sort(
       (a: any, b: any) => b.likeUsers.length - a.likeUsers.length
     );
@@ -47,8 +69,144 @@ class ChartScreen extends React.Component<Props, State> {
     });
   };
 
+  // TODO: Handle Add music in Playlist
+  addMusicToPlaylist = async musicId => {
+    const { selectedOption } = this.state;
+    if (!selectedOption) {
+      Alert.alert('리스트를 먼저 정해주세요.');
+      return;
+    } else {
+      try {
+        const playlistId = selectedOption.id;
+        const response = await axios.post(
+          `${PREFIX_URL}/music/${musicId}/list`,
+          {
+            playlistId,
+          }
+        );
+        console.log(response.data);
+        Alert.alert('리스트에 추가되었습니다.');
+        return;
+      } catch (err) {
+        Alert.alert('이미 존재하는 음악입니다.');
+        return;
+      }
+    }
+  };
+
+  // TODO: Fetch PlayListItems
+  getPlayListItems = async () => {
+    const response = await axios.get(`${PREFIX_URL}/list`);
+    console.log('DATA', response.data);
+    const itemsData = response.data.map(item => ({
+      id: item.id,
+      text: item.listName,
+    }));
+    this.setState({ ...this.state, itemsData });
+  };
+
+  // TODO: Handle List Add
+  handleListAdd = async input => {
+    if (!input.length) {
+      Alert.alert('이름을 입력해주세요!');
+      return;
+    } else {
+      const response = await axios.post(`${PREFIX_URL}/list/add`, {
+        listName: input,
+      });
+      await this.getPlayListItems();
+      console.log(`GET ${PREFIX_URL}/list/add : ${response.data}`);
+      this.showDialog();
+    }
+  };
+
+  // TODO: Show Dialog Input
+  showDialog = () => {
+    let { isDialogVisible } = this.state;
+    isDialogVisible = !isDialogVisible;
+    this.setState({ ...this.state, isDialogVisible });
+  };
+
+  // TODO: PlayList Select
+  onSelect = async selectedOption => {
+    this.setState({ ...this.state, selectedOption });
+    const selectedListId = selectedOption.id;
+    const response = await axios.get(
+      `${PREFIX_URL}/list/${selectedListId}/music`
+    );
+    console.log(
+      `GET : ${PREFIX_URL}/list/${selectedListId}/music\n`,
+      response.data
+    );
+    const musics = response.data[0].musics;
+    this.setState({ ...this.state, playListMusics: musics });
+    console.log(musics, this.state.playListMusics);
+  };
+
+  // TODO: DELETE PLAY LIST
+  handleDeleteList = async () => {
+    const { selectedOption } = this.state;
+    if (selectedOption) {
+      console.log('[OPTION] : ', selectedOption.id);
+      Alert.alert(
+        '경고',
+        '정말로 삭제하시겠습니까?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              if (this.state.itemsData.length >= 2) {
+                const response = await axios.delete(
+                  `${PREFIX_URL}/list/${selectedOption.id}`
+                );
+                await this.setState({
+                  ...this.state,
+                  selectedOption: undefined,
+                });
+                await this.getPlayListItems();
+                Alert.alert('삭제되었습니다.');
+
+                return;
+              } else {
+                Alert.alert('1개는 남겨주세요!');
+                return;
+              }
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+      return;
+    } else {
+      Alert.alert('삭제할 리스트가 없습니다.');
+      return;
+    }
+  };
+
+  handleDeleteMusic = async musicId => {
+    try {
+      const { selectedOption } = this.state;
+      const selectedListId = selectedOption.id;
+      const response = await axios.delete(
+        `${PREFIX_URL}/list/${selectedListId}/music`,
+        { musicId }
+      );
+      Alert.alert('삭제되었습니다.');
+      return;
+    } catch (err) {
+      console.log(err);
+      Alert.alert('서버 에러');
+      return;
+    }
+  };
+
   // TODO: LIST ITEM RENDERING
-  renderItem = ({ item, index }) => {
+  renderChartItem = ({ item, index }) => {
     return (
       <ListItem
         key={item.id}
@@ -59,8 +217,42 @@ class ChartScreen extends React.Component<Props, State> {
         description={item.artist}
         descriptionStyle={styles.listDesc}
         accessory={() => (
-          <Button appearance="outline" status="primary">
+          <Button
+            appearance="outline"
+            status="primary"
+            onPress={() => this.addMusicToPlaylist(item.id)}
+          >
             ADD
+          </Button>
+        )}
+        icon={() => (
+          <Image
+            source={{ uri: item.thumbnail }}
+            style={styles.listItemImage}
+          />
+        )}
+      />
+    );
+  };
+
+  // TODO: LIST ITEM RENDERING
+  renderPlayListMusics = ({ item, index }) => {
+    return (
+      <ListItem
+        key={item.id}
+        index={index}
+        style={styles.renderItem}
+        title={item.title}
+        titleStyle={styles.listTitle}
+        description={item.artist}
+        descriptionStyle={styles.listDesc}
+        accessory={() => (
+          <Button
+            appearance="outline"
+            status="warning"
+            onPress={() => this.handleDeleteMusic(item.id)}
+          >
+            DELETE
           </Button>
         )}
         icon={() => (
@@ -75,8 +267,8 @@ class ChartScreen extends React.Component<Props, State> {
 
   // TODO: MAIN
   render() {
-    const { musics } = this.state;
-    const { renderItem } = this;
+    const { musics, itemsData, selectedOption, playListMusics } = this.state;
+    const { renderChartItem, handleListAdd, renderPlayListMusics } = this;
     return (
       <ScrollView style={styles.container}>
         <Text category="h3" status="danger" style={styles.chartTitle}>
@@ -88,24 +280,76 @@ class ChartScreen extends React.Component<Props, State> {
               style={styles.chartList}
               scrollEnabled={false}
               data={musics.slice(0, 5)}
-              renderItem={renderItem}
+              renderItem={renderChartItem}
             />
           </Layout>
           <Layout style={styles.chartContainer}>
             <List
               scrollEnabled={false}
               data={musics.slice(5, 10)}
-              renderItem={renderItem}
+              renderItem={renderChartItem}
             />
           </Layout>
           <Layout style={styles.chartContainer}>
             <List
               scrollEnabled={false}
               data={musics.slice(10, 15)}
-              renderItem={renderItem}
+              renderItem={renderChartItem}
             />
           </Layout>
         </ScrollView>
+        {/* PlayList */}
+        <Layout style={styles.playListTitleContainer}>
+          <Text category="h3" status="primary" style={styles.playListTitle}>
+            PLAY LIST
+          </Text>
+          <Button
+            appearance="outline"
+            textStyle={{ fontSize: 16 }}
+            style={styles.playListAddButton}
+            onPress={this.showDialog}
+          >
+            리스트 추가
+          </Button>
+          <Button
+            appearance="outline"
+            status="warning"
+            textStyle={{ fontSize: 16 }}
+            style={styles.playListAddButton}
+            onPress={this.handleDeleteList}
+          >
+            리스트 삭제
+          </Button>
+          {/* 다이얼로그 (prompt) */}
+          <DialogInput
+            isDialogVisible={this.state.isDialogVisible}
+            title={'ADD LIST'}
+            message={'리스트이름을 입력해주세요'}
+            hintInput={'ex: List'}
+            cancelText="cancel"
+            submitText="OK"
+            dialogStyle={{ backgroundColor: '#ddd' }}
+            submitInput={inputText => handleListAdd(inputText)}
+            closeDialog={this.showDialog}
+          ></DialogInput>
+        </Layout>
+
+        <Layout style={styles.playListContainer}>
+          <Select
+            data={itemsData}
+            labelStyle={styles.labelStyle}
+            placeholderStyle={styles.placeholderStyle}
+            status="warning"
+            selectedOption={selectedOption}
+            onSelect={this.onSelect}
+          />
+          <List
+            style={styles.chartList}
+            scrollEnabled={false}
+            data={playListMusics}
+            renderItem={renderPlayListMusics}
+          />
+        </Layout>
       </ScrollView>
     );
   }
@@ -165,4 +409,29 @@ const styles = StyleSheet.create({
   listDesc: {
     marginLeft: 10,
   },
+  modalContainer: {
+    width: 200,
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  playListContainer: {
+    //
+  },
+  playListTitleContainer: {
+    padding: 15,
+    flexDirection: 'row',
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+  playListTitle: {
+    marginRight: 15,
+  },
+  playListAddButton: {
+    borderRadius: 20,
+    color: '#fff',
+  },
+  labelStyle: {
+    color: 'gray',
+  },
+  placeholderStyle: { color: 'gray' },
 });
