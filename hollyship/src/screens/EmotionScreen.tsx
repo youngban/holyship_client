@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, FlatList, Text, StyleSheet, Image } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
+import { PREFIX_URL } from '../config/config';
 const axios = require('axios');
 
 type Props = {
@@ -21,7 +22,7 @@ export default class EmotinScreen extends Component<Props> {
 
   handlePress(id) {
     axios
-      .get(`http://13.125.244.90:8000/post/${id}`)
+      .get(`${PREFIX_URL}/post/${id}`)
       .then(res => {
         this.props.navigation.navigate('ReadScreen', {
           post: res.data,

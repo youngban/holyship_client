@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchScreen from './SearchScreen';
 import { CommentList } from '../components/CommentList';
 import { Posting } from '../components/Posting';
+import { PREFIX_URL } from '../config/config';
 
 const axios = require('axios');
 
@@ -28,7 +29,7 @@ export default class ReadScreen extends Component<Props> {
 
   componentDidMount() {
     axios
-      .get(`http://13.125.244.90:8000/comment`)
+      .get(`${PREFIX_URL}/comment`)
       .then(res =>
         this.setState({
           commentData: res.data,
@@ -39,7 +40,7 @@ export default class ReadScreen extends Component<Props> {
 
   handleComment() {
     axios
-      .post(`http://13.125.244.90:8000/comment`, {
+      .post(`${PREFIX_URL}/comment`, {
         comment: this.state.comment,
         postId: this.props.navigation.getParam('post').id,
         musicId: this.state.musicId,

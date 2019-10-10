@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Layout, Text, Input, Button, Popover } from 'react-native-ui-kitten';
 import axios from 'axios';
+import { PREFIX_URL } from '../config/config';
 
 type Props = {
   navigation: any;
@@ -41,7 +42,7 @@ export default class LoginScreen extends Component<Props, State> {
         ...this.state,
         isLoading: true,
       });
-      const login = await axios.post('http://13.125.244.90:8000/auth/signup', {
+      const login = await axios.post(`${PREFIX_URL}/auth/signup`, {
         email: this.state.email,
         username: this.state.username,
         password: this.state.password,

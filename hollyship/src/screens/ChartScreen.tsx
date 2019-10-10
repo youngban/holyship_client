@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import { Image } from 'react-native-elements';
 import DialogInput from 'react-native-dialog-input';
+import { PREFIX_URL } from '../config/config';
 
 interface Props {
   navigation: any;
@@ -27,8 +28,6 @@ interface State {
   itemsData: any;
   playListMusics: any;
 }
-
-const PREFIX_URL = 'http://13.125.244.90:8000';
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 
@@ -305,7 +304,7 @@ class ChartScreen extends React.Component<Props, State> {
           </Text>
           <Button
             appearance="outline"
-            textStyle={{ fontSize: 16 }}
+            textStyle={{ fontSize: 12 }}
             style={styles.playListAddButton}
             onPress={this.showDialog}
           >
@@ -314,7 +313,7 @@ class ChartScreen extends React.Component<Props, State> {
           <Button
             appearance="outline"
             status="warning"
-            textStyle={{ fontSize: 16 }}
+            textStyle={{ fontSize: 12, fontWeight: 600 }}
             style={styles.playListAddButton}
             onPress={this.handleDeleteList}
           >

@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import axios from 'axios';
+import { PREFIX_URL } from '../../config/config';
 
 // * UI Part
 function Item({ id, title, artist, playTime, genre, thumbnail }) {
@@ -46,7 +47,7 @@ export default class Happy extends React.Component<Props, State> {
   };
 
   fetchMusics = async () => {
-    const response = await axios.get(`http://13.125.244.90:8000/music`);
+    const response = await axios.get(`${PREFIX_URL}/music`);
     this.setState({
       ...this.state,
       happyMusics: response.data,

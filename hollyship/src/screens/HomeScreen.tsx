@@ -5,9 +5,6 @@ import { Layout } from 'react-native-ui-kitten';
 import MainRecentPost from '../components/MainRecentPost';
 import { Image } from 'react-native-elements';
 
-// TODO: URL
-const PREFIX_URL = 'http://13.125.244.90:8000';
-
 // TODO: MAIN
 class HomeScreen extends Component {
   render() {

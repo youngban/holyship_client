@@ -4,6 +4,7 @@ import { Card } from 'react-native-elements';
 import { ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
+import { PREFIX_URL } from '../../config/config';
 
 interface State {}
 interface Props {}
@@ -19,9 +20,7 @@ export default class MypagePosts extends Component<Props, State> {
 
   getPostTitle = async () => {
     try {
-      const response = await axios.get(
-        'http://13.125.244.90:8000/post/user/my'
-      );
+      const response = await axios.get(`${PREFIX_URL}/post/user/my`);
       this.setState({
         ...this.state,
         total: response.data.posts,
