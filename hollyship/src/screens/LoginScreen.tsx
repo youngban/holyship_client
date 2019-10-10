@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Layout, Text, Input, Button } from 'react-native-ui-kitten';
+import { PREFIX_URL } from '../config/config';
 
 const axios = require('axios');
 
@@ -56,7 +57,7 @@ export default class LoginScreen extends Component<Props, State> {
     });
     try {
       const { email, password } = this.state;
-      const data = await axios.post('http://13.125.244.90:8000/auth/login', {
+      const data = await axios.post(`${PREFIX_URL}/auth/login`, {
         email,
         password,
       });
@@ -110,12 +111,17 @@ export default class LoginScreen extends Component<Props, State> {
                 value={this.state.email}
                 caption={isValidInputEmail ? 'Done' : 'ID를 입력해주세요'}
                 placeholder="ID"
+                keyboardType="email-address"
+                keyboardAppearance="dark"
+                autoCapitalize="none"
+                autoCorrect={false}
                 onChangeText={text => this.setState({ email: text })}
               />
               <Input
                 style={styles.textInput}
                 status={isValidInputPassword ? 'info' : ''}
                 value={this.state.password}
+                keyboardAppearance="dark"
                 caption={
                   isValidInputPassword ? 'Done' : '비밀번호를 입력해주세요'
                 }

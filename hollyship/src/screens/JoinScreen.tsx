@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Layout, Text, Input, Button, Popover } from 'react-native-ui-kitten';
 import axios from 'axios';
+import { PREFIX_URL } from '../config/config';
 
 type Props = {
   navigation: any;
@@ -41,7 +42,7 @@ export default class LoginScreen extends Component<Props, State> {
         ...this.state,
         isLoading: true,
       });
-      const login = await axios.post('http://13.125.244.90:8000/auth/signup', {
+      const login = await axios.post(`${PREFIX_URL}/auth/signup`, {
         email: this.state.email,
         username: this.state.username,
         password: this.state.password,
@@ -116,6 +117,10 @@ export default class LoginScreen extends Component<Props, State> {
                 placeholder={'ID'}
                 status={isValidInputEmail ? 'info' : ''}
                 value={this.state.email}
+                keyboardType="email-address"
+                keyboardAppearance="dark"
+                autoCapitalize="none"
+                autoCorrect={false}
                 caption={isValidInputEmail ? 'Correct' : 'ID를 입력해주세요'}
                 onChangeText={input => this.setState({ email: input })}
               />
@@ -124,6 +129,7 @@ export default class LoginScreen extends Component<Props, State> {
                 secureTextEntry={true}
                 placeholder={'Password'}
                 keyboardType="decimal-pad"
+                keyboardAppearance="dark"
                 value={this.state.password}
                 status={isValidInputPassword ? 'info' : ''}
                 caption={
@@ -138,6 +144,9 @@ export default class LoginScreen extends Component<Props, State> {
                 placeholder={'Nickname'}
                 status={isValidInputUsername ? 'info' : ''}
                 value={this.state.username}
+                keyboardAppearance="dark"
+                autoCapitalize="none"
+                autoCorrect={false}
                 caption={
                   isValidInputUsername ? 'Correct' : '닉네임을 입력해주세요'
                 }

@@ -6,100 +6,136 @@ import {
   Dimensions,
   Alert,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import axios from 'axios';
-import MypagePosts from '../../src/components/Mypage-Posts/MypagePosts';
+import MypageModal from '../components/MypageModal/MypagePosts';
+import MypageFollowers from '../components/MypageModal/MypageFollowers';
+
+import MypageFollowing from '../components/MypageModal/MypageFollowing';
+
+import { PREFIX_URL } from '../config/config';
+
 
 interface Props {
   navigation: any;
 }
 
 interface State {
+  userId: number;
   username: string;
   postingNumber: number;
-  followerCounter: number;
+  followNumber: number;
   followingCounter: number;
-  modalVisible: boolean;
+  postModalVisible: boolean;
+  followModalVisible: boolean;
+  followingModalVisible: boolean;
   userImage: any;
 }
 
 // TODO : Class
 export default class UserScreen extends Component<Props, State> {
   state = {
+    userId: 0,
     username: '',
     postingNumber: 0,
-    followerCounter: 0,
+    followNumber: 0,
     followingCounter: 0,
-    modalVisible: false,
-    userImage:
-      'https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png',
+    postModalVisible: false,
+    followModalVisible: false,
+    followingModalVisible: false,
+    userImage: null,
   };
+
+  //? *******************************************************
+  //?                   모달 페이지 상태
+  //? *******************************************************
 
   // TODO : 모달
   setModalVisible = () => {
-    const modalVisible = !this.state.modalVisible;
-    this.setState({ modalVisible });
+    const postModalVisible: boolean = !this.state.postModalVisible;
+    this.setState({ postModalVisible });
   };
+
+  setFollowModal = () => {
+    const followModalVisible: boolean = !this.state.followModalVisible;
+    this.setState({ followModalVisible });
+  };
+
+  setFollowingModal = () => {
+    const followingModalVisible: boolean = !this.state.followingModalVisible;
+    this.setState({ followingModalVisible });
+  };
+
+  //? ***************state****************************************
+  //?                  COMPONENT DID MOUNT
+  //? *******************************************************
 
   // TODO : 이미지 유지 및 화면 cdm
   componentDidMount = () => {
-    // AsyncStorage.getItem('image').then(value =>
-    //   this.setState({ image: value })
-    // );
     this.getUserImage();
     this.getUserInfo();
     this.postingConter();
-    // this.followerCounter();
-    // this.followingCounter();
+    this.followCounter();
+    this.followingCounter();
+  };
+
+  //? *******************************************************
+  //?      서버 요청 ( 이미지, 유저 이미지, 팔로우, 포스팅)
+  //? *******************************************************
+
+  // TODO: iOS Allow Camera Album Permission
+  getPermissionAsync = async () => {
+    if (Platform.OS === 'ios') {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
   };
 
   // TODO : 이미지 선택 및 이미지 POST 날리기
   pickImage = async () => {
+    await this.getPermissionAsync();
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
     });
-    //! console.log('[changeImage]', result);
-    this.setState({ userImage: result.uri });
-
     if (!result.cancelled) {
-      // this.setState({ image: result.uri });
       const data = new FormData();
       data.append('photo', {
         uri: result.uri,
         name: result.uri.split('/').pop(),
         type: result.type,
       });
-      //! console.log('[data] :', data);
-      const res = await axios.post('http://13.125.244.90:8000/user/upload', {
+
+      // TODO: Upload UserImage to AWS S3 Bucket
+      const res = await axios.post(`${PREFIX_URL}/user/upload`, data, {
         headers: {
-          Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
         },
-        // body: data,
       });
-      //! console.log('[POST - image]', res.data);
+      const userImage = res.data.file.location;
+      this.setState({ ...this.state, userImage });
+      // TODO: Change UserImage in User Info
+      await axios.patch(`${PREFIX_URL}/user`, {
+        userImage,
+      });
     }
   };
-
-  // // TODO : 이미지 바뀌면 Asyncstorage 에 저장
-  // setImage = value => {
-  //   AsyncStorage.setItem('image', value);
-  //   this.setState({ image: value });
-  // };
 
   // TODO : 유저 이미지 가져오기
   getUserImage = async () => {
     try {
-      const response = await axios.get('http://13.125.244.90:8000/user');
-      // console.log('[iWantImage] : ', response.data);
-      // this.setState({
-      //   ...this.state,
-      //   userImage: response.data.userImage,
-      // });
+      const response = await axios.get(`${PREFIX_URL}/user`);
+      this.setState({
+        ...this.state,
+        userImage: response.data.userImage,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -108,9 +144,10 @@ export default class UserScreen extends Component<Props, State> {
   // TODO : 유저 이름 가져오기
   getUserInfo = async () => {
     try {
-      const response = await axios.get('http://13.125.244.90:8000/user');
+      const response = await axios.get(`${PREFIX_URL}/user`);
       this.setState({
         ...this.state,
+        userId: response.data.userId,
         username: response.data.username,
       });
     } catch (err) {
@@ -121,9 +158,7 @@ export default class UserScreen extends Component<Props, State> {
   // TODO: Axios 포스팅 카운터
   postingConter = async () => {
     try {
-      const response = await axios.get(
-        'http://13.125.244.90:8000/post/user/my'
-      );
+      const response = await axios.get(`${PREFIX_URL}/post/user/my`);
 
       this.setState({
         ...this.state,
@@ -135,40 +170,60 @@ export default class UserScreen extends Component<Props, State> {
   };
 
   // TODO: Axios 팔로워 카운터
-  // followerCounter = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       'http://13.125.244.90:8000/follow/follower'
-  //     );
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+
+  followCounter = async () => {
+    try {
+      const response = await axios.get(
+        'http://13.125.244.90:8000/follow/follower'
+      );
+      console.log('[Follow - Counter]', response.data.length);
+      this.setState({
+        ...this.state,
+        followNumber: response.data.length,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
 
   // TODO: Axios 팔로잉 카운터
-  // followingCounter = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       'http://13.125.244.90:8000/follow/following'
-  //     );
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  followingCounter = async () => {
+    try {
+      const response = await axios.get(
+        'http://13.125.244.90:8000/follow/following'
+      );
+
+      this.setState({
+        followingCounter: response.data.length,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // TODO: 로그아웃 요청
-  handleLogout() {
-    axios
-      .get('http://13.125.244.90:8000/auth/logout')
-      .then(this.props.navigation.navigate('Login'))
-      .then(AsyncStorage.removeItem('access_token'))
-      .catch(err => Alert.alert('logout'));
+  async handleLogout() {
+    try {
+      await axios.get(`${PREFIX_URL}/auth/logout`);
+      await this.props.navigation.navigate('Login');
+      await AsyncStorage.removeItem('access_token');
+      Alert.alert('로그아웃되었습니다.');
+    } catch (err) {
+      Alert.alert('There is No User Info.\n Have To ReLogin.');
+      await this.props.navigation.navigate('Login');
+    }
   }
 
-  // TODO : 모달 페이지
+  //? *******************************************************
+  //?      포스터, 팔로우, 팔로잉 모달 페이지
+  //? *******************************************************
+
+  // TODO : 포스터 모달 페이지
   renderModalElement = () => {
     return (
-      <Layout level="1" style={styles.modalContainer}>
+      <Layout level="2" style={styles.modalContainer}>
         <Button
           style={{
             marginTop: 15,
@@ -183,7 +238,53 @@ export default class UserScreen extends Component<Props, State> {
         >
           ❌
         </Button>
-        <MypagePosts />
+        <MypageModal />
+      </Layout>
+    );
+  };
+
+  // TODO : 팔로우 모달 페이지
+  showFollowModal = () => {
+    return (
+      <Layout level="1" style={styles.modalContainer}>
+        <Button
+          style={{
+            marginTop: 15,
+            padding: 2,
+            marginRight: 5,
+            alignSelf: 'flex-end',
+          }}
+          size="giant"
+          status="danger"
+          appearance="ghost"
+          onPress={this.setFollowModal}
+        >
+          ❌
+        </Button>
+        <MypageFollowers />
+      </Layout>
+    );
+  };
+
+  // TODO : 팔로잉 모달 페이지
+  showingFollowingModal = () => {
+    return (
+      <Layout level="1" style={styles.modalContainer}>
+        <Button
+          style={{
+            marginTop: 15,
+            padding: 2,
+            marginRight: 5,
+            alignSelf: 'flex-end',
+          }}
+          size="giant"
+          status="danger"
+          appearance="ghost"
+          onPress={this.setFollowingModal}
+        >
+          ❌
+        </Button>
+        <MypageFollowing />
       </Layout>
     );
   };
@@ -197,15 +298,15 @@ export default class UserScreen extends Component<Props, State> {
           style={styles.gradientBg}
         ></LinearGradient>
         <Layout style={styles.imageContainer}>
-          {userImage && (
-            <Avatar
-              style={styles.avatarStyle}
-              appearance="default"
-              size="large"
-              shape="round"
-              source={{ uri: userImage }}
-            />
-          )}
+          <Avatar
+            style={styles.avatarStyle}
+            appearance="default"
+            size="large"
+            shape="round"
+            source={
+              !userImage ? require('../Image/user.png') : { uri: userImage }
+            }
+          />
           <Button
             style={styles.imageBtn}
             appearance="filled"
@@ -230,18 +331,43 @@ export default class UserScreen extends Component<Props, State> {
           </Button>
         </Layout>
         <Layout style={styles.buttonGroupContainer}>
-          <TouchableOpacity style={styles.buttonContainer}>
+          {/* Follower */}
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={this.setFollowModal}
+          >
             <Text category="h6" status="primary" style={styles.button}>
               Followers
             </Text>
-            <Text category="h6">{this.state.followerCounter}</Text>
+            <Modal
+              allowBackdrop={true}
+              backdropStyle={{ backgroundColor: 'black', opacity: 0.5 }}
+              onBackdropPress={this.setFollowModal}
+              visible={this.state.followModalVisible}
+            >
+              {this.showFollowModal()}
+            </Modal>
+            <Text category="h6">{this.state.followNumber}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer}>
+          {/* Following */}
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={this.setFollowingModal}
+          >
             <Text category="h6" status="primary" style={styles.button}>
               Following
             </Text>
+            <Modal
+              allowBackdrop={true}
+              backdropStyle={{ backgroundColor: 'black', opacity: 0.5 }}
+              onBackdropPress={this.setFollowingModal}
+              visible={this.state.followingModalVisible}
+            >
+              {this.showingFollowingModal()}
+            </Modal>
             <Text category="h6">{this.state.followingCounter}</Text>
           </TouchableOpacity>
+          {/* Posts */}
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={this.setModalVisible}
@@ -259,7 +385,7 @@ export default class UserScreen extends Component<Props, State> {
               allowBackdrop={true}
               backdropStyle={{ backgroundColor: 'black', opacity: 0.5 }}
               onBackdropPress={this.setModalVisible}
-              visible={this.state.modalVisible}
+              visible={this.state.postModalVisible}
             >
               {this.renderModalElement()}
             </Modal>

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import {
-  TouchableOpacity,
-  FlatList,
   StyleSheet,
   View,
   Dimensions,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import {
   Layout,
@@ -18,20 +17,24 @@ import {
 
 import axios from 'axios';
 import moment from 'moment';
+import FollowBtn from './MypageModal/MainFollowBtn';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const PREFIX_URL = 'http://13.125.244.90:8000';
+import { PREFIX_URL } from '../config/config';
 
-interface state {
+export interface State {
   posts: any;
   modalVisible: boolean;
-  currentModalData: any;
+  currentModalData: null;
+  refreshing: boolean;
 }
 
-export default class MainRecentPost extends Component {
+export default class MainRecentPost extends Component<State> {
   state = {
     posts: {},
     modalVisible: false,
     currentModalData: null,
+    refreshing: false,
   };
 
   // TODO: MAKE BUTTON ACC
@@ -105,7 +108,7 @@ export default class MainRecentPost extends Component {
       createAt,
     };
     this.setState({ ...this.state, currentModalData });
-    console.log(currentModalData);
+    // console.log(currentModalData);
   };
 
   renderItem = ({ item, index }) => (
@@ -127,10 +130,24 @@ export default class MainRecentPost extends Component {
     />
   );
 
+  onRefresh = async () => {
+    this.setState({ refreshing: true });
+    this.getPosts();
+  };
+
   render() {
     const { posts, currentModalData: post } = this.state;
+
     return (
       <View style={styles.container}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
+        />
         <Text category="h5" status="primary" style={styles.recentPost}>
           RECENT POST
         </Text>
@@ -162,9 +179,16 @@ export default class MainRecentPost extends Component {
               >
                 {post.content}
               </Text>
-              <Text category="p1" status="warning" style={styles.modalName}>
-                {post.name}
-              </Text>
+              <View style={styles.alignContainer}>
+                <View style={styles.aliginText}>
+                  <Text category="p1" status="warning" style={styles.modalName}>
+                    {post.name}
+                  </Text>
+                </View>
+                <View style={styles.followBtnContainer}>
+                  <FollowBtn currentModalData={post.name} />
+                </View>
+              </View>
 
               <Text appearance="hint" style={styles.modalDate}>
                 {moment(post.createAt, 'YYYY-MM-DD').fromNow()}
@@ -219,11 +243,19 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   modalName: {
-    marginRight: 15,
-    alignSelf: 'flex-end',
+    marginRight: 10,
   },
   modalDate: {
     marginRight: 15,
     alignSelf: 'flex-end',
+  },
+  alignContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'flex-end',
+  },
+  aliginText: { flexDirection: 'row', alignItems: 'center' },
+  followBtnContainer: {
+    paddingRight: 10,
   },
 });
