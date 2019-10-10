@@ -15,10 +15,10 @@ import {
 } from 'react-navigation-stack';
 // import { Icon } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+// import {
+//   widthPercentageToDP as wp,
+//   heightPercentageToDP as hp,
+// } from 'react-native-responsive-screen';
 import EmotionScreen from './EmotionScreen';
 import ReadScreen from './ReadScreen';
 import SearchScreen from './SearchScreen';
@@ -35,14 +35,14 @@ type MyState = {
 type Props = {
   navigation: NavigationStackProp<{ category: 'string' }>;
 };
-// const { width } = Dimensions.get('window');
+// const { height } = Dimensions.get('window');
 
 const emotions = [
-  { title: 'happy', img: require('../img/happy4.jpeg') },
-  { title: 'chill', img: require('../img/chill3.jpeg') },
-  { title: 'empty', img: require('../img/blank.jpeg') },
-  { title: 'sad', img: require('../img/sad.jpg') },
-  { title: 'angry', img: require('../img/angry.jpg') },
+  { title: 'HAPPY', img: require('../img/happy.jpeg') },
+  { title: 'SAD', img: require('../img/sad.jpg') },
+  { title: 'EMPTY', img: require('../img/blank2.jpeg') },
+  { title: 'CHILL', img: require('../img/chill.jpeg') },
+  { title: 'ANGRY', img: require('../img/anger.jpg') },
 ];
 
 class CategoryScreen extends Component<Props, MyState> {
@@ -156,12 +156,7 @@ class CategoryScreen extends Component<Props, MyState> {
               onValueChange={itemValue => this.setState({ emotion: itemValue })}
             >
               {emotions.map((item, idx) => (
-                <Picker.Item
-                  label={item.title}
-                  value={item.title}
-                  key={idx}
-                  color={'black'}
-                />
+                <Picker.Item label={item.title} value={item.title} key={idx} />
               ))}
             </Picker>
             <View style={{ borderBottomColor: 'grey', borderBottomWidth: 1 }}>
@@ -181,48 +176,42 @@ class CategoryScreen extends Component<Props, MyState> {
           </View>
         </Modal>
 
-        <View style={{ flex: 1 }}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              backgroundColor: 'black',
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <FlatList
-                data={emotions}
-                renderItem={({ item }) => (
-                  <ImageBackground
-                    source={item.img}
-                    style={{
-                      flexDirection: 'column',
-                      margin: 2,
-                      alignContent: 'stretch',
-                      backgroundColor: 'grey',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        flex: 1,
-                        height: hp('16%'),
-                        fontSize: 20,
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                        alignContent: 'center',
-                        color: 'white',
-                      }}
-                      onPress={() => this.handlePress(`${item.title}`)}
-                    >
-                      {item.title}
-                    </Text>
-                  </ImageBackground>
-                )}
-                keyExtractor={item => item.title}
-                numColumns={1}
-              ></FlatList>
-            </View>
-          </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            backgroundColor: 'black',
+          }}
+        >
+          <FlatList
+            style={{ flex: 1 }}
+            data={emotions}
+            renderItem={({ item }) => (
+              <ImageBackground
+                source={item.img}
+                style={{
+                  width: '100%',
+                  height: 120,
+                  justifyContent: 'center',
+                  margin: 2,
+                  alignContent: 'stretch',
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    textAlign: 'center',
+                    color: 'white',
+                  }}
+                  onPress={() => this.handlePress(`${item.title}`)}
+                >
+                  {item.title}
+                </Text>
+              </ImageBackground>
+            )}
+            keyExtractor={item => item.title}
+            numColumns={1}
+          ></FlatList>
         </View>
       </View>
     );
