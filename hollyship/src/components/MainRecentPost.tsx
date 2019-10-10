@@ -118,7 +118,7 @@ export default class MainRecentPost extends Component<State> {
       title={`${this.changeEmoji(item.emotion)} ${item.title}`}
       descriptionStyle={styles.listItemDescription}
       description={`${item.content
-        .replace(/(\n)/g, '   ')
+        .replace(/(\n)/g, ' ')
         .substring(0, 20)}\n${moment(
         item.createAt,
         'YYYY-MM-DD'
