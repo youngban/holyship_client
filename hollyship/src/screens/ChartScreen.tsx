@@ -75,7 +75,6 @@ class ChartScreen extends Component<Props, State> {
       const response = await axios.post(`${PREFIX_URL}/music/${musicId}/list`, {
         playlistId,
       });
-      console.log(response.data);
       Alert.alert('리스트에 추가되었습니다.');
       return;
     } catch (err) {
@@ -98,7 +97,6 @@ class ChartScreen extends Component<Props, State> {
   // TODO: Fetch PlayListItems
   getPlayListItems = async () => {
     const response = await axios.get(`${PREFIX_URL}/list`);
-    console.log('DATA', response.data);
     const itemsData = response.data.map(item => ({
       id: item.id,
       text: item.listName,
@@ -115,8 +113,9 @@ class ChartScreen extends Component<Props, State> {
       const response = await axios.post(`${PREFIX_URL}/list/add`, {
         listName: input,
       });
+      const { id, listName } = response.data.list;
       await this.getPlayListItems();
-      console.log(`GET ${PREFIX_URL}/list/add : ${response.data}`);
+      await this.onSelect({ id, text: listName });
       this.showDialog();
     }
   };
@@ -136,7 +135,6 @@ class ChartScreen extends Component<Props, State> {
       `${PREFIX_URL}/list/${selectedListId}/music`
     );
     const musics = response.data[0].musics;
-    console.log(musics);
     this.setState({ ...this.state, playListMusics: musics });
   };
 
@@ -156,7 +154,7 @@ class ChartScreen extends Component<Props, State> {
           {
             text: 'OK',
             onPress: async () => {
-              if (this.state.itemsData.length >= 2) {
+              if (this.state.itemsData.length >= 1) {
                 const response = await axios.delete(
                   `${PREFIX_URL}/list/${selectedOption.id}`
                 );
@@ -165,11 +163,12 @@ class ChartScreen extends Component<Props, State> {
                   selectedOption: undefined,
                 });
                 await this.getPlayListItems();
+                this.setState({ ...this.state, playListMusics: [] });
                 Alert.alert('삭제되었습니다.');
 
                 return;
               } else {
-                Alert.alert('1개는 남겨주세요!');
+                Alert.alert('지울 리스트가 없습니다!');
                 return;
               }
             },
@@ -199,7 +198,6 @@ class ChartScreen extends Component<Props, State> {
         return;
       }
     } catch (err) {
-      console.log(err);
       Alert.alert('서버 에러');
       return;
     }
@@ -274,7 +272,12 @@ class ChartScreen extends Component<Props, State> {
         <Text category="h3" status="danger" style={styles.chartTitle}>
           HOT CHART
         </Text>
-        <ScrollView horizontal={true} style={styles.chartScrollView}>
+        <ScrollView
+          horizontal={true}
+          indicatorStyle="black"
+          pagingEnabled
+          style={styles.chartScrollView}
+        >
           <Layout style={styles.chartContainer}>
             <List
               style={styles.chartList}
