@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -8,6 +8,9 @@ import {
   BottomNavigationTab,
   Icon,
 } from 'react-native-ui-kitten';
+
+
+
 import { Icon as EleIcon } from 'react-native-elements';
 import Start from './StartScreen';
 import Join from './JoinScreen';

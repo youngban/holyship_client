@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-ui-kitten';
 import axios from 'axios';
-
-const PREFIX_URL = 'http://13.125.244.90:8000';
+import { PREFIX_URL } from '../../config/config';
 
 export default class MainFollowBtn extends Component {
   constructor(props) {
@@ -13,6 +12,31 @@ export default class MainFollowBtn extends Component {
     toggle: true,
   };
 
+  // componentDidMount() {
+  //   this.checkFollowState();
+  // }
+
+  // checkFollowState = async () => {
+  //   try {
+  //     const response = await axios.get(`${PREFIX_URL}/follow/following`);
+
+  //     this.setState({
+  //       ...this.state,
+  //       toggle: response.data.map(item => {
+  //         return item.followingName === `${this.props.currentModalData}`
+  //           ? true
+  //           : false;
+  //         console.log(
+  //           '[팔로우 상태]',
+  //           item.followingName === `${this.props.currentModalData}`
+  //         );
+  //       }),
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
   // TODO: FOLLOW BUTTON TOGGLE
   onPressFollow = async () => {
     const newState = !this.state.toggle;
@@ -21,6 +45,7 @@ export default class MainFollowBtn extends Component {
     if (this.state.toggle === true) {
       const addMAinFollow = async () => {
         try {
+          // console.log(['FollowBtn', this.state.toggle]);
           const request = await axios.post(`${PREFIX_URL}/follow/add`, {
             username: `${this.props.currentModalData}`,
           });

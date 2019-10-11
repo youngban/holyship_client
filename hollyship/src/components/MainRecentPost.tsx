@@ -188,7 +188,10 @@ export default class MainRecentPost extends Component<State> {
                   </Text>
                 </View>
                 <View style={styles.followBtnContainer}>
-                  <FollowBtn currentModalData={post.name} />
+                  <FollowBtn
+                    checkFollow={this.checkFollowState}
+                    currentModalData={post.name}
+                  />
                 </View>
               </View>
 
