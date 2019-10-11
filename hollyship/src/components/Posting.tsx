@@ -1,9 +1,10 @@
 import React from 'react';
 import { Text, View, StyleSheet, FlatList, Image } from 'react-native';
 import moment from 'moment';
+import CategoryFollowBtn from '../components/MypageModal/CategoryFollowBtn';
 
 export const Posting = props => {
-  console.log(props.post);
+  // console.log(props);
   return (
     <FlatList
       data={[props.post]}
@@ -23,9 +24,12 @@ export const Posting = props => {
             ></Image>
             <View style={{ justifyContent: 'center' }}>
               <Text style={styles.user}>{item.user.username}</Text>
-              <Text style={styles.date}>
-                {moment(item.createdAt, 'YYYY-MM-DD').fromNow()}
-              </Text>
+              <CategoryFollowBtn item={props.post.user.username} />
+              <View>
+                <Text style={styles.date}>
+                  {moment(item.createdAt, 'YYYY-MM-DD').fromNow()}
+                </Text>
+              </View>
             </View>
           </View>
           <Text style={styles.content}>{item.content}</Text>
@@ -38,7 +42,7 @@ export const Posting = props => {
 
 const styles = StyleSheet.create({
   title: { color: 'white', fontWeight: 'bold', fontSize: 30, marginBottom: 10 },
-  user: { color: 'white', fontSize: 15 },
+  user: { color: '#f09724', fontSize: 15 },
   date: { color: 'grey' },
   content: { color: 'white', fontSize: 18, marginTop: 10 },
 });
