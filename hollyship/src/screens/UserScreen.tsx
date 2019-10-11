@@ -49,6 +49,9 @@ export default class UserScreen extends Component<Props, State> {
     followingModalVisible: false,
     userImage: null,
   };
+  intervalId;
+  intervalId2;
+  intervalId3;
 
   //? *******************************************************
   //?                   모달 페이지 상태
@@ -119,6 +122,7 @@ export default class UserScreen extends Component<Props, State> {
         },
       });
       const userImage = res.data.file;
+
       this.setState({ ...this.state, userImage });
       // TODO: Change UserImage in User Info
       await axios.patch(`${PREFIX_URL}/user`, {
@@ -131,6 +135,7 @@ export default class UserScreen extends Component<Props, State> {
   getUserImage = async () => {
     try {
       const response = await axios.get(`${PREFIX_URL}/user`);
+
       this.setState({
         ...this.state,
         userImage: response.data.userImage,
@@ -163,6 +168,7 @@ export default class UserScreen extends Component<Props, State> {
         ...this.state,
         postingNumber: response.data.posts.length,
       });
+      this.intervalId3 = setTimeout(this.postingConter.bind(this), 1000);
     } catch (err) {
       console.log(err);
     }
@@ -178,6 +184,7 @@ export default class UserScreen extends Component<Props, State> {
         ...this.state,
         followNumber: response.data.length,
       });
+      this.intervalId = setTimeout(this.followCounter.bind(this), 1000);
     } catch (err) {
       console.log(err);
     }
@@ -191,6 +198,7 @@ export default class UserScreen extends Component<Props, State> {
       this.setState({
         followingCounter: response.data.length,
       });
+      this.intervalId2 = setTimeout(this.followingCounter.bind(this), 1000);
     } catch (err) {
       console.log(err);
     }
