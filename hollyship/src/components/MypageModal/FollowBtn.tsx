@@ -7,23 +7,19 @@ import { PREFIX_URL } from '../../config/config';
 export default class FollowBtn extends Component {
   constructor(props) {
     super(props);
-    this.onClick = this.onClick.bind(this);
   }
   state = {
     toggle: true,
+    textValue: '',
   };
 
-  onClick() {
-    this.setState(() => ({ toggle: false }));
-  }
-
-  changeToggle = () => {
-    this.setState({ toggle: false });
-  };
-
-  // componentDidMount() {
-  //   this.checkFollowingState();
+  // onClick() {
+  //   this.setState(() => ({ toggle: false }));
   // }
+
+  // changeToggle = () => {
+  //   this.setState({ toggle: false });
+  // };
 
   // checkFollowingState = async () => {
   //   const newState = !this.state.toggle;
@@ -45,7 +41,7 @@ export default class FollowBtn extends Component {
   onPressFollow = async () => {
     const newState = !this.state.toggle;
 
-    this.setState({ toggle: this.onClick });
+    this.setState({ toggle: newState });
 
     if (this.state.toggle === true) {
       const addFollow = async () => {
@@ -76,8 +72,8 @@ export default class FollowBtn extends Component {
         <View style={{ flexDirection: 'row' }}>
           <Button
             appearance="outline"
-            status={buttonChange}
             size="large"
+            status={buttonChange}
             onPress={this.onPressFollow}
           >
             {textValue}
