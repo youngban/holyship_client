@@ -12,31 +12,6 @@ export default class MainFollowBtn extends Component {
     toggle: true,
   };
 
-  // componentDidMount() {
-  //   this.checkFollowState();
-  // }
-
-  // checkFollowState = async () => {
-  //   try {
-  //     const response = await axios.get(`${PREFIX_URL}/follow/following`);
-
-  //     this.setState({
-  //       ...this.state,
-  //       toggle: response.data.map(item => {
-  //         return item.followingName === `${this.props.currentModalData}`
-  //           ? true
-  //           : false;
-  //         console.log(
-  //           '[팔로우 상태]',
-  //           item.followingName === `${this.props.currentModalData}`
-  //         );
-  //       }),
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   // TODO: FOLLOW BUTTON TOGGLE
   onPressFollow = async () => {
     const newState = !this.state.toggle;
