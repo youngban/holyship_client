@@ -117,7 +117,9 @@ export default class MainRecentPost extends Component<State> {
       titleStyle={styles.listItemTitle}
       title={`${this.changeEmoji(item.emotion)} ${item.title}`}
       descriptionStyle={styles.listItemDescription}
-      description={`${item.content}\n${moment(
+      description={`${item.content
+        .replace(/(\n)/g, ' ')
+        .substring(0, 20)}\n${moment(
         item.createAt,
         'YYYY-MM-DD'
       ).fromNow()}   -   🖋${item.name}`}
@@ -186,7 +188,10 @@ export default class MainRecentPost extends Component<State> {
                   </Text>
                 </View>
                 <View style={styles.followBtnContainer}>
-                  <FollowBtn currentModalData={post.name} />
+                  <FollowBtn
+                    checkFollow={this.checkFollowState}
+                    currentModalData={post.name}
+                  />
                 </View>
               </View>
 

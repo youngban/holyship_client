@@ -2,31 +2,58 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-ui-kitten';
 import axios from 'axios';
-
-const PREFIX_URL = 'http://13.125.244.90:8000';
+import { PREFIX_URL } from '../../config/config';
 
 export default class FollowBtn extends Component {
   constructor(props) {
     super(props);
+    this.onClick = this.onClick.bind(this);
   }
   state = {
     toggle: true,
   };
 
+  onClick() {
+    this.setState(() => ({ toggle: false }));
+  }
+
+  changeToggle = () => {
+    this.setState({ toggle: false });
+  };
+
+  // componentDidMount() {
+  //   this.checkFollowingState();
+  // }
+
+  // checkFollowingState = async () => {
+  //   const newState = !this.state.toggle;
+  //   try {
+  //     const response = await axios.get(`${PREFIX_URL}/follow/following`);
+  //     console.log('[팔로우 되어있는 사람들]', response.data);
+  //     this.setState({
+  //       ...this.state,
+  //       toggle: response.data.map(item => {
+  //         return item.followingName !== undefined &&
+  //       }),
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
   // TODO: FOLLOW BUTTON TOGGLE
   onPressFollow = async () => {
     const newState = !this.state.toggle;
-    this.setState({ toggle: newState });
+
+    this.setState({ toggle: this.onClick });
 
     if (this.state.toggle === true) {
       const addFollow = async () => {
         try {
-          const request = await axios.post(
-            'http://13.125.244.90:8000/follow/add',
-            {
-              username: `${this.props.dataSource}`,
-            }
-          );
+          const request = await axios.post(`${PREFIX_URL}/follow/add`, {
+            username: `${this.props.dataSource}`,
+          });
+          console.log(request.data);
           this.setState({
             ...this.state,
             toggle: false,
@@ -42,7 +69,7 @@ export default class FollowBtn extends Component {
 
   render() {
     const { toggle } = this.state;
-    const textValue = toggle ? 'Follow' : 'UnFollow';
+    const textValue = toggle ? 'Follow' : 'Following';
     const buttonChange = toggle ? 'success' : 'primary';
     return (
       <View style={styles.container}>

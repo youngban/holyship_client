@@ -4,6 +4,7 @@ import { ListItem } from 'react-native-elements';
 import { Button } from 'react-native-ui-kitten';
 import { FlatList } from 'react-native-gesture-handler';
 import FollowingBtn from './FollowingBtn';
+import { PREFIX_URL } from '../../config/config';
 
 import axios from 'axios';
 
@@ -19,9 +20,7 @@ export default class MypageFollowers extends Component {
 
   getFollowers = async () => {
     try {
-      const response = await axios.get(
-        'http://13.125.244.90:8000/follow/following'
-      );
+      const response = await axios.get(`${PREFIX_URL}/follow/following`);
 
       this.setState({
         dataSource: response.data,
@@ -55,7 +54,7 @@ export default class MypageFollowers extends Component {
         titleStyle={styles.titleStyle}
       />
       <View style={styles.buttonStyle}>
-        <FollowingBtn />
+        <FollowingBtn dataSource={item.followingName} />
       </View>
     </View>
   );

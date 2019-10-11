@@ -6,6 +6,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 import axios from 'axios';
 import FollowBtn from './FollowBtn';
+import { PREFIX_URL } from '../../config/config';
 
 export default class MypageFollowers extends Component {
   state = {
@@ -19,9 +20,8 @@ export default class MypageFollowers extends Component {
 
   getFollowers = async () => {
     try {
-      const response = await axios.get(
-        'http://13.125.244.90:8000/follow/follower'
-      );
+      const response = await axios.get(`${PREFIX_URL}/follow/follower`);
+
       this.setState({
         dataSource: response.data,
       });

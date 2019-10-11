@@ -31,7 +31,7 @@ interface State {
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 
-class ChartScreen extends React.Component<Props, State> {
+class ChartScreen extends Component<Props, State> {
   state = {
     musics: [],
     selectedOption: undefined,
@@ -69,34 +69,34 @@ class ChartScreen extends React.Component<Props, State> {
   };
 
   // TODO: Handle Add music in Playlist
-  addMusicToPlaylist = async musicId => {
+  addMusicToPlaylist = async (musicId: number, selectedOption: any) => {
+    try {
+      const playlistId = selectedOption.id;
+      const response = await axios.post(`${PREFIX_URL}/music/${musicId}/list`, {
+        playlistId,
+      });
+      Alert.alert('리스트에 추가되었습니다.');
+      return;
+    } catch (err) {
+      Alert.alert('이미 존재하는 음악입니다.');
+      return;
+    }
+  };
+
+  handleRenderAddMusic = async (musicId: number) => {
     const { selectedOption } = this.state;
     if (!selectedOption) {
       Alert.alert('리스트를 먼저 정해주세요.');
       return;
     } else {
-      try {
-        const playlistId = selectedOption.id;
-        const response = await axios.post(
-          `${PREFIX_URL}/music/${musicId}/list`,
-          {
-            playlistId,
-          }
-        );
-        console.log(response.data);
-        Alert.alert('리스트에 추가되었습니다.');
-        return;
-      } catch (err) {
-        Alert.alert('이미 존재하는 음악입니다.');
-        return;
-      }
+      await this.addMusicToPlaylist(musicId, selectedOption);
+      await this.onSelect(selectedOption);
     }
   };
 
   // TODO: Fetch PlayListItems
   getPlayListItems = async () => {
     const response = await axios.get(`${PREFIX_URL}/list`);
-    console.log('DATA', response.data);
     const itemsData = response.data.map(item => ({
       id: item.id,
       text: item.listName,
@@ -113,8 +113,9 @@ class ChartScreen extends React.Component<Props, State> {
       const response = await axios.post(`${PREFIX_URL}/list/add`, {
         listName: input,
       });
+      const { id, listName } = response.data.list;
       await this.getPlayListItems();
-      console.log(`GET ${PREFIX_URL}/list/add : ${response.data}`);
+      await this.onSelect({ id, text: listName });
       this.showDialog();
     }
   };
@@ -133,20 +134,14 @@ class ChartScreen extends React.Component<Props, State> {
     const response = await axios.get(
       `${PREFIX_URL}/list/${selectedListId}/music`
     );
-    console.log(
-      `GET : ${PREFIX_URL}/list/${selectedListId}/music\n`,
-      response.data
-    );
     const musics = response.data[0].musics;
     this.setState({ ...this.state, playListMusics: musics });
-    console.log(musics, this.state.playListMusics);
   };
 
   // TODO: DELETE PLAY LIST
   handleDeleteList = async () => {
     const { selectedOption } = this.state;
     if (selectedOption) {
-      console.log('[OPTION] : ', selectedOption.id);
       Alert.alert(
         '경고',
         '정말로 삭제하시겠습니까?',
@@ -159,7 +154,7 @@ class ChartScreen extends React.Component<Props, State> {
           {
             text: 'OK',
             onPress: async () => {
-              if (this.state.itemsData.length >= 2) {
+              if (this.state.itemsData.length >= 1) {
                 const response = await axios.delete(
                   `${PREFIX_URL}/list/${selectedOption.id}`
                 );
@@ -168,11 +163,12 @@ class ChartScreen extends React.Component<Props, State> {
                   selectedOption: undefined,
                 });
                 await this.getPlayListItems();
+                this.setState({ ...this.state, playListMusics: [] });
                 Alert.alert('삭제되었습니다.');
 
                 return;
               } else {
-                Alert.alert('1개는 남겨주세요!');
+                Alert.alert('지울 리스트가 없습니다!');
                 return;
               }
             },
@@ -187,18 +183,21 @@ class ChartScreen extends React.Component<Props, State> {
     }
   };
 
-  handleDeleteMusic = async musicId => {
+  handleDeleteMusic = async (musicId: number) => {
     try {
       const { selectedOption } = this.state;
-      const selectedListId = selectedOption.id;
-      const response = await axios.delete(
-        `${PREFIX_URL}/list/${selectedListId}/music`,
-        { musicId }
-      );
-      Alert.alert('삭제되었습니다.');
-      return;
+      if (selectedOption) {
+        const playlistId = selectedOption.id;
+        await axios.delete(`${PREFIX_URL}/music/${musicId}/list`, {
+          data: { playlistId },
+        });
+        await this.onSelect(selectedOption);
+        Alert.alert('삭제되었습니다.');
+        return;
+      } else {
+        return;
+      }
     } catch (err) {
-      console.log(err);
       Alert.alert('서버 에러');
       return;
     }
@@ -219,7 +218,7 @@ class ChartScreen extends React.Component<Props, State> {
           <Button
             appearance="outline"
             status="primary"
-            onPress={() => this.addMusicToPlaylist(item.id)}
+            onPress={() => this.handleRenderAddMusic(item.id)}
           >
             ADD
           </Button>
@@ -273,7 +272,12 @@ class ChartScreen extends React.Component<Props, State> {
         <Text category="h3" status="danger" style={styles.chartTitle}>
           HOT CHART
         </Text>
-        <ScrollView horizontal={true} style={styles.chartScrollView}>
+        <ScrollView
+          horizontal={true}
+          indicatorStyle="black"
+          pagingEnabled
+          style={styles.chartScrollView}
+        >
           <Layout style={styles.chartContainer}>
             <List
               style={styles.chartList}
@@ -313,7 +317,7 @@ class ChartScreen extends React.Component<Props, State> {
           <Button
             appearance="outline"
             status="warning"
-            textStyle={{ fontSize: 12, fontWeight: 600 }}
+            textStyle={{ fontSize: 12, fontWeight: '600' }}
             style={styles.playListAddButton}
             onPress={this.handleDeleteList}
           >
@@ -426,6 +430,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   playListAddButton: {
+    marginRight: 10,
     borderRadius: 20,
     color: '#fff',
   },
