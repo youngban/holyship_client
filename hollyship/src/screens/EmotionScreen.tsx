@@ -95,6 +95,7 @@ export default class EmotinScreen extends Component<Props> {
                 <Text style={{ color: 'grey' }}>{item.singer}</Text>
               </View>
             )}
+            keyExtractor={item => item.id}
           />
         </View>
         <View style={{ flex: 3, marginTop: 10 }}>
@@ -117,7 +118,7 @@ export default class EmotinScreen extends Component<Props> {
                 <View
                   style={{
                     borderBottomWidth: 1,
-                    borderBottomColor: 'grey',
+                    borderBottomColor: 'rgba(255,255,255,0.5)',
                   }}
                 ></View>
               </View>

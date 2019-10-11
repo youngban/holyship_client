@@ -2,51 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { Text, FlatList, View, Image, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const axios = require('axios');
+import { PREFIX_URL } from '../config/config';
+// import { Comment } from '../components/Comment';
 
 export const CommentList = props => {
-  console.log(props.likeMusics, 'vmkqfmvkfqfda2332');
-  const [isLiked, setLiked] = useState(false);
+  const [isLiked, setLiked] = useState('');
   const [likedMusics, setMusics] = useState([]);
 
-  const filtered = props.comments.filter(
-    item => item.postId === props.currentPost
-  );
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://13.125.244.90:8000/user`)
-  //     .then(res => {
-  //       setMusics(res.data.likeMusics);
-  //     })
-  //     .catch(err => console.log(err));
-  //   console.log(likedMusics, '!!!!!!!여기');
-  // }, [isLiked]);
-
   const handleLike = (musicId, index) => {
-    setLiked(!isLiked);
-    if (isLiked) {
+    if (!likedMusics.includes(index)) {
+      likedMusics.push(index);
       axios
-        .post(`http://${PREFIX_URL}/music/${musicId}/like`)
+        .post(`${PREFIX_URL}/music/${musicId}/like`)
         .then(res => alert(res.data.message))
         .catch(err => console.log(err));
     } else {
+      likedMusics.splice(likedMusics.indexOf(index), 1);
       axios
-        .delete(`http://${PREFIX_URL}/music/${musicId}/like`)
+        .delete(`${PREFIX_URL}/music/${musicId}/like`)
         .then(res => alert(res.data.message))
         .catch(err => console.log(err));
     }
   };
 
-  const likedStyles = isLiked ? styles.liked : null;
+  // const likedStyle = idx => {
+  //   if (likedMusics.indexOf(idx) > -1) {
+  //     return 'white';
+  //   } else {
+  //     return 'pink';
+  //   }
+  // };
 
   return (
     <FlatList
-      data={filtered}
-      keyExtractor={item => item.id.toString()}
-      renderItem={({ item }) => (
+      data={props.comments}
+      keyExtractor={item => item.music.createdAt}
+      renderItem={({ item, index }) => (
+        // <Comment
+        //   user={item.commentUsername}
+        //   music={item.music}
+        //   comment={item.comment}
+        //   toggle={item.isLiked}
+        // />
         <View
           style={{
-            borderBottomColor: 'grey',
+            borderBottomColor: 'rgba(52,52,52,0.8)',
             borderBottomWidth: 1,
           }}
         >
@@ -61,31 +61,34 @@ export const CommentList = props => {
               source={{ uri: item.music.thumbnail }}
             ></Image>
 
-            <View style={{ alignSelf: 'center' }}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontWeight: 'bold',
-                }}
-              >
-                {item.commentUsername}
-              </Text>
-              <Text style={{ color: 'white' }}>
-                {item.music.artist} - {item.music.title}
-              </Text>
-              <Text style={{ color: 'white' }}>{item.comment}</Text>
+            <View style={{ flexDirection: 'row', flex: 4 }}>
+              <View style={{ alignSelf: 'center' }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {item.commentUsername}
+                </Text>
+                <Text style={{ color: 'white' }}>
+                  {item.music.artist} - {item.music.title}
+                </Text>
+                <Text style={{ color: 'white' }}>{item.comment}</Text>
+              </View>
             </View>
-            <Icon
-              name="heart-outline"
-              color={
-                props.likeMusics.includes(item.music.id) ? 'white' : 'pink'
-              }
-              size={20}
-              style={[styles.icon]}
-              onPress={() => {
-                handleLike(item.music.id, item.id);
-              }}
-            ></Icon>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+              <Icon
+                name="heart-outline"
+                color={likedStyle(index)}
+                size={30}
+                style={styles.icon}
+                onPress={() => {
+                  handleLike(item.music.id, index);
+                  console.log(likedMusics);
+                }}
+              ></Icon>
+            </View>
           </View>
         </View>
       )}

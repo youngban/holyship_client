@@ -5,9 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchScreen from './SearchScreen';
 import { CommentList } from '../components/CommentList';
 import { Posting } from '../components/Posting';
-
-import { PREFIX_URL } from '../../config/config';
-
+import { PREFIX_URL } from '../config/config';
 
 const axios = require('axios');
 
@@ -22,44 +20,27 @@ export default class ReadScreen extends Component<Props> {
       isVisible: false,
       comment: '',
       query: '',
-      commentData: [],
       musicData: [],
       userMusics: [],
       musicId: 0,
       isloading: false,
     };
   }
-
   componentDidMount() {
-    this.getComments();
-    this.getMusics();
-  }
-
-  getComments() {
     axios
-      .get(`http://${PREFIX_URL}/comment`)
+      .get(`${PREFIX_URL}/user`)
       .then(res => {
-        this.setState({ commentData: res.data });
+        const userData = res.data.likeMusics;
+        this.setState({ userMusics: userData.map(item => item.id) }, () =>
+          console.log(this.state.userMusics)
+        );
       })
       .catch(err => console.log(err));
   }
 
-  getMusics() {
-    axios
-      .get(`http://${PREFIX_URL}/user`)
-      .then(res => {
-        const userData = res.data.likeMusics;
-        this.setState({ userMusics: userData.map(item => item.id) });
-      })
-
-  }
-
   handleComment() {
     axios
-
-
       .post(`${PREFIX_URL}/comment`, {
-
         comment: this.state.comment,
         postId: this.props.navigation.getParam('post').id,
         musicId: this.state.musicId,
@@ -91,7 +72,6 @@ export default class ReadScreen extends Component<Props> {
       isloading,
       musicData,
       userMusics,
-      commentData,
       pickedMusic,
     } = this.state;
 
@@ -103,7 +83,7 @@ export default class ReadScreen extends Component<Props> {
           <View
             style={{
               borderTopWidth: 1,
-              borderTopColor: 'grey',
+              borderTopColor: 'rgba(52,52,52,0.8)',
               flexDirection: 'row',
               justifyContent: 'space-between',
               marginTop: 15,
@@ -114,11 +94,13 @@ export default class ReadScreen extends Component<Props> {
               style={{
                 color: 'white',
                 fontSize: 20,
+                margin: 10,
               }}
             >
               댓글
             </Text>
             <Icon
+              style={{ margin: 10 }}
               name="message-text-outline"
               color="white"
               size={30}
@@ -127,7 +109,7 @@ export default class ReadScreen extends Component<Props> {
           </View>
           <View>
             <CommentList
-              comments={commentData}
+              comments={this.props.navigation.getParam('comment')}
               likeMusics={userMusics}
               currentPost={this.props.navigation.getParam('post').id}
               handleLikes={this.getMusics}
