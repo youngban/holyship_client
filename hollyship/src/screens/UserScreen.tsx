@@ -122,7 +122,7 @@ export default class UserScreen extends Component<Props, State> {
           'Content-Type': 'multipart/form-data',
         },
       });
-      const userImage = res.data.file.location;
+      const userImage = res.data.file;
       this.setState({ ...this.state, userImage });
       // TODO: Change UserImage in User Info
       await axios.patch(`${PREFIX_URL}/user`, {

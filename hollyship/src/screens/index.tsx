@@ -9,6 +9,10 @@ import {
   Icon,
 } from 'react-native-ui-kitten';
 
+
+
+import { Icon as EleIcon } from 'react-native-elements';
+import Start from './StartScreen';
 import Join from './JoinScreen';
 import Login from './LoginScreen';
 import HomeStack from './HomeScreen';
@@ -38,32 +42,39 @@ export class BottomNavigationShowcase extends React.Component<Props, State> {
     selectedIndex: 1,
   };
 
-  emotionIcon = style => (
-    <Icon
-      {...style}
-      name="heart"
-      fill={this.state.selectedIndex === 0 ? '#f33' : '#ccc'}
+  emotionIcon = () => (
+    <EleIcon
+      name={this.state.selectedIndex === 0 ? 'heart' : 'heart-o'}
+      type="font-awesome"
+      size={26}
+      color="#f50"
     />
   );
-  homeIcon = style => (
-    <Icon
-      {...style}
-      name="home"
-      fill={this.state.selectedIndex === 1 ? '#33f' : '#ccc'}
+
+  homeIcon = () => (
+    <EleIcon
+      name={'home'}
+      type="font-awesome"
+      size={30}
+      color={this.state.selectedIndex === 1 ? '#0f0' : '#ccc'}
     />
   );
-  chartIcon = style => (
-    <Icon
-      {...style}
-      name="music"
-      fill={this.state.selectedIndex === 2 ? '#33f' : '#ccc'}
+
+  chartIcon = () => (
+    <EleIcon
+      name={'md-musical-notes'}
+      type="ionicon"
+      size={30}
+      color={this.state.selectedIndex === 2 ? '#ff0' : '#ccc'}
     />
   );
-  myPageIcon = style => (
-    <Icon
-      {...style}
-      name="person"
-      fill={this.state.selectedIndex === 3 ? '#33f' : '#ccc'}
+
+  myPageIcon = () => (
+    <EleIcon
+      name={'user'}
+      type="feather"
+      size={30}
+      color={this.state.selectedIndex === 3 ? '#33f' : '#ccc'}
     />
   );
 
@@ -76,7 +87,7 @@ export class BottomNavigationShowcase extends React.Component<Props, State> {
   };
 
   render(): React.ReactNode {
-    const { emotionIcon, homeIcon, chartIcon, myPageIcon } = this;
+    const { homeIcon, chartIcon, myPageIcon, emotionIcon } = this;
     return (
       <BottomNavigation
         style={styles.bottomNavigation}
@@ -88,25 +99,25 @@ export class BottomNavigationShowcase extends React.Component<Props, State> {
           style={styles.tab}
           titleStyle={styles.tabTitle}
           title="Emotion"
-          // icon={emotionIcon}
+          icon={emotionIcon}
         />
         <BottomNavigationTab
           style={styles.tab}
           titleStyle={styles.tabTitle}
           title="Home"
-          // icon={homeIcon}
+          icon={homeIcon}
         />
         <BottomNavigationTab
           style={styles.tab}
           titleStyle={styles.tabTitle}
           title="Chart"
-          // icon={chartIcon}
+          icon={chartIcon}
         />
         <BottomNavigationTab
           style={styles.tab}
           titleStyle={styles.tabTitle}
           title="MyPage"
-          // icon={myPageIcon}
+          icon={myPageIcon}
         />
       </BottomNavigation>
     );
