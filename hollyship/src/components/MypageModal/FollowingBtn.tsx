@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-ui-kitten';
 import axios from 'axios';
+import { PREFIX_URL } from '../../config/config';
 
 export default class FollowingBtn extends Component {
+  constructor(props) {
+    super(props);
+  }
   state = {
     toggle1: true,
     textValue: '',
@@ -12,33 +16,23 @@ export default class FollowingBtn extends Component {
   onPressFollowing = async () => {
     const newState = !this.state.toggle1;
     this.setState({ toggle1: newState });
+
     if (this.state.toggle1 === true) {
-      const addFollowing = async () => {
+      console.log('[DELETE]', this.state.toggle1);
+      const unFollow = async () => {
         try {
-          const response = await axios.post(
-            'http://13.125.244.90:8000/follow/following'
-          );
-          // console.log('[Following]', response.data);
+          const request = await axios.delete(`${PREFIX_URL}/follow`, {
+            data: { username: `${this.props.dataSource}` },
+          });
           this.setState({
             ...this.state,
-            toggle1: false,
+            toggle: false,
           });
         } catch (err) {
           console.log(err);
         }
       };
-      addFollowing();
-    } else {
-      try {
-        const unFollow = async () => {
-          const request = await axios.delete(
-            'http://13.125.244.90:8000/follow'
-          );
-          console.log(request.data);
-        };
-      } catch (err) {
-        console.log(err);
-      }
+      unFollow();
     }
   };
 
