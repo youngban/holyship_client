@@ -73,11 +73,7 @@ export default class UserScreen extends Component<Props, State> {
   //? ***************state****************************************
   //?                  COMPONENT DID MOUNT
   //? *******************************************************
-  componentDidUpdate = () => {
-    this.postingConter();
-    this.followCounter();
-    this.followingCounter();
-  };
+
   // TODO : 이미지 유지 및 화면 cdm
   componentDidMount = () => {
     this.getUserImage();

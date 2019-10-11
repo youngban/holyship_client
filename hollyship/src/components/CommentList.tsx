@@ -25,13 +25,13 @@ export const CommentList = props => {
     }
   };
 
-  // const likedStyle = idx => {
-  //   if (likedMusics.indexOf(idx) > -1) {
-  //     return 'white';
-  //   } else {
-  //     return 'pink';
-  //   }
-  // };
+  const likedStyle = idx => {
+    if (likedMusics.indexOf(idx) > -1) {
+      return 'white';
+    } else {
+      return 'pink';
+    }
+  };
 
   return (
     <FlatList
