@@ -20,7 +20,6 @@ import MypageFollowing from '../components/MypageModal/MypageFollowing';
 
 import { PREFIX_URL } from '../config/config';
 
-
 interface Props {
   navigation: any;
 }
@@ -74,7 +73,11 @@ export default class UserScreen extends Component<Props, State> {
   //? ***************state****************************************
   //?                  COMPONENT DID MOUNT
   //? *******************************************************
-
+  componentDidUpdate = () => {
+    this.postingConter();
+    this.followCounter();
+    this.followingCounter();
+  };
   // TODO : 이미지 유지 및 화면 cdm
   componentDidMount = () => {
     this.getUserImage();
@@ -173,10 +176,8 @@ export default class UserScreen extends Component<Props, State> {
 
   followCounter = async () => {
     try {
-      const response = await axios.get(
-        'http://13.125.244.90:8000/follow/follower'
-      );
-      console.log('[Follow - Counter]', response.data.length);
+      const response = await axios.get(`${PREFIX_URL}/follow/follower`);
+      // console.log('[Follow - Counter]', response.data.length);
       this.setState({
         ...this.state,
         followNumber: response.data.length,
@@ -186,14 +187,10 @@ export default class UserScreen extends Component<Props, State> {
     }
   };
 
-
-
   // TODO: Axios 팔로잉 카운터
   followingCounter = async () => {
     try {
-      const response = await axios.get(
-        'http://13.125.244.90:8000/follow/following'
-      );
+      const response = await axios.get(`${PREFIX_URL}/follow/following`);
 
       this.setState({
         followingCounter: response.data.length,
