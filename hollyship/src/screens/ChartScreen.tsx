@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
-import { StyleSheet, Alert, Dimensions, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  Alert,
+  Dimensions,
+  ScrollView,
+  ActivityIndicator,
+  Image as MusicImage,
+} from 'react-native';
 import {
   Layout,
   Text,
@@ -8,11 +15,13 @@ import {
   ListItem,
   Button,
   Select,
+  Modal,
 } from 'react-native-ui-kitten';
 import axios from 'axios';
 import { Image } from 'react-native-elements';
 import DialogInput from 'react-native-dialog-input';
 import { PREFIX_URL } from '../config/config';
+import { Audio, Video } from 'expo-av';
 
 interface Props {
   navigation: any;
@@ -21,30 +30,39 @@ interface Props {
   title: string;
 }
 interface State {
+  isLoading: boolean;
   musics: any;
   selectedOption: any | undefined;
   isDialogVisible: boolean;
   inputText: string;
   itemsData: any;
   playListMusics: any;
+  modalVisible: boolean;
+  playbackObject: Audio.Sound;
 }
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 
 class ChartScreen extends Component<Props, State> {
   state = {
+    isLoading: true,
     musics: [],
     selectedOption: undefined,
     isDialogVisible: false,
     inputText: '',
     itemsData: [],
     playListMusics: [],
+    modalVisible: false,
+    playbackObject: new Audio.Sound(),
   };
 
   // TODO: INITIALIZE
   componentDidMount = () => {
     this.fetchMusics();
     this.getPlayListItems();
+    setTimeout(() => {
+      this.setState({ ...this.state, isLoading: false });
+    }, 100);
   };
 
   // TODO: Fetch Music Data
@@ -83,6 +101,7 @@ class ChartScreen extends Component<Props, State> {
     }
   };
 
+  // TODO: Wrap addMusic and onSelect
   handleRenderAddMusic = async (musicId: number) => {
     const { selectedOption } = this.state;
     if (!selectedOption) {
@@ -125,6 +144,27 @@ class ChartScreen extends Component<Props, State> {
     let { isDialogVisible } = this.state;
     isDialogVisible = !isDialogVisible;
     this.setState({ ...this.state, isDialogVisible });
+  };
+
+  // TODO: HandlePlayMusic
+  handlePlayMusic = async item => {
+    const { playbackObject } = this.state;
+    this.setModalVisible();
+    playbackObject.loadAsync({ uri: item.youtubeUrl }, { shouldPlay: true });
+  };
+
+  handleStopMusic = async () => {
+    clearInterval();
+    const { playbackObject } = this.state;
+    playbackObject.stopAsync();
+    playbackObject.unloadAsync();
+    this.setModalVisible();
+  };
+
+  // TODO: TOGGLE MODAL
+  setModalVisible = () => {
+    const modalVisible: boolean = !this.state.modalVisible;
+    this.setState({ modalVisible });
   };
 
   // TODO: PlayList Select
@@ -214,6 +254,7 @@ class ChartScreen extends Component<Props, State> {
         titleStyle={styles.listTitle}
         description={item.artist}
         descriptionStyle={styles.listDesc}
+        onPress={() => this.handlePlayMusic(item)}
         accessory={() => (
           <Button
             appearance="outline"
@@ -244,6 +285,7 @@ class ChartScreen extends Component<Props, State> {
         titleStyle={styles.listTitle}
         description={item.artist}
         descriptionStyle={styles.listDesc}
+        onPress={() => this.handlePlayMusic(item)}
         accessory={() => (
           <Button
             appearance="outline"
@@ -265,9 +307,22 @@ class ChartScreen extends Component<Props, State> {
 
   // TODO: MAIN
   render() {
-    const { musics, itemsData, selectedOption, playListMusics } = this.state;
+    const {
+      isLoading,
+      musics,
+      itemsData,
+      selectedOption,
+      playListMusics,
+    } = this.state;
     const { renderChartItem, handleListAdd, renderPlayListMusics } = this;
-    return (
+    return isLoading ? (
+      <ScrollView style={styles.loadingContainer}>
+        <ActivityIndicator
+          color="#ddd"
+          style={{ marginTop: SCREEN_HEIGHT * 0.4 }}
+        />
+      </ScrollView>
+    ) : (
       <ScrollView style={styles.container}>
         <Text category="h3" status="danger" style={styles.chartTitle}>
           HOT CHART
@@ -353,6 +408,21 @@ class ChartScreen extends Component<Props, State> {
             renderItem={renderPlayListMusics}
           />
         </Layout>
+        {/* Modal */}
+        <Modal
+          allowBackdrop={true}
+          backdropStyle={{ backgroundColor: 'black', opacity: 0.5 }}
+          onBackdropPress={this.handleStopMusic}
+          visible={this.state.modalVisible}
+        >
+          <MusicImage
+            style={{ width: 200, height: 200 }}
+            source={{
+              uri:
+                'https://78.media.tumblr.com/25b83202d484a18f0d768dd4708031b3/tumblr_pct6d7qgR71qzm8dwo1_640.gif',
+            }}
+          />
+        </Modal>
       </ScrollView>
     );
   }
@@ -378,6 +448,10 @@ const ChartStack = createStackNavigator(
 export default ChartStack;
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#101426',
+  },
   container: {
     flex: 1,
     backgroundColor: '#101426',
@@ -412,12 +486,6 @@ const styles = StyleSheet.create({
   listDesc: {
     marginLeft: 10,
   },
-  modalContainer: {
-    width: 200,
-    height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   playListContainer: {
     //
   },
@@ -438,4 +506,10 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   placeholderStyle: { color: 'gray' },
+  modalContainer: {
+    width: 200,
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
