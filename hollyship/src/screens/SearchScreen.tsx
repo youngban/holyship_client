@@ -12,7 +12,7 @@ import { Dimensions } from 'react-native';
 import axios from 'axios';
 import { PREFIX_URL } from '../config/config';
 
-const { width, height } = Dimensions.get('window');
+// const { width, height } = Dimensions.get('window');
 
 export default class SearchScreen extends Component {
   constructor(props) {
@@ -21,7 +21,6 @@ export default class SearchScreen extends Component {
       selectedItem: null,
       styleStatus: false,
     };
-    // this.handlePress = this.handlePress.bind(this);
   }
 
   onChangeColor = (index, item) => {
@@ -72,7 +71,7 @@ export default class SearchScreen extends Component {
             const localColor = {
               backgroundColor:
                 this.state.selectedItem === index
-                  ? 'rgba(52, 52, 52, 0.6)'
+                  ? 'rgba(0, 70, 239, 0.6)'
                   : 'black',
               flexDirection: 'row',
             };

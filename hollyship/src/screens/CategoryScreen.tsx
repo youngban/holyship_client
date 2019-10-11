@@ -41,9 +41,9 @@ type Props = {
 const emotions = [
   { title: 'HAPPY', img: require('../img/happy.jpeg') },
   { title: 'SAD', img: require('../img/sad.jpg') },
-  { title: 'EMPTY', img: require('../img/blank2.jpeg') },
+  { title: 'BLANK', img: require('../img/blank2.jpeg') },
   { title: 'CHILL', img: require('../img/chill.jpeg') },
-  { title: 'ANGRY', img: require('../img/anger.jpg') },
+  { title: 'UPSET', img: require('../img/anger.jpg') },
 ];
 
 class CategoryScreen extends Component<Props, MyState> {
@@ -102,8 +102,9 @@ class CategoryScreen extends Component<Props, MyState> {
         content: this.state.content,
         emotion: this.state.emotion,
       })
-      .then(res => console.log(res.data))
+      .then(res => Alert.alert('', '글이 등록되었습니다'))
       .catch(err => console.log(err));
+    this.setState({ isVisible: !this.state.isVisible });
   }
 
   render() {
@@ -118,38 +119,40 @@ class CategoryScreen extends Component<Props, MyState> {
               { text: '아니오' },
               {
                 text: '네',
-                onPress: () =>
-                  this.setState({ isVisible: !this.state.isVisible }),
+                onPress: () => {
+                  this.setState({ isVisible: !this.state.isVisible });
+                },
               },
             ]);
           }}
         >
-          <View style={styles.darkTheme}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text
+          <View style={{ flex: 1 }}>
+            <View style={{ backgroundColor: 'black' }}>
+              <View
                 style={{
-                  color: 'white',
-                  fontSize: 20,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  margin: 10,
                 }}
               >
-                글쓰기
-              </Text>
-              <View style={{ paddingEnd: '15%' }}>
-                <Icon
-                  name="check-outline"
-                  size={20}
-                  color="white"
-                  onPress={this.handlePost.bind(this)}
-                />
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 20,
+                  }}
+                >
+                  오늘 기분을 얘기해주세요
+                </Text>
+                <View>
+                  <Icon
+                    name="check-outline"
+                    size={30}
+                    color="white"
+                    onPress={this.handlePost.bind(this)}
+                  />
+                </View>
               </View>
             </View>
-
             <Picker
               style={styles.darkTheme}
               itemStyle={styles.darkTheme}
@@ -160,20 +163,28 @@ class CategoryScreen extends Component<Props, MyState> {
                 <Picker.Item label={item.title} value={item.title} key={idx} />
               ))}
             </Picker>
-            <View style={{ borderBottomColor: 'grey', borderBottomWidth: 1 }}>
+            <View
+              style={{
+                borderBottomColor: 'grey',
+                borderBottomWidth: 1,
+                backgroundColor: 'black',
+                padding: 10,
+              }}
+            >
               <TextInput
                 style={styles.darkTheme}
                 placeholder={'제목'}
                 onChangeText={text => this.setState({ title: text })}
               ></TextInput>
             </View>
-
-            <TextInput
-              style={styles.darkTheme}
-              placeholder={'내용'}
-              onChangeText={text => this.setState({ content: text })}
-              multiline={true}
-            ></TextInput>
+            <View style={{ flex: 1, backgroundColor: 'black', padding: 10 }}>
+              <TextInput
+                style={styles.darkTheme}
+                placeholder={'내용'}
+                onChangeText={text => this.setState({ content: text })}
+                multiline={true}
+              ></TextInput>
+            </View>
           </View>
         </Modal>
 
@@ -200,9 +211,11 @@ class CategoryScreen extends Component<Props, MyState> {
               >
                 <Text
                   style={{
-                    fontSize: 20,
+                    fontSize: 30,
+                    fontWeight: 'bold',
                     textAlign: 'center',
                     color: 'white',
+                    opacity: 0.8,
                   }}
                   onPress={() => this.handlePress(`${item.title}`)}
                 >
@@ -245,6 +258,7 @@ const styles = StyleSheet.create({
   darkTheme: {
     color: 'white',
     backgroundColor: 'black',
+    fontSize: 20,
   },
   button: {
     backgroundColor: 'green',
