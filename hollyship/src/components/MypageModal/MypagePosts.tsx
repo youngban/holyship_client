@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Layout, Text, Button } from 'react-native-ui-kitten';
 import { Card } from 'react-native-elements';
-import { ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
+import { ActivityIndicator, Dimensions, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { PREFIX_URL } from '../../config/config';
@@ -13,6 +13,8 @@ export default class MypagePosts extends Component<Props, State> {
   state = {
     total: null,
   };
+
+  renderId;
 
   componentDidMount() {
     this.getPostTitle();
@@ -30,6 +32,14 @@ export default class MypagePosts extends Component<Props, State> {
     }
   };
 
+  deleteButton = async () => {
+    const { total } = this.state;
+    const number = total.map(item => item.id);
+
+    const request = await axios.delete(`${PREFIX_URL}/post/${number}`);
+    this.renderId = setTimeout(this.getPostTitle.bind(this), 500);
+  };
+
   render() {
     const { total } = this.state;
 
@@ -40,6 +50,7 @@ export default class MypagePosts extends Component<Props, State> {
       <ScrollView
         contentContainerStyle={{
           justifyContent: 'center',
+          // flexDirection: 'column-reverse',
           alignItems: 'center',
         }}
         style={{
@@ -72,15 +83,16 @@ export default class MypagePosts extends Component<Props, State> {
             </Text>
             <Button
               appearance="outline"
-              status="primary"
-              style={{
-                borderRadius: 0,
-                marginLeft: 0,
-                marginRight: 0,
-                marginBottom: 0,
-              }}
+              status="danger"
+              onPress={this.deleteButton}
+              // style={{
+              //   borderRadius: 0,
+              //   marginLeft: 0,
+              //   marginRight: 0,
+              //   marginBottom: 0,
+              // }}
             >
-              OPEN
+              DELETE
             </Button>
           </Card>
         ))}

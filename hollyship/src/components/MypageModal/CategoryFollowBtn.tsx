@@ -22,7 +22,7 @@ export default class MainFollowBtn extends Component {
         try {
           // console.log(['FollowBtn', this.state.toggle]);
           const request = await axios.post(`${PREFIX_URL}/follow/add`, {
-            username: `${this.props.currentModalData}`,
+            username: `${this.props.item}`,
           });
           this.setState({
             ...this.state,

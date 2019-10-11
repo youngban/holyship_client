@@ -16,6 +16,7 @@ export default class MypageFollowers extends Component {
 
   componentDidMount() {
     this.getFollowers();
+    // this.getUserImage();
   }
 
   getFollowers = async () => {
@@ -29,6 +30,11 @@ export default class MypageFollowers extends Component {
       console.log(err);
     }
   };
+
+  // getUserImage = async () => {
+  //   const response = await axios.get(`${PREFIX_URL}/`);
+
+  // }
 
   _renderItem = ({ item, index }) => (
     <View style={styles.listContainer}>
