@@ -8,6 +8,7 @@ Holyship 프로젝트는 사용자들이 직접 DJ가 되서 감정을 기반으
 Front : ReactNative, React-Navigation, TypeScript, JWT, UI Kitten, Expo  
 Back : AWS, EC2, S3, Mysql, Sequelize, Amazon RDS, Passport
 
+### 
 - 회원가입  
 ![user_signup.gif](https://images.velog.io/post-images/qksud14/b86af8a0-f5fd-11e9-9e2c-7d4c8c38bd49/usersignup.gif)
 
