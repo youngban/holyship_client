@@ -26,26 +26,26 @@ Nightmare
 Front : ReactNative, React-Navigation, TypeScript, JWT, UI Kitten, Expo  
 Back : AWS, EC2, S3, Mysql, Sequelize, Amazon RDS, Passport
 
-- 회원가입
+- 회원가입  
 ![user_signup.gif](https://images.velog.io/post-images/qksud14/b86af8a0-f5fd-11e9-9e2c-7d4c8c38bd49/usersignup.gif)
 
-- 로그인
+- 로그인  
 ![user_login.gif](https://images.velog.io/post-images/qksud14/c1f83130-f5fd-11e9-9e2c-7d4c8c38bd49/userlogin.gif)
 
-- 피드
+- 피드  
 ![view_post.gif](https://images.velog.io/post-images/qksud14/e50dab00-f5fd-11e9-8db7-4123832bedd7/viewpost.gif)
 
-- 포스팅
+- 포스팅  
 ![posting.gif](https://images.velog.io/post-images/qksud14/390591d0-f600-11e9-91c1-b56aa27e15be/posting.gif)
 
-- 코멘트
+- 코멘트  
 ![comment.gif](https://images.velog.io/post-images/qksud14/ccc2b9d0-f5ff-11e9-9e2c-7d4c8c38bd49/comment.gif)
 
-- 플레이리스트 / 노래재생
+- 플레이리스트 / 노래재생  
 ![add_playlist.gif](https://images.velog.io/post-images/qksud14/3db4ace0-f5fe-11e9-ae86-f7f42c038cd6/addplaylist.gif)
 
-- 프로필 변경
+- 프로필 변경  
 ![change_profile.gif](https://images.velog.io/post-images/qksud14/81dec770-f5fe-11e9-ae86-f7f42c038cd6/changeprofile.gif)
 
-- 팔로우
+- 팔로우  
 ![follow.gif](https://images.velog.io/post-images/qksud14/4ac0e820-f600-11e9-9e2c-7d4c8c38bd49/follow.gif)
