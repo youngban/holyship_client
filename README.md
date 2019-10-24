@@ -23,7 +23,7 @@ Nightmare
 - 좋아하는 가수/장르 별로 필터링하기
 
 ### 사용한 스택
-Front : ReactNative, React-Navigation, TypeScript, JWT, UI Kitten, Expo
+Front : ReactNative, React-Navigation, TypeScript, JWT, UI Kitten, Expo  
 Back : AWS, EC2, S3, Mysql, Sequelize, Amazon RDS, Passport
 
 - 회원가입
