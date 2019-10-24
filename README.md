@@ -2,25 +2,7 @@
 Holyship 프로젝트는 사용자들이 직접 DJ가 되서 감정을 기반으로 음악을 추천해주는 SNS서비스 입니다.
 
 ### 기능별 진행단계 
-Minimum
-- 로그인 & 회원가입
-- API를 통해서 음원정보 가져오기
-- 게시글 작성
-- 댓글
-- PlayList
-
-Advanced
-- 팔로우 & 좋아요
-- 차트 
-- 녹음기능
-- 플레이리스트 공유
-- 음악 재생
-
-Nightmare
-- 댓글 기준으로 리스트 만들기
-- 노래추천(AWS personalize 사용 음악추천)
-- 음악취향분석
-- 좋아하는 가수/장르 별로 필터링하기
+<img width="1257" alt="holyship_step" src="https://user-images.githubusercontent.com/40445771/67447283-55455580-f64e-11e9-9bf0-7785caee9d5d.png">
 
 ### 사용한 스택
 Front : ReactNative, React-Navigation, TypeScript, JWT, UI Kitten, Expo  
